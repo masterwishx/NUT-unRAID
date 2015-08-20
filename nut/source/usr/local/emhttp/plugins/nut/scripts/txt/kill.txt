@@ -1,4 +1,4 @@
-if [ -x /usr/bin/nut_kill_inverter ]; then
+if [ -f /usr/bin/nut_kill_inverter ]; then
         . /usr/bin/nut_kill_inverter
 fi
 
