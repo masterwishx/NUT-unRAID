@@ -5,6 +5,7 @@
 <!ENTITY author     "macester">
 <!ENTITY version    "2015.08.21">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
+<!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
 <!ENTITY repository "https://raw.githubusercontent.com/macexx/plugins/master/nut/archive/">
 ]>
@@ -40,29 +41,29 @@ rm -f $(ls &path;/&name;*.txz 2>/dev/null|grep -v '&version;')
 dependency files
 -->
 <FILE Name="&path;/dependencies/expat-2.1.0-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/l/expat-2.1.0-x86_64-1.txz</URL>
+<URL>&pkgURL;expat-2.1.0-x86_64-1.txz</URL>
 </FILE>
 <FILE Name="&path;/dependencies/freeipmi-1.4.8-x86_64-1gds.txz" Run="upgradepkg --install-new">
-<URL>http://slackpack.ludost.net/packages/slackware64-14.1/freeipmi-1.4.8-x86_64-1gds.txz</URL>
+<URL>&pkgURL;freeipmi-1.4.8-x86_64-1gds.txz</URL>
 </FILE>
 <FILE Name="&path;/dependencies/libtool-2.4.6-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/d/libtool-2.4.6-x86_64-1.txz</URL>
+<URL>&pkgURL;libtool-2.4.6-x86_64-1.txz</URL>
 </FILE>
 <FILE Name="&path;/dependencies/libusb-compat-0.1.5-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/l/libusb-compat-0.1.5-x86_64-1.txz</URL>
+<URL>&pkgURL;libusb-compat-0.1.5-x86_64-1.txz</URL>
 </FILE>
 <FILE Name="&path;/dependencies/neon-0.29.6-x86_64-2.txz" Run="upgradepkg --install-new">
-<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/l/neon-0.29.6-x86_64-2.txz</URL>
+<URL>&pkgURL;neon-0.29.6-x86_64-2.txz</URL>
 </FILE>
 <FILE Name="&path;/dependencies/net-snmp-5.7.3-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/n/net-snmp-5.7.3-x86_64-1.txz</URL>
+<URL>&pkgURL;net-snmp-5.7.3-x86_64-1.txz</URL>
 </FILE>
 
 <!--
 The 'nut-package' file.
 -->
 <FILE Name="&path;/nut-2.7.3-x86_64-1gds.txz" Run="upgradepkg --install-new">
-<URL>http://slackpack.ludost.net/packages/slackware64-14.1/nut-2.7.3-x86_64-1gds.txz</URL>
+<URL>&pkgURL;nut-2.7.3-x86_64-1gds.txz</URL>
 </FILE>
 
 
