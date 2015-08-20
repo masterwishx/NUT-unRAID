@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.20">
+<!ENTITY version    "2015.08.21">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY path       "/boot/config/plugins/&name;">
 <!ENTITY repository "https://raw.githubusercontent.com/macexx/plugins/master/nut/archive/">
@@ -12,13 +12,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;">
 
 <CHANGES>
-##&name;
-
-###&version;
-- first version
-
-###2015.08.20;
-- first version
+###2015.08.21###
+- Initial Release
+</CHANGES>
 
 
 <!--
@@ -111,7 +107,7 @@ rm -f /etc/rc.d/rc.&name;
 removepkg nut-2.7.3-x86_64-1gds.txz
 
 # Clear go script
-sed -i '/###NUT-MARKER1###/,/###NUT-MARKER2###/d' /boot/config/go
+sed -i -e '/###NUT-MARKER1###/,/###NUT-MARKER2###/d' /boot/config/go
 </INLINE>
 </FILE>
 
