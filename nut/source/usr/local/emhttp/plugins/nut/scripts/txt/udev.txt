@@ -1,0 +1,4 @@
+
+if [ -x /usr/bin/nut_restart_udev ]; then
+        . /usr/bin/nut_restart_udev
+fi

@@ -1,0 +1,8 @@
+[admin]
+password=adminpass
+actions=set
+actions=fsd
+instcmds=all
+[monuser]
+password=pass
+upsmon master

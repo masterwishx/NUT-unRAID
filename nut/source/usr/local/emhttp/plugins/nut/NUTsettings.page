@@ -1,0 +1,108 @@
+Menu="OtherSettings"
+Type="xmenu"
+Title="NUT Settings"
+Icon="nut.png"
+---
+<?PHP
+/* Copyright 2015, Dan Landon.
+ * Copyright 2015, Bergware International.
+ * Copyright 2015, Lime Technology
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * Modified by macester macecapri@gmail.com for NUT plugin
+ *
+ */
+?>
+
+<?
+$sName = "nut";
+$cfg = parse_plugin_cfg($sName);
+?>
+
+<script>
+$(function() {
+  showStatus('upsmon');
+});
+</script>
+
+<form markdown="1" name="nut_settings" method="POST" action="/update.php" target="progressFrame">
+<input type="hidden" name="#file" value="<?=$sName?>/<?=$sName?>.cfg">
+<input type="hidden" name="#include" value="/plugins/<?=$sName?>/include/update.nut.php">
+<span style="float:right;margin-right:10px"><a href="http://www.networkupstools.org/docs/user-manual.chunked/" target="_blank" title="NUT UPS user manual"><i class="fa fa-file-text-o"></i> <u>Online Manual</u></a></span>
+
+Start NUT UPS service:
+: <select name="SERVICE" size="1">
+  <?=mk_option($cfg['SERVICE'], "disable", "No");?>
+  <?=mk_option($cfg['SERVICE'], "enable", "Yes");?>
+  </select>
+
+> Set to 'Yes' to enable NUT and start the service, set to 'No' to disable NUT and stop the service.
+> Setting 'Yes' will also enable NUT on unRAID boot.
+
+UPS Driver:
+: <input type="text" name="DRIVER" class="narrow" maxlength="25" value="<?=$cfg['DRIVER'];?>">
+
+> Enter the *driver* which matches your UPS, check **"http://www.networkupstools.org/stable-hcl.html"** for a complete list.
+>
+> + **usbhid-ups** - **bcmxcp_usb** - **tripplite_usb** - **blazer_usb** - **richcomm_usbExample** USB-drivers.
+>
+> Above is the different usb drivers avaible. Example, enter **"usbhid-ups"** on the line without the quotes. 
+
+UPS Port:
+: <input type="text" name="PORT" class="narrow" maxlength="25" value="<?=$cfg['PORT'];?>">
+
+> Enter the *port* which your UPS connects to.
+>
+> + **auto** - Set to "auto" if the ups is connected by usb.
+> + **/dev/tty0** - Example, for seriall devices**
+
+UPS Mode:
+: <input type="text" name="MODE"  class="narrow" maxlength="25" value="<?=$cfg['MODE'];?>">
+
+> Enter the *mode* which mode your UPS will run in.
+>
+> + **standalone** - When the ups is only used by the local host**
+> + **netserver** - When nut clients/slaves need to connect to the ups**
+
+Admin Username:
+: <input type="text" name="ADMIN"  class="narrow" maxlength="25" value="<?=$cfg['ADMIN'];?>">
+
+> Enter the *username* for the administrator account for the UPS.
+>
+> + **EXAMPLE** - When you want to administrate or monitor the UPS remotely**
+
+Admin Password:
+: <input type="text" name="PASSWORD"  class="narrow" maxlength="25" value="<?=$cfg['PASSWORD'];?>">
+
+> Enter the *password* for the administrator account for the UPS.
+>
+> + **EXAMPLE** - When you want to administrate or monitor the UPS remotely**
+
+Time on battery before shutdown (seconds):
+: <input type="text" name="TIMER" class="narrow" maxlength="4" value="<?=$cfg['TIMER'];?>">
+
+> The time in seconds before the system will power down if a power failure accours.
+
+Turn off UPS after shutdown:
+: <select name="UPSKILL" size="1">
+  <?=mk_option($cfg['UPSKILL'], "disable", "No");?>
+  <?=mk_option($cfg['UPSKILL'], "enable", "Yes");?>
+  </select>
+
+> Set to *Yes* to turn off the power to the UPS after a shutdown.
+>
+> Check your bios and enable, "Automatically power on after power loss" so that the server starts again when powers is restored.
+
+
+<input type="submit" name="#default" value="Default">
+: <input type="submit" name="#apply" value="Apply"><input type="button" value="Done" onclick="done()">
+</form>
+<div id="title"><span class="left"><img src="/plugins/nut/icons/nutsettings.png" class="icon">NUT Status</span></div>
+
+<?echo "<pre>".shell_exec("/usr/bin/upsc ups")."</pre>";?>

@@ -1,0 +1,15 @@
+###NUT-MARKER1###
+#Start NUT on boot
+while [[ ${LOOP:=30} -gt 1 && ! -d /mnt/user ]]
+do
+        (( LOOP=LOOP-1 ))
+        echo "Waiting for Array to come online ($LOOP)"
+        sleep 5
+done
+
+run=$( grep -ic 'SERVICE="enable"' /boot/config/plugins/nut/nut.cfg )
+
+if [ $run -eq 1 ]; then
+/etc/rc.d/rc.nut start
+fi
+###NUT-MARKER2###
