@@ -1,0 +1,118 @@
+<?xml version='1.0' standalone='yes'?>
+
+<!DOCTYPE PLUGIN [
+<!ENTITY name       "nut">
+<!ENTITY author     "macester">
+<!ENTITY version    "2015.08.20">
+<!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
+<!ENTITY path       "/boot/config/plugins/&name;">
+<!ENTITY repository "https://raw.githubusercontent.com/macexx/plugins/master/nut/archive/">
+]>
+
+<PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;">
+
+<CHANGES>
+##&name;
+
+###&version;
+- first version
+
+###2015.08.20;
+- first version
+
+
+<!--
+The 'pre-install' script.
+-->
+<FILE Run="/bin/bash">
+<INLINE>
+# Stop service
+/etc/rc.d/rc.nut stop 2>/dev/null
+
+# Remove old 'nut-package' file
+rm -f $(ls &path;/nut-2.7* 2>/dev/null)
+# Remove old 'nut-package' file
+rm -f $(ls &path;/&name;*.txz 2>/dev/null|grep -v '&version;')
+
+# Remove old dependencies ???
+</INLINE>
+</FILE>
+
+
+
+<!--
+dependency files
+-->
+<FILE Name="&path;/dependencies/expat-2.1.0-x86_64-1.txz" Run="upgradepkg --install-new">
+<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/l/expat-2.1.0-x86_64-1.txz</URL>
+</FILE>
+<FILE Name="&path;/dependencies/freeipmi-1.4.8-x86_64-1gds.txz" Run="upgradepkg --install-new">
+<URL>http://slackpack.ludost.net/packages/slackware64-14.1/freeipmi-1.4.8-x86_64-1gds.txz</URL>
+</FILE>
+<FILE Name="&path;/dependencies/libtool-2.4.6-x86_64-1.txz" Run="upgradepkg --install-new">
+<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/d/libtool-2.4.6-x86_64-1.txz</URL>
+</FILE>
+<FILE Name="&path;/dependencies/libusb-compat-0.1.5-x86_64-1.txz" Run="upgradepkg --install-new">
+<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/l/libusb-compat-0.1.5-x86_64-1.txz</URL>
+</FILE>
+<FILE Name="&path;/dependencies/neon-0.29.6-x86_64-2.txz" Run="upgradepkg --install-new">
+<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/l/neon-0.29.6-x86_64-2.txz</URL>
+</FILE>
+<FILE Name="&path;/dependencies/net-snmp-5.7.3-x86_64-1.txz" Run="upgradepkg --install-new">
+<URL>http://mirrors.slackware.com/slackware/slackware64-current/slackware64/n/net-snmp-5.7.3-x86_64-1.txz</URL>
+</FILE>
+
+<!--
+The 'nut-package' file.
+-->
+<FILE Name="&path;/nut-2.7.3-x86_64-1gds.txz" Run="upgradepkg --install-new">
+<URL>http://slackpack.ludost.net/packages/slackware64-14.1/nut-2.7.3-x86_64-1gds.txz</URL>
+</FILE>
+
+
+
+<!--
+nut package
+-->
+<FILE Name="&path;/&name;-&version;.txz" Run="upgradepkg --install-new">
+<URL>&repository;&name;-&version;.txz</URL>
+</FILE>
+
+
+<!--
+The 'post-install' script.
+-->
+<FILE Run="/bin/bash">
+<INLINE>
+rm /etc/ups/*sample*
+echo ""
+echo "-----------------------------------------------------------"
+echo " Plugin &name; is installed."
+echo " Version: &version;"
+echo "-----------------------------------------------------------"
+echo ""
+</INLINE>
+</FILE>
+
+<!--
+The 'remove' script.
+-->
+<FILE Run="/bin/bash" Method="remove">
+<INLINE>
+# Stop service
+/etc/rc.d/rc.&name; stop
+
+# Remove plugin related files
+rm -rf /boot/config/plugins/&name;
+rm -rf /usr/local/emhttp/plugins/&name;
+rm -f /etc/rc.d/rc.&name;
+
+# Uninstall the 'nut' package
+removepkg nut-2.7.3-x86_64-1gds.txz
+
+# Clear go script
+sed -i '/###NUT-MARKER1###/,/###NUT-MARKER2###/d' /boot/config/go
+</INLINE>
+</FILE>
+
+</PLUGIN>
