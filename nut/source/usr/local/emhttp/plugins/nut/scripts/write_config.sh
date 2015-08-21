@@ -81,9 +81,9 @@ else
 fi
 
 # Enable autostart of NUT
-go=$( grep -ic "NUT-MARKER1" /boot/config/go )
-if [ $go -ge 1 ]; then
-    echo "Go script already configured."
-else
-    cat /usr/local/emhttp/plugins/nut/scripts/txt/go.txt >> /boot/config/go
-fi
+#go=$( grep -ic "NUT-MARKER1" /boot/config/go )
+#if [ $go -ge 1 ]; then
+#    echo "Go script already configured."
+#else
+#    cat /usr/local/emhttp/plugins/nut/scripts/txt/go.txt >> /boot/config/go
+#fi

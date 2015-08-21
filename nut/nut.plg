@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.22b">
+<!ENTITY version    "2015.08.22c">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -130,8 +130,6 @@ rm -rf /boot/config/plugins/&name;
 removepkg nut-2.7.3-x86_64-1gds.txz
 removepkg &name;-&version;
 
-# Clear go script
-sed -i -e '/###NUT-MARKER1###/,/###NUT-MARKER2###/d' /boot/config/go
 echo ""
 echo "-----------------------------------------------------------"
 echo " Uninstalled Plugin &name;"
