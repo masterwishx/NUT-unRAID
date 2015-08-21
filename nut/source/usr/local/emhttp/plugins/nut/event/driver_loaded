@@ -7,19 +7,5 @@ cfg=/boot/config/plugins/nut/nut.cfg
 # Read settings
 source $cfg
 
-# Apply settings
-sed -i -e '/^SERVICE/c\\SERVICE=\"'$SERVICE'\"' $cfg
-sed -i -e '/^PORT/c\\PORT=\"'$PORT'\"' $cfg
-sed -i -e '/^MODE/c\\MODE=\"'$MODE'\"' $cfg
-sed -i -e '/^ADMIN/c\\ADMIN=\"'$ADMIN'\"' $cfg
-sed -i -e '/^PASSWORD/c\\PASSWORD=\"'$PASSWORD'\"' $cfg
-sed -i -e '/^TIMER/c\\TIMER=\"'$TIMER'\"' $cfg
-sed -i -e '/^UPSKILL/c\\UPSKILL=\"'$UPSKILL'\"' $cfg
-if [[ $DRIVER == custom ]]; then
-  sed -i -e '/^DRIVER/c\\DRIVER=\"'$SERIAL'\"' $cfg
-else
-  sed -i -e '/^DRIVER/c\\DRIVER '$DRIVER'' $cfg
-fi
-
 # Start daemon
 [[ $SERVICE == enable ]] && /etc/rc.d/rc.nut start
