@@ -26,6 +26,11 @@ $cfg = parse_plugin_cfg($sName);
 ?>
 
 <script>
+function toggleCustomDriver(form) {
+  var readonly = form.DRIVER.value != 'custom';
+  form.SERIAL.readOnly = readonly;
+  if (readonly) form.SERIAL.value = '';
+}
 $(function() {
   showStatus('upsmon');
 });
@@ -46,31 +51,48 @@ Start NUT UPS service:
 > Setting 'Yes' will also enable NUT on unRAID boot.
 
 UPS Driver:
-: <input type="text" name="DRIVER" class="narrow" maxlength="25" value="<?=$cfg['DRIVER'];?>">
+: <select name="DRIVER" size="1" onChange="toggleCustomDriver(this.form)">
+  <?=mk_option($cfg['DRIVER'], "blazer_usb", "Blazer_usb");?>
+  <?=mk_option($cfg['DRIVER'], "bcmxcp_usb", "Bcmxcp_usb");?>
+  <?=mk_option($cfg['DRIVER'], "richcomm_usb", "Richcomm_usb");?>
+  <?=mk_option($cfg['DRIVER'], "tripplite_usb", "Tripplite_usb");?>
+  <?=mk_option($cfg['DRIVER'], "usbhid-ups", "Usbhid-ups");?>
+  <?=mk_option($cfg['DRIVER'], "custom", "Custom");?>
+  </select>
 
-> **Check the link bellow ro find the driver matching your UPS**
+> **Check the link below to find the driver matching your UPS**
 >
 > + <a href="http://www.networkupstools.org/stable-hcl.html" target="_blank">http://www.networkupstools.org/stable-hcl.html</a>
 >
-> + **usbhid-ups** - **bcmxcp_usb** - **tripplite_usb** - **blazer_usb** - **richcomm_usbExample** USB-drivers.
->
-> Above is the different usb drivers avaible. Example, enter **"usbhid-ups"** on the line without the quotes. 
+> For other devices set **Custom** and enter the driver manually below.
+
+
+Custom Driver:
+: <input type="text" name="SERIAL" class="narrow" maxlength="40" value="<?=$cfg['SERIAL'];?>">
+
+> Use the *Link* above to find which Driver to choose.
+
 
 UPS Port:
-: <input type="text" name="PORT" class="narrow" maxlength="25" value="<?=$cfg['PORT'];?>">
+: <input type="text" name="PORT" class="narrow" maxlength="40" value="<?=$cfg['PORT'];?>">
 
 > Enter the *port* which your UPS connects to.
 >
 > + **auto** - Set to "auto" if the ups is connected by usb.
 > + **/dev/tty0** - Example, for seriall devices**
 
+
 UPS Mode:
-: <input type="text" name="MODE"  class="narrow" maxlength="25" value="<?=$cfg['MODE'];?>">
+: <select name="MODE" size="1">
+  <?=mk_option($cfg['MODE'], "standalone", "Standalone");?>
+  <?=mk_option($cfg['MODE'], "netserver", "Netserver");?>
+  </select>
 
 > Enter the *mode* which mode your UPS will run in.
 >
 > + **standalone** - When the ups is only used by the local host**
 > + **netserver** - When nut clients/slaves need to connect to the ups**
+
 
 Admin Username:
 : <input type="text" name="ADMIN"  class="narrow" maxlength="25" value="<?=$cfg['ADMIN'];?>">
@@ -79,12 +101,14 @@ Admin Username:
 >
 > + **EXAMPLE** - When you want to administrate or monitor the UPS remotely**
 
+
 Admin Password:
 : <input type="text" name="PASSWORD"  class="narrow" maxlength="25" value="<?=$cfg['PASSWORD'];?>">
 
 > Enter the *password* for the administrator account for the UPS.
 >
 > + **EXAMPLE** - When you want to administrate or monitor the UPS remotely**
+
 
 Time on battery before shutdown (seconds):
 : <input type="text" name="TIMER" class="narrow" maxlength="4" value="<?=$cfg['TIMER'];?>">

@@ -27,35 +27,44 @@ fi
 # Edit nut config files with values from plugin settings
 NUTCFG=/boot/config/plugins/nut/nut.cfg
 
-var1=$( grep -i "DRIVER=" $NUTCFG|cut -d \" -f2|sed 's/^/driver = /' )
-sed -i "2 s/.*/$var1/" /etc/ups/ups.conf
 
-var2=$( grep -i "PORT=" $NUTCFG|cut -d \" -f2|sed 's/^/port = /' )
-sed -i "3 s/.*/$var2/" /etc/ups/ups.conf
 
-var3=$( grep -i "MODE=" $NUTCFG|cut -d \" -f2|sed 's/^/MODE=/' )
-sed -i "1 s/.*/$var3/" /etc/ups/nut.conf
 
-var4=$( grep -i "ADMIN=" $NUTCFG|cut -d \" -f2|sed 's/^/[/'|sed 's/$/]/' )
-sed -i "1 s/.*/$var4/" /etc/ups/upsd.users
+driver_custom=$( grep -ic 'DRIVER="custom"' $NUTCFG )
+if [ $driver_custom -eq 1 ]; then
+        var1=$( grep -i "SERIAL=" $NUTCFG|cut -d \" -f2|sed 's/^/driver = /' )
+        sed -i "2 s/.*/$var1/" /etc/ups/ups.conf
+else
+        var3=$( grep -i "DRIVER=" $NUTCFG|cut -d \" -f2|sed 's/^/driver = /' )
+        sed -i "2 s/.*/$var3/" /etc/ups/ups.conf
+fi
 
-var5=$( grep -i "PASSWORD=" $NUTCFG|cut -d \" -f2|sed 's/^/password = /' )
-sed -i "2 s/.*/$var5/" /etc/ups/upsd.users
+var6=$( grep -i "PORT=" $NUTCFG|cut -d \" -f2|sed 's/^/port = /' )
+sed -i "3 s/.*/$var6/" /etc/ups/ups.conf
 
-var6=$( grep -i "TIMER=" $NUTCFG|cut -d \" -f2|sed 's/^/COUNT_DOWN=/' )
-sed -i "6 s/.*/$var6/" /etc/ups/notifycmd
+var8=$( grep -i "MODE=" $NUTCFG|cut -d \" -f2|sed 's/^/MODE=/' )
+sed -i "1 s/.*/$var8/" /etc/ups/nut.conf
+
+var10=$( grep -i "ADMIN=" $NUTCFG|cut -d \" -f2|sed 's/^/[/'|sed 's/$/]/' )
+sed -i "1 s/.*/$var10/" /etc/ups/upsd.users
+
+var12=$( grep -i "PASSWORD=" $NUTCFG|cut -d \" -f2|sed 's/^/password = /' )
+sed -i "2 s/.*/$var12/" /etc/ups/upsd.users
+
+var14=$( grep -i "TIMER=" $NUTCFG|cut -d \" -f2|sed 's/^/COUNT_DOWN=/' )
+sed -i "6 s/.*/$var14/" /etc/ups/notifycmd
 
 # Set ups poweroff
 ups_kill=$( grep -ic 'UPSKILL="enable"' $NUTCFG )
 if [ $ups_kill -eq 1 ]; then
-    var7='POWERDOWNFLAG /etc/ups/flag/killpower'
-    sed -i "3 s,.*,$var7," /etc/ups/upsmon.conf
+    var16='POWERDOWNFLAG /etc/ups/flag/killpower'
+    sed -i "3 s,.*,$var16," /etc/ups/upsmon.conf
 else
-    var8='POWERDOWNFLAG /etc/ups/flag/no_killpower'
-    sed -i "3 s,.*,$var8," /etc/ups/upsmon.conf
+    var18='POWERDOWNFLAG /etc/ups/flag/no_killpower'
+    sed -i "3 s,.*,$var18," /etc/ups/upsmon.conf
 fi
 
-	
+
 # Link shutdown scripts for poweroff in rc.0 and rc.6
 UDEV=$( grep -ic "/usr/bin/nut_restart_udev" /etc/rc.d/rc.6 )
 if [ $UDEV -ge 1 ]; then
@@ -63,7 +72,7 @@ if [ $UDEV -ge 1 ]; then
 else
     sed -i '/\/bin\/mount -v -n -o remount,ro \//r /usr/local/emhttp/plugins/nut/scripts/txt/udev.txt' /etc/rc.d/rc.6
 fi
-	
+
 KILL=$( grep -ic "/usr/bin/nut_kill_inverter" /etc/rc.d/rc.6 )
 if [ $KILL -ge 1 ]; then
     echo "KILL_INVERTER lines already exist in rc.0,6"

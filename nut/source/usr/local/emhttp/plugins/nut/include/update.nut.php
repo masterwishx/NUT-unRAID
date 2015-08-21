@@ -15,6 +15,7 @@
 ?>
 <?
 $cfg  = "/boot/config/plugins/nut/nut.cfg";
+$connection = $_POST['DRIVER']=='custom' ? $_POST['SERIAL'] : $_POST['DRIVER'];
 
 exec("/etc/rc.d/rc.nut stop");
 exec("sed -i -e '/^SERVICE/c\\SERVICE=\"'{$_POST['SERVICE']}'\"' $cfg");
@@ -25,6 +26,7 @@ exec("sed -i -e '/^ADMIN/c\\ADMIN=\"'{$_POST['ADMIN']}'\"' $cfg");
 exec("sed -i -e '/^PASSWORD/c\\PASSWORD=\"'{$_POST['PASSWORD']}'\"' $cfg");
 exec("sed -i -e '/^TIMER/c\\TIMER=\"'{$_POST['TIMER']}'\"' $cfg");
 exec("sed -i -e '/^UPSKILL/c\\UPSKILL=\"'{$_POST['UPSKILL']}'\"' $cfg");
+exec("sed -i -e '/^DRIVER/c\\DRIVER=\"'{$connection}'\"' $cfg");
 
 if ($_POST['SERVICE']=='enable') exec("/etc/rc.d/rc.nut start");
 ?>
