@@ -19,7 +19,6 @@ $connection = $_POST['DRIVER']=='custom' ? $_POST['SERIAL'] : $_POST['DRIVER'];
 
 exec("/etc/rc.d/rc.nut stop");
 exec("sed -i -e '/^SERVICE/c\\SERVICE=\"'{$_POST['SERVICE']}'\"' $cfg");
-exec("sed -i -e '/^DRIVER/c\\DRIVER=\"'{$_POST['DRIVER']}'\"' $cfg");
 exec("sed -i -e '/^PORT/c\\PORT=\"'{$_POST['PORT']}'\"' $cfg");
 exec("sed -i -e '/^MODE/c\\MODE=\"'{$_POST['MODE']}'\"' $cfg");
 exec("sed -i -e '/^ADMIN/c\\ADMIN=\"'{$_POST['ADMIN']}'\"' $cfg");
