@@ -81,7 +81,7 @@ The 'post-install' script.
 -->
 <FILE Run="/bin/bash">
 <INLINE>
-[ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/
+[ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/nut.cfg
 echo ""
 echo "-----------------------------------------------------------"
 echo " Plugin &name; is installed."
