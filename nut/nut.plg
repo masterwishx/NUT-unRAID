@@ -101,8 +101,6 @@ The 'remove' script.
 
 # Remove plugin related files
 rm -rf /boot/config/plugins/&name;
-rm -rf /usr/local/emhttp/plugins/&name;
-rm -f /etc/rc.d/rc.&name;
 
 # Uninstall the 'nut' packages
 removepkg nut-2.7.3-x86_64-1gds.txz
