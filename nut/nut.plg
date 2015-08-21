@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.22">
+<!ENTITY version    "2015.08.22a">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -13,6 +13,9 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2015.08.22a###
+- Restart NUT on upgrades
+
 ###2015.08.22###
 - Resolved first start error
 - Help fixes
@@ -32,11 +35,15 @@ The 'pre-install' script.
 /etc/rc.d/rc.nut stop 2>/dev/null
 
 # Remove old 'nut-package' file
-rm -f $(ls &path;/nut-2.7* 2>/dev/null)
-# Remove old 'nut-package' file
 rm -f $(ls &path;/&name;*.txz 2>/dev/null|grep -v '&version;')
 
 # Remove old dependencies ???
+echo ""
+echo "-----------------------------------------------------------"
+echo " Old Plugin &name; was removed"
+echo " Version: &version;"
+echo "-----------------------------------------------------------"
+echo ""
 </INLINE>
 </FILE>
 
@@ -86,7 +93,17 @@ The 'post-install' script.
 -->
 <FILE Run="/bin/bash">
 <INLINE>
+# Copy default config to persistent directory
 [ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/nut.cfg
+
+sleep 1
+# Restart NUT on upgrades
+if [ "$(grep -ic 'SERVICE="enable"' /boot/config/plugins/nut/nut.cfg)" == "1" ]; then
+	/etc/rc.d/rc.nut start
+	echo ""
+	echo "Restarting NUT service..."
+	echo ""
+fi
 echo ""
 echo "-----------------------------------------------------------"
 echo " Plugin &name; is installed."
@@ -113,6 +130,12 @@ removepkg &name;-&version;
 
 # Clear go script
 sed -i -e '/###NUT-MARKER1###/,/###NUT-MARKER2###/d' /boot/config/go
+echo ""
+echo "-----------------------------------------------------------"
+echo " Uninstalled Plugin &name;"
+echo " Version: &version;"
+echo "-----------------------------------------------------------"
+echo ""
 </INLINE>
 </FILE>
 
