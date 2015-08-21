@@ -48,7 +48,9 @@ Start NUT UPS service:
 UPS Driver:
 : <input type="text" name="DRIVER" class="narrow" maxlength="25" value="<?=$cfg['DRIVER'];?>">
 
-> Enter the *driver* which matches your UPS, check **"http://www.networkupstools.org/stable-hcl.html"** for a complete list.
+> **Check the link bellow ro find the driver matching your UPS**
+>
+> + <a href="http://www.networkupstools.org/stable-hcl.html" target="_blank">http://www.networkupstools.org/stable-hcl.html</a>
 >
 > + **usbhid-ups** - **bcmxcp_usb** - **tripplite_usb** - **blazer_usb** - **richcomm_usbExample** USB-drivers.
 >
