@@ -81,7 +81,7 @@ The 'post-install' script.
 -->
 <FILE Run="/bin/bash">
 <INLINE>
-rm /etc/ups/*sample*
+[ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/
 echo ""
 echo "-----------------------------------------------------------"
 echo " Plugin &name; is installed."
@@ -104,8 +104,9 @@ rm -rf /boot/config/plugins/&name;
 rm -rf /usr/local/emhttp/plugins/&name;
 rm -f /etc/rc.d/rc.&name;
 
-# Uninstall the 'nut' package
+# Uninstall the 'nut' packages
 removepkg nut-2.7.3-x86_64-1gds.txz
+removepkg &name;-&version;
 
 # Clear go script
 sed -i -e '/###NUT-MARKER1###/,/###NUT-MARKER2###/d' /boot/config/go
