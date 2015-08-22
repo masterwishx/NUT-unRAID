@@ -8,4 +8,4 @@ cfg=/boot/config/plugins/nut/nut.cfg
 source $cfg
 
 # Start daemon
-[[ $SERVICE == enable ]] && /etc/rc.d/rc.nut start
+[[ $SERVICE == enable ]] && /usr/local/emhttp/plugins/nut/scripts/rc.nut start

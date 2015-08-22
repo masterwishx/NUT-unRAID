@@ -46,24 +46,24 @@ mode_bat_level=$( grep -ic 'SHUTDOWN="batt_level"' $NUTCFG )
 mode_bat_timer=$( grep -ic 'SHUTDOWN="batt_timer"' $NUTCFG )
 
 if [ $mode_bat_level -eq 1 ]; then
-        sed -i "6 s,.*,NOTIFYCMD \"/etc/ups/notifycmd_batterylevel\"," /etc/ups/upsmon.conf
+        sed -i "6 s,.*,NOTIFYCMD \"/usr/local/emhttp/plugins/nut/scripts/notifycmd_batterylevel\"," /etc/ups/upsmon.conf
 else
   if [ $mode_bat_timer -eq 1 ]; then
-        sed -i "6 s,.*,NOTIFYCMD \"/etc/ups/notifycmd_seconds\"," /etc/ups/upsmon.conf
+        sed -i "6 s,.*,NOTIFYCMD \"/usr/local/emhttp/plugins/nut/scripts/notifycmd_seconds\"," /etc/ups/upsmon.conf
   else
-        sed -i "6 s,.*,NOTIFYCMD \"/etc/ups/notifycmd_timeout\"," /etc/ups/upsmon.conf
+        sed -i "6 s,.*,NOTIFYCMD \"/usr/local/emhttp/plugins/nut/scripts/notifycmd_timeout\"," /etc/ups/upsmon.conf
   fi
 fi
 
 # Edit timers fo shutdown scripts
 var5=$( grep -i "BATTERYLEVEL=" $NUTCFG|cut -d \" -f2|sed 's/^/BATTERYLEVEL=/' )
-sed -i "6 s/.*/$var5/" /etc/ups/notifycmd_batterylevel
+sed -i "6 s/.*/$var5/" /usr/local/emhttp/plugins/nut/scripts/notifycmd_batterylevel
 
 var6=$( grep -i "SECONDS=" $NUTCFG|cut -d \" -f2|sed 's/^/SECONDS=/' )
-sed -i "6 s/.*/$var6/" /etc/ups/notifycmd_seconds
+sed -i "6 s/.*/$var6/" /usr/local/emhttp/plugins/nut/scripts/notifycmd_seconds
 
 var7=$( grep -i "TIMEOUT=" $NUTCFG|cut -d \" -f2|sed 's/^/TIMEOUT=/' )
-sed -i "6 s/.*/$var7/" /etc/ups/notifycmd_timeout
+sed -i "6 s/.*/$var7/" /usr/local/emhttp/plugins/nut/scripts/notifycmd_timeout
 
 # Set if the ups should be turned off
 ups_kill=$( grep -ic 'UPSKILL="enable"' $NUTCFG )

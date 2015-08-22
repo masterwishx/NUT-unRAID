@@ -28,5 +28,5 @@ exec("sed -i -e '/^TIMEOUT/c\\TIMEOUT=\"'{$_POST['TIMEOUT']}'\"' $cfg");
 exec("sed -i -e '/^UPSKILL/c\\UPSKILL=\"'{$_POST['UPSKILL']}'\"' $cfg");
 exec("sed -i -e '/^DRIVER/c\\DRIVER=\"'{$connection}'\"' $cfg");
 
-if ($_POST['SERVICE']=='enable') exec("/etc/rc.d/rc.nut start");
+if ($_POST['SERVICE']=='enable') exec("/usr/local/emhttp/plugins/nut/scripts/rc.nut start");
 ?>

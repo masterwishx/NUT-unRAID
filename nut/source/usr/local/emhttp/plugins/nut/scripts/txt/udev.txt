@@ -1,4 +1,4 @@
 
-if [ -f /usr/bin/nut_restart_udev ]; then
-        . /usr/bin/nut_restart_udev
+if [ -f /usr/local/emhttp/plugins/nut/scripts/nut_restart_udev ]; then
+        . /usr/local/emhttp/plugins/nut/scripts/nut_restart_udev
 fi
