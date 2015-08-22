@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.22k">
+<!ENTITY version    "2015.08.22l">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -94,6 +94,7 @@ The 'post-install' script.
 <INLINE>
 # Copy default config to persistent directory
 [ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/nut.cfg
+[ ! -f &path;/VERSION ] &amp;&amp; touch &path;/VERSION
 
 echo ""
 echo "-----------------------------------------------------------"
@@ -101,8 +102,23 @@ echo " Plugin &name; is installed."
 echo " Version: &version;"
 echo "-----------------------------------------------------------"
 echo ""
-upgrade=&version;
-echo $upgrade
+verupgrade=&version;
+verboot=$( cat &path;/VERSION )
+if (( $(echo "$verupgrade $verboot" | awk '{print ($1 == $2)}') )); then
+  echo ""
+  echo "-----------------------------------------------------------"
+  echo " Versions Match, System will handle start of NUT..."
+  echo "-----------------------------------------------------------"
+  echo ""
+else
+  echo ""
+  echo "-----------------------------------------------------------"
+  echo " Upgrade was made, NUT is restarting..."
+  echo "-----------------------------------------------------------"
+  echo ""
+  echo $verupgrade > &path;/VERSION
+  /etc/rc.d/rc.nut start
+fi
 </INLINE>
 </FILE>
 
