@@ -36,7 +36,7 @@ else
 fi
 
 var3=$( grep -i "PORT=" $NUTCFG|cut -d \" -f2|sed 's/^/port = /' )
-sed -i "3 s/.*/$var3/" /etc/ups/ups.conf
+sed -i "3 s~.*~$var3~" /etc/ups/ups.conf
 
 var4=$( grep -i "MODE=" $NUTCFG|cut -d \" -f2|sed 's/^/MODE=/' )
 sed -i "1 s/.*/$var4/" /etc/ups/nut.conf
@@ -76,14 +76,14 @@ else
 fi
 
 # Link shutdown scripts for poweroff in rc.0 and rc.6
-UDEV=$( grep -ic "/usr/bin/nut_restart_udev" /etc/rc.d/rc.6 )
+UDEV=$( grep -ic "/usr/local/emhttp/plugins/nut/scripts/nut_restart_udev" /etc/rc.d/rc.6 )
 if [ $UDEV -ge 1 ]; then
     echo "UDEV lines already exist in rc.0,6"
 else
     sed -i '/\/bin\/mount -v -n -o remount,ro \//r /usr/local/emhttp/plugins/nut/scripts/txt/udev.txt' /etc/rc.d/rc.6
 fi
 
-KILL=$( grep -ic "/usr/bin/nut_kill_inverter" /etc/rc.d/rc.6 )
+KILL=$( grep -ic "/usr/local/emhttp/plugins/nut/scripts/nut_kill_inverter" /etc/rc.d/rc.6 )
 if [ $KILL -ge 1 ]; then
     echo "KILL_INVERTER lines already exist in rc.0,6"
 else

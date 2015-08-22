@@ -118,7 +118,7 @@ Runtime left to initiate shutdown (seconds):
 : <input type="text" name="SECONDS" class="narrow" maxlength="4" value="<?=$cfg['SECONDS'];?>">
 
 > If during a power failure, the remaining runtime seconds (as calculated internally by the UPS) is below or equal to *seconds*, NUT will initiate a system shutdown.
-
+> **Note** depeding on your ups this value can "fluctuate" so be aware. if yot ups have an old battery dont use this
 
 Time on battery before shutdown (seconds):
 : <input type="text" name="TIMEOUT" class="narrow" maxlength="4" value="<?=$cfg['TIMEOUT'];?>">
