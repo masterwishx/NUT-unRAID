@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.23c">
+<!ENTITY version    "2015.08.23d">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -14,16 +14,16 @@
 
 <CHANGES>
 ###2015.08.22###
-- Resolved first start error
-- Help fixes
 - Uninstall fixes
 - Fix autorestart after upgrade
 - Make USB drivers selectable
 - Add shutdown on battery levels
 - Remove user/password and hardcode them (see plugin help)
+- Moved scripts to plugin folder for 6.1 (ln -s rc.nut)
 
 ###2015.08.21###
 - Initial Release
+- Test Version (plg)
 </CHANGES>
 
 
@@ -33,15 +33,17 @@ The 'pre-install' script.
 <FILE Run="/bin/bash">
 <INLINE>
 # Stop service
-/etc/rc.d/rc.nut stop 2>/dev/null
+/usr/local/emhttp/plugins/nut/scripts/rc.nut stop 2>/dev/null
 
 # Remove old 'nut-package' file
-rm -f $(ls &path;/&name;-201*.txz 2>/dev/null|grep -v '&version;')
+if [ -d "/boot/config/plugins/nut" ]; then
+  rm -f $(ls &path;/&name;-201*.txz 2>/dev/null|grep -v '&version;')
+fi
 
 # Remove old dependencies ???
 echo ""
 echo "-----------------------------------------------------------"
-echo " Old Plugin &name; was removed"
+echo " Old Plugin &name; was removed if installed)"
 echo " Version: &version;"
 echo "-----------------------------------------------------------"
 echo ""
@@ -97,6 +99,7 @@ The 'post-install' script.
 # Copy default config to persistent directory
 [ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/nut.cfg
 [ ! -f &path;/VERSION ] &amp;&amp; touch &path;/VERSION
+ln -sf /usr/local/emhttp/plugins/nut/scripts/rc.nut /etc/rc.d/rc.nut
 
 echo ""
 echo "-----------------------------------------------------------"
@@ -121,11 +124,12 @@ else
     echo "-----------------------------------------------------------"
     echo ""
     echo $verupgrade > &path;/VERSION
-    /etc/rc.d/rc.nut start
+    /usr/local/emhttp/plugins/nut/scripts/rc.nut start
   else
     echo ""
     echo "-----------------------------------------------------------"
-    echo " Upgrade done, NUT is not set to start in plugin settings"
+    echo " New Install or Upgrade done"
+    echo " NUT is not set to auto start in plugin settings"
     echo "-----------------------------------------------------------"
     echo ""
     echo $verupgrade > &path;/VERSION
@@ -140,7 +144,7 @@ The 'remove' script.
 <FILE Run="/bin/bash" Method="remove">
 <INLINE>
 # Stop service
-/etc/rc.d/rc.&name; stop
+/usr/local/emhttp/plugins/nut/scripts/rc.&name; stop
 
 # Remove plugin related files
 rm -rf /boot/config/plugins/&name;
