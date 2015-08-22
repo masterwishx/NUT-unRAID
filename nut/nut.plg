@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.22w">
+<!ENTITY version    "2015.08.22x">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -33,7 +33,7 @@ The 'pre-install' script.
 <FILE Run="/bin/bash">
 <INLINE>
 # Stop service
-/etc/rc.d/rc.nut stop 2>/dev/null
+/usr/local/emhttp/plugins/nut/scripts/rc.nut stop 2>/dev/null
 
 # Remove old 'nut-package' file
 rm -f $(ls &path;/&name;-201*.txz 2>/dev/null|grep -v '&version;')
@@ -97,6 +97,7 @@ The 'post-install' script.
 # Copy default config to persistent directory
 [ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/nut.cfg
 [ ! -f &path;/VERSION ] &amp;&amp; touch &path;/VERSION
+ln -sf /usr/local/emhttp/plugins/nut/scripts/rc.nut /etc/rc.d/rc.nut
 
 echo ""
 echo "-----------------------------------------------------------"
@@ -121,7 +122,7 @@ else
     echo "-----------------------------------------------------------"
     echo ""
     echo $verupgrade > &path;/VERSION
-    /etc/rc.d/rc.nut start
+    /usr/local/emhttp/plugins/nut/scripts/rc.nut start
   else
     echo ""
     echo "-----------------------------------------------------------"
@@ -141,7 +142,7 @@ The 'remove' script.
 <FILE Run="/bin/bash" Method="remove">
 <INLINE>
 # Stop service
-/etc/rc.d/rc.&name; stop
+/usr/local/emhttp/plugins/nut/scripts/rc.&name; stop
 
 # Remove plugin related files
 rm -rf /boot/config/plugins/&name;
