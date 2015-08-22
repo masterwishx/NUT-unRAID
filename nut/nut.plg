@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.22j">
+<!ENTITY version    "2015.08.22k">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -101,6 +101,8 @@ echo " Plugin &name; is installed."
 echo " Version: &version;"
 echo "-----------------------------------------------------------"
 echo ""
+upgrade=&version;
+echo $upgrade
 </INLINE>
 </FILE>
 

@@ -61,7 +61,7 @@ case "$1" in
                 /usr/sbin/upsd -c reload
                 /usr/sbin/upsmon -c reload
                 ;;
-                write_config)
+	write_config)
                 write_config
                 ;;
         *)
