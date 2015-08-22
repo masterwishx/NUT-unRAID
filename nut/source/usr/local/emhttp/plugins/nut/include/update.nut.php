@@ -21,7 +21,10 @@ exec("/etc/rc.d/rc.nut stop");
 exec("sed -i -e '/^SERVICE/c\\SERVICE=\"'{$_POST['SERVICE']}'\"' $cfg");
 exec("sed -i -e '/^PORT/c\\PORT=\"'{$_POST['PORT']}'\"' $cfg");
 exec("sed -i -e '/^MODE/c\\MODE=\"'{$_POST['MODE']}'\"' $cfg");
-exec("sed -i -e '/^TIMER/c\\TIMER=\"'{$_POST['TIMER']}'\"' $cfg");
+exec("sed -i -e '/^SHUTDOWN/c\\SHUTDOWN=\"'{$_POST['SHUTDOWN']}'\"' $cfg");
+exec("sed -i -e '/^BATTERYLEVEL/c\\BATTERYLEVEL=\"'{$_POST['BATTERYLEVEL']}'\"' $cfg");
+exec("sed -i -e '/^SECONDS/c\\SECONDS=\"'{$_POST['SECONDS']}'\"' $cfg");
+exec("sed -i -e '/^TIMEOUT/c\\TIMEOUT=\"'{$_POST['TIMEOUT']}'\"' $cfg");
 exec("sed -i -e '/^UPSKILL/c\\UPSKILL=\"'{$_POST['UPSKILL']}'\"' $cfg");
 exec("sed -i -e '/^DRIVER/c\\DRIVER=\"'{$connection}'\"' $cfg");
 

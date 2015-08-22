@@ -88,16 +88,43 @@ UPS Mode:
   <?=mk_option($cfg['MODE'], "netserver", "Netserver");?>
   </select>
 
-> Enter the *mode* which mode your UPS will run in.
+> Select the *mode* which mode your UPS will run in.
 >
 > + **standalone** - When the ups is only used by the local host**
 > + **netserver** - When nut clients/slaves need to connect to the ups**
 
 
+UPS Shutdown Mode:
+: <select name="SHUTDOWN" size="1">
+  <?=mk_option($cfg['SHUTDOWN'], "batt_level", "Battery Level");?>
+  <?=mk_option($cfg['SHUTDOWN'], "batt_timer", "Runtime Left");?>
+  <?=mk_option($cfg['SHUTDOWN'], "sec_timer", "Time on Battery");?>
+  </select>
+
+> Select the *Shutdown mode* for NUT, this mode determines which "timer" to use for when the UPS will shutdown the system.
+>
+> + **Battery Level** - Shuts down the system when there is X percentage left on the battery **
+> + **Runtime Left** - Shuts down the system when there is X runtime left on the battery (in seconds)**
+> + **Time on Battery** - Shuts down the system when the user defined timer reaches zero (in seconds)**
+
+
+Battery level to initiate shutdown (%):
+: <input type="text" name="BATTERYLEVEL" class="narrow" maxlength="2" value="<?=$cfg['BATTERYLEVEL'];?>">
+
+> If during a power failure, the remaining battery percentage (as reported by the UPS) is below or equal to *Battery level*, NUT will initiate a system shutdown.
+
+
+Runtime left to initiate shutdown (seconds):
+: <input type="text" name="SECONDS" class="narrow" maxlength="4" value="<?=$cfg['SECONDS'];?>">
+
+> If during a power failure, the remaining runtime seconds (as calculated internally by the UPS) is below or equal to *seconds*, NUT will initiate a system shutdown.
+
+
 Time on battery before shutdown (seconds):
-: <input type="text" name="TIMER" class="narrow" maxlength="4" value="<?=$cfg['TIMER'];?>">
+: <input type="text" name="TIMEOUT" class="narrow" maxlength="4" value="<?=$cfg['TIMEOUT'];?>">
 
 > The time in seconds before the system will power down if a power failure accours.
+
 
 Turn off UPS after shutdown:
 : <select name="UPSKILL" size="1">
@@ -108,6 +135,18 @@ Turn off UPS after shutdown:
 > Set to *Yes* to turn off the power to the UPS after a shutdown.
 >
 > Check your bios and enable, "Automatically power on after power loss" so that the server starts again when powers is restored.
+
+
+<br><br><br>
+
+> **Additional Notes**
+>
+> The usernames and passwords for *admin* and *slave* accounts in *upsd.users* file **
+>
+> + **Admin Account**: "admin / adminpass" - **Slave Account**: "slaveuser / slavepass"
+>
+> NUT is set to listen on all interface in upsd.conf "LISTEN 0.0.0.0"
+>
 
 
 <input type="submit" name="#default" value="Default">

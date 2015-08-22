@@ -3,7 +3,7 @@
 # NUT NOTIFYCMD script macester macecapri@gmail.com
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/sbin:/usr/local/bin
 
-COUNT_DOWN=180
+TIMEOUT=200
 
 trap "exit 0" SIGTERM
 if [ "$NOTIFYTYPE" = "ONLINE" ]
@@ -15,10 +15,10 @@ then
 fi
 if [ "$NOTIFYTYPE" = "ONBATT" ]
 then
-        echo $0: $COUNT_DOWN seconds till system powers down... | wall
+        echo $0: $TIMEOUT seconds till system powers down... | wall
                /usr/local/emhttp/plugins/dynamix/scripts/notify -e "UPS Notification" -s "UPS is on battery" -i "alert"
         # Loop with one second interval to allow SIGTERM reception.
-        let "n = $COUNT_DOWN"
+        let "n = $TIMEOUT"
         while [ $n -ne 0 ]
         do
                 sleep 1

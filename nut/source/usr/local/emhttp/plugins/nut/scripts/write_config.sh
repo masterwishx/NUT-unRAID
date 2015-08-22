@@ -3,6 +3,8 @@
 # NUT plugin configuration script for unRAID
 # By macester macecapri@gmail.com
 #
+NUTCFG=/boot/config/plugins/nut/nut.cfg
+
 
 # Killpower flag permissions
 chmod 777 /etc/ups/flag
@@ -23,41 +25,55 @@ else
     useradd -u 218 -g nut -s /bin/false nut
 fi
 
-
-# Edit nut config files with values from plugin settings
-NUTCFG=/boot/config/plugins/nut/nut.cfg
-
-
-
-
+# Nut config files
 driver_custom=$( grep -ic 'DRIVER="custom"' $NUTCFG )
 if [ $driver_custom -eq 1 ]; then
         var1=$( grep -i "SERIAL=" $NUTCFG|cut -d \" -f2|sed 's/^/driver = /' )
         sed -i "2 s/.*/$var1/" /etc/ups/ups.conf
 else
-        var3=$( grep -i "DRIVER=" $NUTCFG|cut -d \" -f2|sed 's/^/driver = /' )
-        sed -i "2 s/.*/$var3/" /etc/ups/ups.conf
+        var2=$( grep -i "DRIVER=" $NUTCFG|cut -d \" -f2|sed 's/^/driver = /' )
+        sed -i "2 s/.*/$var2/" /etc/ups/ups.conf
 fi
 
-var6=$( grep -i "PORT=" $NUTCFG|cut -d \" -f2|sed 's/^/port = /' )
-sed -i "3 s/.*/$var6/" /etc/ups/ups.conf
+var3=$( grep -i "PORT=" $NUTCFG|cut -d \" -f2|sed 's/^/port = /' )
+sed -i "3 s/.*/$var3/" /etc/ups/ups.conf
 
-var8=$( grep -i "MODE=" $NUTCFG|cut -d \" -f2|sed 's/^/MODE=/' )
-sed -i "1 s/.*/$var8/" /etc/ups/nut.conf
+var4=$( grep -i "MODE=" $NUTCFG|cut -d \" -f2|sed 's/^/MODE=/' )
+sed -i "1 s/.*/$var4/" /etc/ups/nut.conf
 
-var14=$( grep -i "TIMER=" $NUTCFG|cut -d \" -f2|sed 's/^/COUNT_DOWN=/' )
-sed -i "6 s/.*/$var14/" /etc/ups/notifycmd
+# Set which shutdown script NUT should use
+mode_bat_level=$( grep -ic 'SHUTDOWN="batt_level"' $NUTCFG )
+mode_bat_timer=$( grep -ic 'SHUTDOWN="batt_timer"' $NUTCFG )
 
-# Set ups poweroff
+if [ $mode_bat_level -eq 1 ]; then
+        sed -i "6 s,.*,NOTIFYCMD \"/etc/ups/notifycmd_batterylevel\"," /etc/ups/upsmon.conf
+else
+  if [ $mode_bat_timer -eq 1 ]; then
+        sed -i "6 s,.*,NOTIFYCMD \"/etc/ups/notifycmd_seconds\"," /etc/ups/upsmon.conf
+  else
+        sed -i "6 s,.*,NOTIFYCMD \"/etc/ups/notifycmd_timeout\"," /etc/ups/upsmon.conf
+  fi
+fi
+
+# Edit timers fo shutdown scripts
+var5=$( grep -i "BATTERYLEVEL=" $NUTCFG|cut -d \" -f2|sed 's/^/BATTERYLEVEL=/' )
+sed -i "6 s/.*/$var5/" /etc/ups/notifycmd_batterylevel
+
+var6=$( grep -i "SECONDS=" $NUTCFG|cut -d \" -f2|sed 's/^/SECONDS=/' )
+sed -i "6 s/.*/$var6/" /etc/ups/notifycmd_seconds
+
+var7=$( grep -i "TIMEOUT=" $NUTCFG|cut -d \" -f2|sed 's/^/TIMEOUT=/' )
+sed -i "6 s/.*/$var7/" /etc/ups/notifycmd_timeout
+
+# Set if the ups should be turned off
 ups_kill=$( grep -ic 'UPSKILL="enable"' $NUTCFG )
 if [ $ups_kill -eq 1 ]; then
-    var16='POWERDOWNFLAG /etc/ups/flag/killpower'
-    sed -i "3 s,.*,$var16," /etc/ups/upsmon.conf
+    var8='POWERDOWNFLAG /etc/ups/flag/killpower'
+    sed -i "3 s,.*,$var8," /etc/ups/upsmon.conf
 else
-    var18='POWERDOWNFLAG /etc/ups/flag/no_killpower'
-    sed -i "3 s,.*,$var18," /etc/ups/upsmon.conf
+    var9='POWERDOWNFLAG /etc/ups/flag/no_killpower'
+    sed -i "3 s,.*,$var9," /etc/ups/upsmon.conf
 fi
-
 
 # Link shutdown scripts for poweroff in rc.0 and rc.6
 UDEV=$( grep -ic "/usr/bin/nut_restart_udev" /etc/rc.d/rc.6 )
