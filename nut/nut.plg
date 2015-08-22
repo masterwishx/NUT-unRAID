@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.22l">
+<!ENTITY version    "2015.08.22m">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -104,6 +104,7 @@ echo "-----------------------------------------------------------"
 echo ""
 verupgrade=&version;
 verboot=$( cat &path;/VERSION )
+bootenable=$( grep -ic 'SERVICE="enable"' &path;/nut.cfg )
 if (( $(echo "$verupgrade $verboot" | awk '{print ($1 == $2)}') )); then
   echo ""
   echo "-----------------------------------------------------------"
@@ -111,13 +112,22 @@ if (( $(echo "$verupgrade $verboot" | awk '{print ($1 == $2)}') )); then
   echo "-----------------------------------------------------------"
   echo ""
 else
-  echo ""
-  echo "-----------------------------------------------------------"
-  echo " Upgrade was made, NUT is restarting..."
-  echo "-----------------------------------------------------------"
-  echo ""
-  echo $verupgrade > &path;/VERSION
-  /etc/rc.d/rc.nut start
+  if [ $bootenable -eq 1 ]; then
+    echo ""
+    echo "-----------------------------------------------------------"
+    echo " Upgrade done, NUT is restarting..."
+    echo "-----------------------------------------------------------"
+    echo ""
+    echo $verupgrade > &path;/VERSION
+    /etc/rc.d/rc.nut start
+  else
+    echo ""
+    echo "-----------------------------------------------------------"
+    echo " Upgrade done, NUT is not set to start in plugin settings"
+    echo "-----------------------------------------------------------"
+    echo ""
+    echo $verupgrade > &path;/VERSION
+  fi
 fi
 </INLINE>
 </FILE>

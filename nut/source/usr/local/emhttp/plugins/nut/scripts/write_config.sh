@@ -79,11 +79,3 @@ if [ $KILL -ge 1 ]; then
 else
      sed -i -e '/# Now halt (poweroff with APM or ACPI enabled kernels) or reboot./r /usr/local/emhttp/plugins/nut/scripts/txt/kill.txt' -e //N /etc/rc.d/rc.6
 fi
-
-# Enable autostart of NUT
-#go=$( grep -ic "NUT-MARKER1" /boot/config/go )
-#if [ $go -ge 1 ]; then
-#    echo "Go script already configured."
-#else
-#    cat /usr/local/emhttp/plugins/nut/scripts/txt/go.txt >> /boot/config/go
-#fi
