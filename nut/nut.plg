@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.22z">
+<!ENTITY version    "2015.08.23">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -37,7 +37,7 @@ The 'pre-install' script.
 
 # Remove old 'nut-package' file
 if [ -d "/boot/config/plugins/nut" ]; then
-  rm -f $(ls &path;/&name;-201*.txz 2>/dev/null|grep -v '&version;')
+  rm -f &path;/&name;-201*.txz
 fi
 
 # Remove old dependencies ???
