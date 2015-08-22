@@ -45,12 +45,6 @@ sed -i "3 s/.*/$var6/" /etc/ups/ups.conf
 var8=$( grep -i "MODE=" $NUTCFG|cut -d \" -f2|sed 's/^/MODE=/' )
 sed -i "1 s/.*/$var8/" /etc/ups/nut.conf
 
-var10=$( grep -i "ADMIN=" $NUTCFG|cut -d \" -f2|sed 's/^/[/'|sed 's/$/]/' )
-sed -i "1 s/.*/$var10/" /etc/ups/upsd.users
-
-var12=$( grep -i "PASSWORD=" $NUTCFG|cut -d \" -f2|sed 's/^/password = /' )
-sed -i "2 s/.*/$var12/" /etc/ups/upsd.users
-
 var14=$( grep -i "TIMER=" $NUTCFG|cut -d \" -f2|sed 's/^/COUNT_DOWN=/' )
 sed -i "6 s/.*/$var14/" /etc/ups/notifycmd
 

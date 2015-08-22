@@ -4,5 +4,8 @@ actions=set
 actions=fsd
 instcmds=all
 [monuser]
-password=pass
+password=monpass
 upsmon master
+[slaveuser]
+password=slavepass
+upsmon slave

@@ -94,22 +94,6 @@ UPS Mode:
 > + **netserver** - When nut clients/slaves need to connect to the ups**
 
 
-Admin Username:
-: <input type="text" name="ADMIN"  class="narrow" maxlength="25" value="<?=$cfg['ADMIN'];?>">
-
-> Enter the *username* for the administrator account for the UPS.
->
-> + **EXAMPLE** - When you want to administrate or monitor the UPS remotely**
-
-
-Admin Password:
-: <input type="text" name="PASSWORD"  class="narrow" maxlength="25" value="<?=$cfg['PASSWORD'];?>">
-
-> Enter the *password* for the administrator account for the UPS.
->
-> + **EXAMPLE** - When you want to administrate or monitor the UPS remotely**
-
-
 Time on battery before shutdown (seconds):
 : <input type="text" name="TIMER" class="narrow" maxlength="4" value="<?=$cfg['TIMER'];?>">
 
