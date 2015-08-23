@@ -66,6 +66,8 @@ UPS Driver:
 > + <a href="http://www.networkupstools.org/stable-hcl.html" target="_blank">http://www.networkupstools.org/stable-hcl.html</a>
 >
 > For other devices set **Custom** and enter the driver manually below.
+> Dont forget to match the port with your driver
+>
 
 
 Custom Driver:
