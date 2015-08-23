@@ -3,7 +3,8 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "nut">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.08.23rc">
+<!ENTITY version    "2015.08.23rc.1">
+<!ENTITY launch     "NUTsettings">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
 <!ENTITY path       "/boot/config/plugins/&name;">
@@ -13,6 +14,10 @@
 <PLUGIN name="&name;" author="&author;" version="&version;" pluginURL="&pluginURL;">
 
 <CHANGES>
+###2015.08.23###
+- added blazer_ser to drivers
+- added plugin launch (thanx saarg)
+
 ###2015.08.23###
 - Public Release
 - Fix, Restart on upgrades
@@ -47,7 +52,7 @@ fi
 # Remove old dependencies ???
 echo ""
 echo "-----------------------------------------------------------"
-echo " Old Plugin &name; was removed if installed)"
+echo " Old Plugin &name; was removed (if installed)"
 echo " Version: &version;"
 echo "-----------------------------------------------------------"
 echo ""

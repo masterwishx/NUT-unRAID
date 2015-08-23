@@ -53,6 +53,7 @@ Start NUT UPS service:
 UPS Driver:
 : <select name="DRIVER" size="1" onChange="toggleCustomDriver(this.form)">
   <?=mk_option($cfg['DRIVER'], "blazer_usb", "Blazer_usb");?>
+  <?=mk_option($cfg['DRIVER'], "blazer_ser", "Blazer_ser");?>
   <?=mk_option($cfg['DRIVER'], "bcmxcp_usb", "Bcmxcp_usb");?>
   <?=mk_option($cfg['DRIVER'], "richcomm_usb", "Richcomm_usb");?>
   <?=mk_option($cfg['DRIVER'], "tripplite_usb", "Tripplite_usb");?>
