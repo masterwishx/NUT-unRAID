@@ -67,13 +67,13 @@ UPS Driver:
 >
 > For other devices set **Custom** and enter the driver manually below.
 > Dont forget to match the port with your driver
->
 
 
 Custom Driver:
 : <input type="text" name="SERIAL" class="narrow" maxlength="40" value="<?=$cfg['SERIAL'];?>">
 
 > Use the *Link* above to find which Driver to choose.
+> Dont forget to match the port with your driver
 
 
 UPS Port:
