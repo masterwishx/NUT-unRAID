@@ -9,7 +9,7 @@ NUTCFG=/boot/config/plugins/nut/nut.cfg
 # Killpower flag permissions
 chmod 777 /etc/ups/flag
 
-# Add nut user and group i for udev at shutdown
+# Add nut user and group for udev at shutdown
 GROUP=$( grep -ic "218" /etc/group )
 USER=$( grep -ic "218" /etc/passwd )
 
@@ -26,6 +26,8 @@ else
 fi
 
 # Nut config files
+
+# Add the driver config
 driver_custom=$( grep -ic 'DRIVER="custom"' $NUTCFG )
 if [ $driver_custom -eq 1 ]; then
         var1=$( grep -i "SERIAL=" $NUTCFG|cut -d \" -f2|sed 's/^/driver = /' )
@@ -35,9 +37,11 @@ else
         sed -i "2 s/.*/$var2/" /etc/ups/ups.conf
 fi
 
+# add the port
 var3=$( grep -i "PORT=" $NUTCFG|cut -d \" -f2|sed 's/^/port = /' )
 sed -i "3 s~.*~$var3~" /etc/ups/ups.conf
 
+# add mode standalone/netserver
 var4=$( grep -i "MODE=" $NUTCFG|cut -d \" -f2|sed 's/^/MODE=/' )
 sed -i "1 s/.*/$var4/" /etc/ups/nut.conf
 
@@ -56,12 +60,16 @@ else
 fi
 
 # Edit timers fo shutdown scripts
+
+# shutdown when battery gets to level
 var5=$( grep -i "BATTERYLEVEL=" $NUTCFG|cut -d \" -f2|sed 's/^/BATTERYLEVEL=/' )
 sed -i "6 s/.*/$var5/" /usr/local/emhttp/plugins/nut/scripts/notifycmd_batterylevel
 
+# shutdown when battery time runs out
 var6=$( grep -i "SECONDS=" $NUTCFG|cut -d \" -f2|sed 's/^/SECONDS=/' )
 sed -i "6 s/.*/$var6/" /usr/local/emhttp/plugins/nut/scripts/notifycmd_seconds
 
+# shutdown on user timer
 var7=$( grep -i "TIMEOUT=" $NUTCFG|cut -d \" -f2|sed 's/^/TIMEOUT=/' )
 sed -i "6 s/.*/$var7/" /usr/local/emhttp/plugins/nut/scripts/notifycmd_timeout
 
