@@ -150,6 +150,7 @@ Turn off UPS after shutdown:
 >
 > NUT is set to listen on all interface in upsd.conf "LISTEN 0.0.0.0"
 >
+> macester (macecapri@gmail.com)
 
 
 <input type="submit" name="#default" value="Default">
