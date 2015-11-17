@@ -26,15 +26,6 @@ fi
 
 echo "Bridge Plugin:  Started..." | $LOGGER
 
-/etc/rc.d/rc.inet1 stop
-echo "Bridge Plugin:  /etc/rc.d/rc.inet1 stop" | $LOGGER
-
-/usr/bin/sed -i 's/$ETH //g' /etc/rc.d/rc.inet1.conf
-echo "Bridge Plugin:  /usr/bin/sed -i 's/$ETH //g' /etc/rc.d/rc.inet1.conf" | $LOGGER
-
-/etc/rc.d/rc.inet1 start
-echo "Bridge Plugin:  /etc/rc.d/rc.inet1 start" | $LOGGER
-
 /sbin/brctl addbr $BR
 echo "Bridge Plugin:  /sbin/brctl addbr $BR" | $LOGGER
 
@@ -43,6 +34,11 @@ echo "Bridge Plugin:  /sbin/brctl stp $BR $STP" | $LOGGER
 
 /sbin/brctl setfd $BR $FD
 echo "Bridge Plugin:  /sbin/brctl setfd $BR $FD" | $LOGGER
+
+/sbin/brctl delif br0 $ETH
+echo "Bridge Plugin:  /sbin/brctl addif $BR $ETH" | $LOGGER
+
+sleep 1
 
 /sbin/brctl addif $BR $ETH
 echo "Bridge Plugin:  /sbin/brctl addif $BR $ETH" | $LOGGER
