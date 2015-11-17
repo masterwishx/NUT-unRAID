@@ -26,23 +26,14 @@ fi
 
 echo "Bridge Plugin:  Started..." | $LOGGER
 
-/sbin/ifconfig br0 down
-echo "Bridge Plugin:  /sbin/ifconfig br0 down" | $LOGGER
-
-/sbin/ifconfig $ETH down
-echo "Bridge Plugin:  /sbin/ifconfig $ETH down" | $LOGGER
-
-/sbin/brctl delif br0 $ETH
-echo "Bridge Plugin:  /sbin/brctl delif br0 $ETH" | $LOGGER
-
-/sbin/ifconfig br0 up
-echo "Bridge Plugin:  /sbin/ifconfig br0 up" | $LOGGER
-
-/sbin/ifconfig $ETH 0.0.0.0 promisc up
-echo "Bridge Plugin:  /sbin/ifconfig $ETH 0.0.0.0 promisc up" | $LOGGER
+/etc/rc.d/rc.inet1 stop
+echo "Bridge Plugin:  /etc/rc.d/rc.inet1 stop" | $LOGGER
 
 /usr/bin/sed -i 's/$ETH //g' /etc/rc.d/rc.inet1.conf
 echo "Bridge Plugin:  /usr/bin/sed -i 's/$ETH //g' /etc/rc.d/rc.inet1.conf" | $LOGGER
+
+/etc/rc.d/rc.inet1 start
+echo "Bridge Plugin:  /etc/rc.d/rc.inet1 start" | $LOGGER
 
 /sbin/brctl addbr $BR
 echo "Bridge Plugin:  /sbin/brctl addbr $BR" | $LOGGER
