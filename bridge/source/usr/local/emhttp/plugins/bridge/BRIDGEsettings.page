@@ -69,7 +69,7 @@ Forward delay:
 : <input type="text" name="DELAY" class="narrow" maxlength="40" value="<?=$cfg['DELAY'];?>">
 
 
-> Set bridge forward delay (numbers).
+> Set bridge forward delay (numbers) 0 will give a false negative.
 >
 
 <input type="submit" name="#default" value="Default">
