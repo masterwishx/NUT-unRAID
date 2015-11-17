@@ -65,7 +65,7 @@ STP Mode:
 >
 
 
-STP Mode:
+Forward delay:
 : <select name="DELAY" size="1">
   <?=mk_option($cfg['DELAY'], "on", "On");?>
   <?=mk_option($cfg['DELAY'], "off", "Off");?>
