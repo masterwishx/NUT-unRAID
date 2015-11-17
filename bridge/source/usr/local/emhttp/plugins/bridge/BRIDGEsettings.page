@@ -66,12 +66,10 @@ STP Mode:
 
 
 Forward delay:
-: <select name="DELAY" size="1">
-  <?=mk_option($cfg['DELAY'], "on", "On");?>
-  <?=mk_option($cfg['DELAY'], "off", "Off");?>
-  </select>
+: <input type="text" name="DELAY" class="narrow" maxlength="40" value="<?=$cfg['DELAY'];?>">
 
-> Set bridge forward delay.
+
+> Set bridge forward delay (numbers).
 >
 
 <input type="submit" name="#default" value="Default">

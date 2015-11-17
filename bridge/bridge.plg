@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name       "bridge">
 <!ENTITY author     "macester">
-<!ENTITY version    "2015.11.17b">
+<!ENTITY version    "2015.11.17c">
 <!ENTITY launch     "Settings/BRIDGEsettings">
 <!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/bridge/&name;.plg">
 <!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
