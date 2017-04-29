@@ -1,19 +1,21 @@
 <?xml version='1.0' standalone='yes'?>
 
 <!DOCTYPE PLUGIN [
-<!ENTITY name       "nut">
-<!ENTITY author     "macester">
-<!ENTITY version    "2015.09.19">
-<!ENTITY launch     "Settings/NUTsettings">
-<!ENTITY pluginURL  "https://raw.githubusercontent.com/macexx/plugins/master/nut/&name;.plg">
-<!ENTITY pkgURL	    "https://raw.githubusercontent.com/macexx/plugins/master/pkgs/">
-<!ENTITY path       "/boot/config/plugins/&name;">
-<!ENTITY repository "https://raw.githubusercontent.com/macexx/plugins/master/nut/archive/">
+<!ENTITY name        "nut">
+<!ENTITY author      "dmacias72">
+<!ENTITY version     "2017.04.29">
+<!ENTITY launch      "Settings/NUTsettings">
+<!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unRAID-plugins/master">
+<!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
+<!ENTITY pkgURL    "&gitURL;/packages">
+<!ENTITY plgPATH   "/boot/config/plugins/&name;">
+<!ENTITY plgNAME   "&name;-&version;-x86_64-1">
 ]>
 
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
+##&name;
 ###2015.09.19###
 - UPS statistics now auto updates(every two seconds)
 
@@ -40,62 +42,17 @@
 - Test Version (plg)
 </CHANGES>
 
-
-<!--
-The 'pre-install' script.
--->
-<FILE Run="/bin/bash">
-<INLINE>
-# Stop service
-/usr/local/emhttp/plugins/nut/scripts/rc.nut stop 2>/dev/null
-
-# Remove old 'nut-package' file
-if [ -d "/boot/config/plugins/nut" ]; then
-  rm -f $(ls &path;/&name;-201*.txz 2>/dev/null|grep -v '&version;')
-fi
-
-# Remove old dependencies ???
-echo ""
-echo "-----------------------------------------------------------"
-echo " Old Plugin &name; was removed (if installed)"
-echo " Version: &version;"
-echo "-----------------------------------------------------------"
-echo ""
-</INLINE>
-</FILE>
-
-
-
 <!--
 dependency files
 -->
-<FILE Name="&path;/dependencies/expat-2.1.0-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>&pkgURL;expat-2.1.0-x86_64-1.txz</URL>
-</FILE>
-<FILE Name="&path;/dependencies/freeipmi-1.4.8-x86_64-1gds.txz" Run="upgradepkg --install-new">
-<URL>&pkgURL;freeipmi-1.4.8-x86_64-1gds.txz</URL>
-</FILE>
-<FILE Name="&path;/dependencies/libtool-2.4.6-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>&pkgURL;libtool-2.4.6-x86_64-1.txz</URL>
-</FILE>
-<FILE Name="&path;/dependencies/libusb-compat-0.1.5-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>&pkgURL;libusb-compat-0.1.5-x86_64-1.txz</URL>
-</FILE>
-<FILE Name="&path;/dependencies/neon-0.29.6-x86_64-2.txz" Run="upgradepkg --install-new">
-<URL>&pkgURL;neon-0.29.6-x86_64-2.txz</URL>
-</FILE>
-<FILE Name="&path;/dependencies/net-snmp-5.7.3-x86_64-1.txz" Run="upgradepkg --install-new">
-<URL>&pkgURL;net-snmp-5.7.3-x86_64-1.txz</URL>
-</FILE>
 
 <!--
 The 'nut-package' file.
 -->
-<FILE Name="&path;/nut-2.7.3-x86_64-1gds.txz" Run="upgradepkg --install-new">
-<URL>&pkgURL;nut-2.7.3-x86_64-1gds.txz</URL>
+<FILE Name="&plgPATH;/nut-2.7.4-x86_64-1gds.txz" Min="6.1" Run="upgradepkg --install-new">
+<URL>&pkgURL;/nut-2.7.4-x86_64-1gds.txz</URL>
+<MD5>a7a7125af78c8744c721c9dce79ca0d9</MD5>
 </FILE>
-
-
 
 <!--
 nut package
@@ -104,50 +61,75 @@ nut package
 <URL>&repository;&name;-&version;.txz</URL>
 </FILE>
 
+<!--
+The 'plugin' package file.
+-->
+<FILE Name="&plgPATH;/&plgNAME;.txz">
+<URL>&gitURL;/archive/&plgNAME;.txz</URL>
+</FILE>
 
 <!--
-The 'post-install' script.
+The 'plugin' package MD5 hash.
+-->
+<FILE Name="&plgPATH;/&plgNAME;.md5">
+<URL>&gitURL;/archive/&plgNAME;.md5</URL>
+</FILE>
+
+<FILE Name="&plgPATH;/&name;.cfg">
+<INLINE>
+<![CDATA[
+# Network UPS Tools configuration:
+SERVICE="disable"
+DRIVER="custom"
+SERIAL="none"
+PORT="auto"
+MODE="standalone"
+SHUTDOWN="sec_timer"
+BATTERYLEVEL="20"
+SECONDS="240"
+TIMEOUT="240"
+UPSKILL="disable"
+]]>
+</INLINE>
+</FILE>
+
+<!--
+The 'install' script.
 -->
 <FILE Run="/bin/bash">
 <INLINE>
-# Copy default config to persistent directory
-[ ! -f &path;/&name;.cfg ] &amp;&amp; cp /usr/local/emhttp/plugins/&name;/default.cfg &path;/nut.cfg
-[ ! -f &path;/VERSION ] &amp;&amp; touch &path;/VERSION
-ln -sf /usr/local/emhttp/plugins/nut/scripts/rc.nut /etc/rc.d/rc.nut
+#Verify unRAID Version
+source /etc/unraid-version
+if [[ ${version:0:3} == 6.0 ]]; then
+  echo "unRAID version 6.1 or higher is required"
+  exit 1
+fi
 
-echo ""
-echo "-----------------------------------------------------------"
-echo " Plugin &name; is installed."
-echo " Version: &version;"
-echo "-----------------------------------------------------------"
-echo ""
-verupgrade=&version;
-verboot=$( cat &path;/VERSION )
-bootenable=$( grep -ic 'SERVICE="enable"' &path;/nut.cfg )
-if (( $(echo "$verupgrade $verboot" | awk '{print ($1 == $2)}') )); then
-  echo ""
-  echo "-----------------------------------------------------------"
-  echo " Versions Match, System will handle start of NUT..."
-  echo "-----------------------------------------------------------"
-  echo ""
+# Verify and install plugin package
+sum1=$(/usr/bin/md5sum &plgPATH;/&plgNAME;.txz)
+sum2=$(/usr/bin/cat &plgPATH;/&plgNAME;.md5)
+if [ "${sum1:0:32}" != "${sum2:0:32}" ]; then
+    echo "Wrong 'plugin' package md5 hash."
+    rm &plgPATH;/&plgNAME;.txz
+    rm &plgPATH;/&plgNAME;.md5
+    exit 1
 else
-  if [ $bootenable -eq 1 ]; then
-    echo ""
-    echo "-----------------------------------------------------------"
-    echo " Upgrade done, NUT is restarting..."
-    echo "-----------------------------------------------------------"
-    echo ""
-    echo $verupgrade > &path;/VERSION
-    /usr/local/emhttp/plugins/nut/scripts/rc.nut start
-  else
-    echo ""
-    echo "-----------------------------------------------------------"
-    echo " New Install or Upgrade done"
-    echo " NUT is not set to auto start in plugin settings"
-    echo "-----------------------------------------------------------"
-    echo ""
-    echo $verupgrade > &path;/VERSION
-  fi
+    # upgrade package
+    upgradepkg --install-new &plgPATH;/&plgNAME;.txz
+
+ # Cleaning old source files
+ find &plgPATH;/ -type f -iname "&name;*.txz" ! -iname "*&version;*" -delete
+ find &plgPATH;/ -type f -iname "&name;*.md5" ! -iname "*&version;*" -delete
+
+ echo ""
+ echo "-----------------------------------------------------------"
+ echo " &name; has been installed."
+ echo " This plugin requires Dynamix webGui to operate"
+ echo " Copyright 2015-2017, &author;"
+ echo " Version: &version;"
+ echo "-----------------------------------------------------------"
+ echo ""
+
 fi
 </INLINE>
 </FILE>
@@ -158,21 +140,30 @@ The 'remove' script.
 <FILE Run="/bin/bash" Method="remove">
 <INLINE>
 # Stop service
-/usr/local/emhttp/plugins/nut/scripts/rc.&name; stop
+#/etc/rc.d/rc.nut stop 2>/dev/null
 
-# Remove plugin related files
-rm -rf /boot/config/plugins/&name;
-
-# Uninstall the 'nut' packages
-removepkg nut-2.7.3-x86_64-1gds.txz
-removepkg &name;-&version;
+removepkg &plgPATH;/*.txz
+rm -rf &emhttp;
+rm -f &plgPATH;/*.txz \
+  &plgPATH;/*.md5
 
 echo ""
 echo "-----------------------------------------------------------"
-echo " Uninstalled Plugin &name;"
+echo " &name; has been removed."
+echo " Copyright 2015-2017, &author;"
 echo " Version: &version;"
 echo "-----------------------------------------------------------"
 echo ""
+</INLINE>
+</FILE>
+
+<FILE Name="/tmp/nut-chkconf" Run="/bin/bash">
+<INLINE>
+<![CDATA[
+#!/bin/sh
+# This will check each entry in the config so nothing is missing, and if missing, sets to default
+rm /tmp/cmdline-chkconf
+]]>
 </INLINE>
 </FILE>
 
