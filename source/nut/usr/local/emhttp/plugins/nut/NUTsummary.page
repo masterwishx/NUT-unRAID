@@ -1,0 +1,37 @@
+Menu="Dashboard:2"
+Title="NUT Summary"
+Cond="file_exists('/var/run/upsmon.pid')"
+---
+<?PHP
+/* Copyright 2017, Derek Macias.
+ * Copyright 2005-2016, Lime Technology
+ * Copyright 2015, Dan Landon.
+ * Copyright 2015, Bergware International.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License version 2,
+ * as published by the Free Software Foundation.
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ */
+?>
+<style>
+table.ups thead tr th{width:16.6%;padding-left:10px;}
+table.ups tbody tr td{padding-left:10px;font-weight:bold;}
+</style>
+<script>
+function getNUTstatus() {
+  $.get('/plugins/nut/include/nut_status.php',{all:'false'},function(data) {
+    if (data) $('#nut_summary').html(data);
+<?if ($update):?>
+    setTimeout(getNUTstatus, <?=max(abs($display['refresh']),15000)?>);
+<?endif;?>
+  });
+}
+$(getNUTstatus);
+</script>
+<table class="tablesorter shift nut">
+<thead><tr><th>UPS Status</th><th>Battery Charge %</th><th>Runtime Left</th><th>Nominal Power</th><th>UPS Load</th><th>UPS Load %</th></tr></thead>
+<tbody id="nut_summary"><tr><td colspan="6">&nbsp;</td></tr></tbody>
+</table>
