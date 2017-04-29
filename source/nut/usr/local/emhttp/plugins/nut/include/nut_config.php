@@ -1,0 +1,14 @@
+<?
+$sName = "nut";
+$nut_cfg           = parse_ini_file('/boot/config/plugins/$sName/$sName.cfg');
+$nut_service     = isset($nut_cfg['SERVICE'])           ? htmlspecialchars($nut_cfg['SERVICE'])             : 'disable';
+$nut_driver       = isset($nut_cfg['DRIVER'])            ? htmlspecialchars($nut_cfg['DRIVER'])               : 'custom';
+$nut_serial       = isset($nut_cfg['SERIAL'])              ? htmlspecialchars($nut_cfg['SERIAL'])               : 'none';
+$nut_port         = isset($nut_cfg['PORT'])                ? htmlspecialchars($nut_cfg['PORT'])                 : 'auto';
+$nut_mode       = isset($nut_cfg['MODE'])               ? htmlspecialchars($nut_cfg['MODE'])                : 'standalone';
+$nut_shutdown = isset($nut_cfg['SHUTDOWN'])      ? htmlspecialchars($nut_cfg['SHUTDOWN'])       : 'sec_timer';
+$nut_battery     = isset($nut_cfg['BATTERYLEVEL']) ? intval($nut_cfg ['BATTERYLEVEL'])                   : 20;
+$nut_seconds    = isset($nut_cfg['SECONDS'])         ? intval($nut_cfg ['SECONDS'])                           : 240;
+$nut_timeout     = isset($nut_cfg['TIMEOUT'])          ? intval($nut_cfg ['TIMEOUT'])                            : 240;
+$nut_upskill       = isset($nut_cfg['UPSKILL'])           ? htmlspecialchars($nut_cfg ['UPSKILL'])             : 'disable';
+?>
