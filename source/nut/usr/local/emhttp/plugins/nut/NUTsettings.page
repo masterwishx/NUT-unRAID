@@ -19,8 +19,8 @@ Icon="nut.png"
  * Modified by macester macecapri@gmail.com for NUT plugin
  *
  */
-<? require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 ?>
+<? require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
 <table class="tablesorter shift nut" <?if (!file_exists('/var/run/upsmon.pid')):?>style="display:none"<?endif;?>>
 <thead><tr><th>UPS Status</th><th>Battery Charge %</th><th>Runtime Left </th><th>Nominal Power</th><th>UPS Load</th><th>UPS Load %</th></tr></thead>
@@ -29,11 +29,12 @@ Icon="nut.png"
 
 <form markdown="1" name="nut_settings" method="POST" action="/update.php" target="progressFrame">
 <input type="hidden" name="#file" value="<?=$sName?>/<?=$sName?>.cfg">
-<input type="hidden" name="#include" value="/plugins/<?=$sName?>/include/update.nut.php">
+<input type="hidden" id="command" name="#command" value="" />
+<!--<input type="hidden" name="#include" value="/plugins/<?=$sName?>/include/update.nut.php"> -->
 <span style="float:right;margin-right:10px"><a href="http://www.networkupstools.org/docs/user-manual.chunked/" target="_blank" title="NUT UPS user manual"><i class="fa fa-file-text-o"></i> <u>Online Manual</u></a></span>
 
 Start Network UPS Tools service:
-: <select name="SERVICE" size="1">
+: <select id="SERVICE" name="SERVICE" size="1">
   <?=mk_option($nut_service, "disable", "No");?>
   <?=mk_option($nut_service, "enable", "Yes");?>
   </select>
@@ -43,15 +44,16 @@ Start Network UPS Tools service:
 
 
 UPS Driver:
-: <select id="DRIVER" name="DRIVER" size="1" >
+: <select class="nut-run" id="DRIVER" name="DRIVER" size="1" >
   <?=mk_option($nut_driver, "blazer_usb", "Blazer_usb");?>
   <?=mk_option($nut_driver, "blazer_ser", "Blazer_ser");?>
   <?=mk_option($nut_driver, "bcmxcp_usb", "Bcmxcp_usb");?>
   <?=mk_option($nut_driver, "richcomm_usb", "Richcomm_usb");?>
   <?=mk_option($nut_driver, "tripplite_usb", "Tripplite_usb");?>
   <?=mk_option($nut_driver, "usbhid-ups", "Usbhid-ups");?>
+  <?=mk_option($nut_driver, "snmp-ups", "SNMP-UPS");?>
   <?=mk_option($nut_driver, "custom", "Custom");?>
-  </select><input type="hidden" class="serial" name="SERIAL" class="narrow" maxlength="40" value="<?=$nut_serial;?>">
+  </select><input type="hidden" class="narrow serial nut-run" id="SERIAL" name="SERIAL" class="narrow" maxlength="40" value="<?=$nut_serial;?>">
 
 > **Check the link below to find the driver matching your UPS**
 >
@@ -64,16 +66,29 @@ UPS Driver:
 
 
 UPS Port:
-: <input type="text" name="PORT" class="narrow" maxlength="40" value="<?=$nut_port;?>">
+: <input type="text" name="PORT" class="narrow nut-run" maxlength="40" value="<?=$nut_port;?>">
 
 > Enter the *port* which your UPS connects to.
 >
 > + **auto** - Set to "auto" if the ups is connected by usb.
-> + **/dev/tty0** - Example, for seriall devices**
+> + **/dev/tty0** - Example, for serial devices**
+
+<!--
+<text class="snmp">SNMP Community:</text>
+: <input type="text" class="snmp" name="COMMUNITY" class="narrow" maxlength="40" value="<?=$nut_community;?>">
+
+> Enter your UPS SNMP Agent's read community here.
+
+
+<text class="snmp">SNMP Polling Frequency:</text>
+: <input type="text" class="snmp" name="POLL" class="narrow" maxlength="40" value="<?=$nut_poll;?>">
+
+>Enter the desired polling frequency (in seconds).
+-->
 
 
 UPS Mode:
-: <select name="MODE" size="1">
+: <select class="nut-run" name="MODE" size="1">
   <?=mk_option($nut_mode, "standalone", "Standalone");?>
   <?=mk_option($nut_mode, "netserver", "Netserver");?>
   </select>
@@ -85,7 +100,7 @@ UPS Mode:
 
 
 UPS Shutdown Mode:
-: <select name="SHUTDOWN" size="1">
+: <select class="nut-run" name="SHUTDOWN" size="1">
   <?=mk_option($nut_shutdown, "batt_level", "Battery Level");?>
   <?=mk_option($nut_shutdown, "batt_timer", "Runtime Left");?>
   <?=mk_option($nut_shutdown, "sec_timer", "Time on Battery");?>
@@ -99,25 +114,25 @@ UPS Shutdown Mode:
 
 
 Battery level to initiate shutdown (%):
-: <input type="text" name="BATTERYLEVEL" class="narrow" maxlength="2" value="<?=$nut_battery_level;?>">
+: <input type="text" name="BATTERYLEVEL" class="narrow nut-run batterylevel" maxlength="2" value="<?=$nut_battery;?>">
 
 > If during a power failure, the remaining battery percentage (as reported by the UPS) is below or equal to *Battery level*, NUT will initiate a system shutdown.
 
 
 Runtime left to initiate shutdown (seconds):
-: <input type="text" name="SECONDS" class="narrow" maxlength="4" value="<?=$nut_seconds;?>">
+: <input type="text" name="SECONDS" class="narrow nut-run seconds" maxlength="4" value="<?=$nut_seconds;?>">
 
 > If during a power failure, the remaining runtime seconds (as calculated internally by the UPS) is below or equal to *seconds*, NUT will initiate a system shutdown.
 > **Note** depeding on your ups this value can "fluctuate" so be aware. if yot ups have an old battery dont use this
 
 Time on battery before shutdown (seconds):
-: <input type="text" name="TIMEOUT" class="narrow" maxlength="4" value="<?=$nut_timeout;?>">
+: <input type="text" name="TIMEOUT" class="narrow nut-run timeout" maxlength="4" value="<?=$nut_timeout;?>">
 
 > The time in seconds before the system will power down if a power failure accours.
 
 
 Turn off UPS after shutdown:
-: <select name="UPSKILL" size="1">
+: <select class="nut-run" name="UPSKILL" size="1">
   <?=mk_option($nut_upskill, "disable", "No");?>
   <?=mk_option($nut_upskill, "enable", "Yes");?>
   </select>
@@ -136,8 +151,8 @@ Turn off UPS after shutdown:
 >
 > NUT is set to listen on all interface in upsd.conf "LISTEN 0.0.0.0"
 
-<input type="submit" name="#default" value="Default">
-: <input type="submit" name="#apply" value="Apply"><input type="button" value="Done" onclick="done()">
+<input id="DEFAULT" class="nut-run" type="submit" name="#default" value="Default">
+: <input type="submit" id="btnApply" name="#apply" value="Apply"><input type="button" value="Done" onclick="done()">
 </form>
 
 <script>
@@ -152,29 +167,46 @@ $(function() {
         });
     <?endif;?>
 
+    $('#SERVICE').change(checkRUNNING);
     $('#DRIVER').change(checkDRIVER);
-    $('#SERIAL').change(checkSERIAL);
+    //$('#SERIAL').change(checkSERIAL);
 
-    checkSerial();
+    checkRUNNING();
+    checkDRIVER();
+    //checkSERIAL();
 });
 
-function checkDRIVER(){
-    if ($('#DRIVER')[0].selectedIndex == 6)
-        $('.serial').css('visibility','visible')
+function checkRUNNING() {
+    if ($('#SERVICE').val() === 'enable')
+        $('#command').val('/usr/local/emhttp/plugins/nut/scripts/start');
     else
-        $('.serial').css('visibility','hidden')
+        $('#command').val('/usr/local/emhttp/plugins/nut/scripts/stop');
+
+    if ("<?=$nut_running;?>" == true)
+        $('.nut-run').prop('disabled', true);
+    else
+        $('.nut-run').prop('disabled', false);
 }
 
-function checkSERIAL() {
-    if ($('#DRIVER').val() != 'custom' ) {
-        $('#SERIAL').val($('#DRIVER option:selected').val());
-        $('#SERIAL').prop('type', 'hidden');
-    }else{
-        $('#SERIAL').val("<?=htmlspecialchars($nut_serial);?>");
-        if ($('#SERIAL').val() === 'root')
-            $('#SERIAL').val('nobody');
+/*function checkDRIVER(){
+    if ($('#DRIVER')[0].selectedIndex == 7)
+        $('.serial').css('visibility','visible').prop('type', 'text');
+    else
+        $('.serial').css('visibility','hidden');
+    if ($('#DRIVER')[0].selectedIndex == 6)
+        $('.snmp').css('visibility','visible');
+    else
+        $('.snmp').css('visibility','hidden');
+}*/
+
+function checkDRIVER() {
+    if ($('#DRIVER').val() == 'custom' ) {
+        //$('#DRIVER').val("<?=htmlspecialchars($nut_serial);?>");
+        //$('#SERIAL').val($('#DRIVER option:selected').val());
         $('#SERIAL').prop('type', 'text');
-        $('#SERIAL').prop('title', '');
+    }else{
+        $('#SERIAL').prop('type', 'hidden');
+        //$('#SERIAL').prop('title', '');
     }
 }
 </script>
