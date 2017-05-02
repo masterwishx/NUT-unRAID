@@ -1,0 +1,118 @@
+Menu="NUTsettings:2"
+Title="Config Editor"
+Markdown="false"
+---
+<?
+$ups_path = '/boot/config/plugins/nut/ups';
+$ups_file   = "$ups_path/upsd.users";
+$edit_file   = '';
+if(file_exists($ups_file))
+    $edit_file = file_get_contents($ups_file);
+?>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/codemirror.min.css" integrity="sha256-B4lcRQIA/hXjqRxuZHImRuHmb0IT1kscrY9mYJ7FsMs=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/hint/show-hint.min.css" integrity="sha256-GttU7Ba1ZLRu9reNxZVI5T87aX1mDTcjLxhfR/clb1M=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/dialog/dialog.min.css" integrity="sha256-YJKyPh6e25gWJyCXgvzIKoFDE1i3lw9UqKwrk0h29wQ=" crossorigin="anonymous" />
+<style type="text/css">
+    .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
+    .CodeMirror pre.CodeMirror-placeholder { color: #999; }
+</style>
+<link type="text/css" rel="stylesheet" href="/webGui/styles/jquery.filetree.css">
+
+<blockquote class="inline_help">
+    <p>NUT Config Editor is used to get and set configuration parameters.</p>
+    <p><b>Search Functions:</b></p>
+    <dl>
+    <dt>Ctrl-F / Cmd-F</dt>
+    <dd>Start searching</dd>
+    <dt>Ctrl-G / Cmd-G</dt>
+    <dd>Find next</dd>
+    <dt>Shift-Ctrl-G / Shift-Cmd-G</dt>
+    <dd>Find previous</dd>
+    <dt>Shift-Ctrl-F / Cmd-Option-F</dt>
+    <dd>Replace</dd>
+    <dt>Shift-Ctrl-R / Shift-Cmd-Option-F</dt>
+    <dd>Replace all</dd>
+    </dl>
+</blockquote>
+
+<form id="editform" method="POST">
+
+<img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
+
+<input id="editfile" type="text" name="editfile" value="<?=htmlspecialchars($ups_file);?>" style="background-color: #f0f0f0;" readonly="" data-pickcloseonfile="true" data-pickfilter="conf,users" data-pickroot="<?=$ups_path;?>" data-pickfolders="false" required="required" >
+
+<textarea id="editdata" name="editdata" placeholder="Select Configuration File to Open." autofocus><?=htmlspecialchars($edit_file);?></textarea>
+<input type="hidden" name="commit" value="1" />
+<dl>
+    <dt></dt>
+    <dd><input type="button" value="Save" id="btnSubmit" title="save configuration changes" />
+    <input type="button" value="Cancel" id="btnCancel" />
+    </dd>
+</form>
+</dl>
+
+<blockquote class="inline_help">
+    <p>The Save button saves configuration changes.
+    </p>
+</blockquote>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/codemirror.min.js" integrity="sha256-nP4BK+NXVKsqHwyv0YAYpYMGQMULLFsQAmrYhr9PUok=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/dialog/dialog.min.js" integrity="sha256-KbBuDRpfbnVjlUhzPVbdWqcaMQDwf9FjH5NGlSma2/Y=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/display/placeholder.min.js" integrity="sha256-dZ1hbx09AEbStymNkjE7umqi7DqhAtuC5cvId0603Yk=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/hint/show-hint.min.js" integrity="sha256-lOBfrUiGFzYN0fjJph7p21pyXxNNCWN8jL/jrd6VpJc=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/mode/properties/properties.min.js" integrity="sha256-sYjmbbbVaUIwHFPmA/ipJMFD64xAucwyitEVb0+8qjA=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/hint/anyword-hint.min.js" integrity="sha256-QpELQ3xE5bkkc1rdv5i7pSBPSK06rljJXh0AHKHJSjw=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/search/searchcursor.min.js" integrity="sha256-+WHQ6GVZ+En4S8tktYbST09huK+qux1Gvhqq5b9Pq+I=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/search/search.min.js" integrity="sha256-jR746s3yEfafMDDa+uuOQ/9dh9KdTaSCnFDITGs0mIk=" crossorigin="anonymous"></script>
+<script src="/webGui/javascript/jquery.filetree.js"></script>
+
+<script>
+$(function(){
+    $('#btnCancel').click(function() {
+        $.cookie('one', 'tab1', { expires:null, path: '/'});
+        location = '/Settings/NUTsettings';
+    });
+
+    var editor = CodeMirror.fromTextArea($('#editdata')[0], {
+        mode: 'properties',
+        lineNumbers: true,
+        gutters: ['CodeMirror-linenumbers'],
+        extraKeys: {
+            'Ctrl-Space': 'autocomplete'
+        },
+        hintOptions: {}
+    });
+
+    $('#tab2').click(function () {
+        editor.refresh();
+    });
+
+    $('#editfile').fileTreeAttach(null, null, function(file) {
+        $('#editfile').val(file);
+    });
+
+    $('#editfile').on('change', function () {
+        var Editfile = $('#editfile').val();
+        $.getJSON('/plugins/nut/include/nut_edit.php', {editfile: Editfile}, function (data) {
+                editor.setValue(data);
+            }
+        );
+    });
+
+    // save config
+    $('#btnSubmit').click(function () {
+        editor.save();
+        $.post('/plugins/nut/include/nut_save.php', $('#editform').serializeArray(), function (data) {
+            var Title = 'Config File ';
+
+            if(data.success)
+                swal({title: Title+'Saved', text: data.saved+'\n\nrestart nut to use new config.', timer: 2500, showConfirmButton: false, type:'success'
+                });
+            if(data.error)
+                swal({title:Title+'Error', text: data.error+'\n\nunable to save file', type:'error'});
+
+        }, 'json');
+    });
+});
+</script>
