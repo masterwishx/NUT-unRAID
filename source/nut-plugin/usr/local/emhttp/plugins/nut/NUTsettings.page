@@ -2,6 +2,7 @@ Menu="OtherSettings"
 Type="xmenu"
 Title="NUT Settings"
 Icon="nut.png"
+Markdown="false"
 ---
 <?PHP
 /* Copyright 2017, Derek Macias.
