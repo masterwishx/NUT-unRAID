@@ -9,7 +9,7 @@
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL    "&gitURL;/packages">
 <!ENTITY plgPATH   "/boot/config/plugins/&name;">
-<!ENTITY plgNAME   "&name;-&version;-x86_64-1">
+<!ENTITY plgNAME   "&name;-plugin-&version;-x86_64-1">
 ]>
 
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
@@ -55,13 +55,6 @@ The 'nut-package' file.
 </FILE>
 
 <!--
-nut package
--->
-<FILE Name="&path;/&name;-&version;.txz" Run="upgradepkg --install-new">
-<URL>&repository;&name;-&version;.txz</URL>
-</FILE>
-
-<!--
 The 'plugin' package file.
 -->
 <FILE Name="&plgPATH;/&plgNAME;.txz">
@@ -73,24 +66,6 @@ The 'plugin' package MD5 hash.
 -->
 <FILE Name="&plgPATH;/&plgNAME;.md5">
 <URL>&gitURL;/archive/&plgNAME;.md5</URL>
-</FILE>
-
-<FILE Name="&plgPATH;/&name;.cfg">
-<INLINE>
-<![CDATA[
-# Network UPS Tools configuration:
-SERVICE="disable"
-DRIVER="custom"
-SERIAL="none"
-PORT="auto"
-MODE="standalone"
-SHUTDOWN="sec_timer"
-BATTERYLEVEL="20"
-SECONDS="240"
-TIMEOUT="240"
-UPSKILL="disable"
-]]>
-</INLINE>
 </FILE>
 
 <!--
@@ -114,10 +89,10 @@ if [ "${sum1:0:32}" != "${sum2:0:32}" ]; then
     rm &plgPATH;/&plgNAME;.md5
     exit 1
 else
-    # upgrade package
+    # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 
- # Cleaning old source files
+ # Cleaning old plugin source files
  find &plgPATH;/ -type f -iname "&name;*.txz" ! -iname "*&version;*" -delete
  find &plgPATH;/ -type f -iname "&name;*.md5" ! -iname "*&version;*" -delete
 
@@ -140,7 +115,7 @@ The 'remove' script.
 <FILE Run="/bin/bash" Method="remove">
 <INLINE>
 # Stop service
-#/etc/rc.d/rc.nut stop 2>/dev/null
+/etc/rc.d/rc.nut stop 2>/dev/null
 
 removepkg &plgPATH;/*.txz
 rm -rf &emhttp;
