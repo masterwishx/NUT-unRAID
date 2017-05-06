@@ -1,0 +1,68 @@
+#!/bin/bash
+#
+# NUT NOTIFYCMD script macester macecapri@gmail.com
+# 2017.05.02 modified by Derek Macias
+PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/sbin:/usr/local/bin
+PROG="nut"
+PLGPATH="/boot/config/plugins/$PROG"
+CONFIG=$PLGPATH/$PROG.cfg
+NOTIFY="/usr/local/emhttp/plugins/dynamix/scripts/notify"
+
+# read our configuration
+[ -e "$CONFIG" ] && source $CONFIG
+
+if [ $SHUTDOWN == "batt_level" ]; then
+        TIMER=$BATTERYLEVEL
+        MESSAGE="System shuts down when battery reaches $BATTERYLEVEL %"
+        BATTERY="charge"
+fi
+
+if [ $SHUTDOWN == "batt_timer" ]; then
+    TIMER=$SECONDS
+    MESSAGE="System shuts down when there is $SECONDS seconds left on the battery..."
+    BATTERY="runtime"
+fi
+
+f [ $SHUTDOWN == "sec_timer" ]; then
+    TIMER=$SECONDS
+    MESSAGE="$TIMEOUT seconds till system powers down..."
+    BATTERY="runtime"
+fi
+
+trap "exit 0" SIGTERM
+if [ "$NOTIFYTYPE" = "ONLINE" ]
+then
+        echo $0: power restored | wall
+        $NOTIFY -e "UPS Notification" -s "UPS is no longer on battery" -i "normal"
+
+        # Cause all instances of this script to exit.
+        killall -s SIGTERM `basename $0`
+fi
+
+if [ "$NOTIFYTYPE" = "ONBATT" ]
+then
+        echo $0: $MESSAGE | wall
+        $NOTIFY -e "UPS Notification" -s "UPS is on battery" -i "alert"
+
+        if [ $SHUTDOWN == "sec_timer" ]; then
+            # Loop with one second interval to allow SIGTERM reception.
+            let "n = $TIMEOUT"
+            while [ $n -ne 0 ]
+            do
+                    sleep 1
+                    let "n--"
+            done
+        else
+            # Loop with one second interval to allow SIGTERM reception.
+            timer=$( /usr/bin/upsc ups|grep battery.$BATTERY:|awk '{print $2}' )
+            while [ $timer -gt $TIMER ]
+            do
+                sleep 1
+                timer=$( /usr/bin/upsc ups|grep battery.$BATTERY:|awk '{print $2}' )
+            done
+        fi
+
+        echo $0: commencing shutdown | wall
+        $NOTIFY -e "UPS Notification" -s "UPS is shutting down unRAID" -i "alert"
+        upsmon -c fsd
+fi
