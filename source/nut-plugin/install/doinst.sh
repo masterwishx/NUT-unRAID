@@ -6,7 +6,8 @@ SD_RCFILE="/etc/rc.d/rc.local_shutdown"
 
 # Update file permissions of scripts
 chmod +0755 $DOCROOT/scripts/* \
-	/etc/rc.d/rc.nut
+        /etc/rc.d/rc.nut \
+        /usr/sbin/nut-notify
 
 #copy the default configs if they don't exist
 cp -nr $DOCROOT/ups $BOOT
@@ -17,7 +18,7 @@ rm -rf /etc/ups
 ln -sfT $BOOT/ups /etc/ups
 
 # add stop to shutdown script
-if ! grep "$RC_SCRIPT" $SD_RCFILE >/dev/null 2>&1
-    then echo -e "\n[ -x $RC_SCRIPT ] && $RC_SCRIPT shutdown" >> $SD_RCFILE
-fi
-[ ! -x $SD_RCFILE ] && chmod u+x $SD_RCFILE
+#if ! grep "$RC_SCRIPT" $SD_RCFILE >/dev/null 2>&1
+#    then echo -e "\n[ -x $RC_SCRIPT ] && $RC_SCRIPT shutdown" >> $SD_RCFILE
+#fi
+#[ ! -x $SD_RCFILE ] && chmod u+x $SD_RCFILE
