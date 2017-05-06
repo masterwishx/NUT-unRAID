@@ -41,7 +41,7 @@ stop() {
 
 write_config() {
 # Killpower flag permissions
-[ -e /etc/ups/flag ] && chmod 777 /etc/ups/flag
+#[ -e /etc/ups/flag ] && chmod 777 /etc/ups/flag
 
 # Add nut user and group for udev at shutdown
 GROUP=$( grep -ic "218" /etc/group )
@@ -59,73 +59,74 @@ else
     useradd -u 218 -g nut -s /bin/false nut
 fi
 
-# Nut config files
+if [ $MANUAL == "disable" ]; then
 
-# Add the driver config
-if [ $DRIVER == "custom" ]; then
-        sed -i "2 s/.*/driver = ${SERIAL}/" /etc/ups/ups.conf
-else
-        sed -i "2 s/.*/driver = ${DRIVER}/" /etc/ups/ups.conf
-fi
+    # Add the driver config
+    if [ $DRIVER == "custom" ]; then
+            sed -i "2 s/.*/driver = ${SERIAL}/" /etc/ups/ups.conf
+    else
+            sed -i "2 s/.*/driver = ${DRIVER}/" /etc/ups/ups.conf
+    fi
 
-# add the port
-sed -i "3 s~.*~port = ${PORT}~" /etc/ups/ups.conf
+    # add the port
+    sed -i "3 s~.*~port = ${PORT}~" /etc/ups/ups.conf
 
-# add mode standalone/netserver
-sed -i "1 s/.*/MODE=${MODE}/" /etc/ups/nut.conf
+    # add mode standalone/netserver
+    sed -i "1 s/.*/MODE=${MODE}/" /etc/ups/nut.conf
 
-# Add SNMP-specific config
-if [ $DRIVER == "snmp-ups" ]; then
-    var10="pollfreq = ${POLL}"
-    var11="community = ${COMMUNITY}"
-    var12='snmp_version = v2c'
-else
-    var10=''
-    var11=''
-    var12=''
-fi
+    # Add SNMP-specific config
+    if [ $DRIVER == "snmp-ups" ]; then
+        var10="pollfreq = ${POLL}"
+        var11="community = ${COMMUNITY}"
+        var12='snmp_version = v2c'
+    else
+        var10=''
+        var11=''
+        var12=''
+    fi
+
     sed -i "4 s/.*/$var10/" /etc/ups/ups.conf
     sed -i "5 s/.*/$var11/" /etc/ups/ups.conf
     sed -i "6 s/.*/$var12/" /etc/ups/ups.conf
 
-# Set which shutdown script NUT should use
-if [ $SHUTDOWN == "batt_level" ]; then
-        sed -i "6 s,.*,NOTIFYCMD \"/usr/local/emhttp/plugins/nut/scripts/notifycmd_batterylevel\"," /etc/ups/upsmon.conf
-else
-  if [ $SHUTDOWN == "batt_timer" ]; then
-        sed -i "6 s,.*,NOTIFYCMD \"/usr/local/emhttp/plugins/nut/scripts/notifycmd_seconds\"," /etc/ups/upsmon.conf
-  else
-        sed -i "6 s,.*,NOTIFYCMD \"/usr/local/emhttp/plugins/nut/scripts/notifycmd_timeout\"," /etc/ups/upsmon.conf
-  fi
+    # Set which shutdown script NUT should use
+    sed -i "2 s,.*,SHUTDOWNCMD \"/sbin/poweroff\"," /etc/ups/upsmon.conf
+
+    # Set which notification script NUT should use
+    sed -i "6 s,.*,NOTIFYCMD \"/usr/sbin/nut-notify\"," /etc/ups/upsmon.conf
+
+    # Set if the ups should be turned off
+    if [ $UPSKILL == "enable" ]; then
+        var8='POWERDOWNFLAG /etc/ups/flag/killpower'
+        sed -i "3 s,.*,$var8," /etc/ups/upsmon.conf
+    else
+        var9='POWERDOWNFLAG /etc/ups/flag/no_killpower'
+        sed -i "3 s,.*,$var9," /etc/ups/upsmon.conf
+    fi
+
+    # Link shutdown scripts for poweroff in rc.0 and rc.6
+    UDEV=$( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 )
+    if [ $UDEV -ge 1 ]; then
+        echo "UDEV lines already exist in rc.0,6"
+    else
+        sed -i '/\/bin\/mount -v -n -o remount,ro \//r [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut restart_udev' /etc/rc.d/rc.6
+    fi
 fi
 
-# Set if the ups should be turned off
-if [ $UPSKILL == "enable" ]; then
-    var8='POWERDOWNFLAG /etc/ups/flag/killpower'
-    sed -i "3 s,.*,$var8," /etc/ups/upsmon.conf
-else
-    var9='POWERDOWNFLAG /etc/ups/flag/no_killpower'
-    sed -i "3 s,.*,$var9," /etc/ups/upsmon.conf
-fi
-
-# Link shutdown scripts for poweroff in rc.0 and rc.6
-UDEV=$( grep -ic "/usr/local/emhttp/plugins/nut/scripts/nut_restart_udev" /etc/rc.d/rc.6 )
-if [ $UDEV -ge 1 ]; then
-    echo "UDEV lines already exist in rc.0,6"
-else
-    sed -i '/\/bin\/mount -v -n -o remount,ro \//r /usr/local/emhttp/plugins/nut/scripts/txt/udev.txt' /etc/rc.d/rc.6
-fi
-
-KILL=$( grep -ic "/usr/local/emhttp/plugins/nut/scripts/nut_kill_inverter" /etc/rc.d/rc.6 )
+KILL=$( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 )
 if [ $KILL -ge 1 ]; then
     echo "KILL_INVERTER lines already exist in rc.0,6"
 else
-     sed -i -e '/# Now halt (poweroff with APM or ACPI enabled kernels) or reboot./r /usr/local/emhttp/plugins/nut/scripts/txt/kill.txt' -e //N /etc/rc.d/rc.6
+     sed -i -e '/# Now halt (poweroff with APM or ACPI enabled kernels) or reboot./r [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut shutdown' -e //N /etc/rc.d/rc.6
 fi
 
 }
 
 case "$1" in
+        shutdown) # shuts down the UPS
+                echo "Killing inverter..."
+                /usr/sbin/upsdrvctl shutdown
+                ;;
         start)  # starts everything (for a ups server box)
                sleep 1
                write_config
@@ -138,16 +139,20 @@ case "$1" in
                 start_upsmon
                 ;;
         stop) # stops all UPS-related daemons
+               sleep 1
+               write_config
+               sleep 3
                 stop
-                ;;
-        shutdown) # shuts down the UPS
-                echo "Killing inverter..."
-                /usr/sbin/upsdrvctl shutdown
                 ;;
         reload)
                 write_config
                 /usr/sbin/upsd -c reload
                 /usr/sbin/upsmon -c reload
+                ;;
+        restart_udev)
+                echo "Restarting udev to be able to shut the UPS inverter off..."
+                /etc/rc.d/rc.udev start
+                sleep 10
                 ;;
         write_config)
                 write_config
