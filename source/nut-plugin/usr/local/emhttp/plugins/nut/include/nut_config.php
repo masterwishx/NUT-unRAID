@@ -2,6 +2,7 @@
 $sName = "nut";
 $nut_cfg           = parse_ini_file("/boot/config/plugins/$sName/$sName.cfg");
 $nut_service     = isset($nut_cfg['SERVICE'])           ? htmlspecialchars($nut_cfg['SERVICE'])        : 'disable';
+$nut_manual     = isset($nut_cfg['MANUAL'])           ? htmlspecialchars($nut_cfg['MANUAL'])        : 'disable';
 $nut_driver       = isset($nut_cfg['DRIVER'])             ? htmlspecialchars($nut_cfg['DRIVER'])         : 'custom';
 $nut_serial        = isset($nut_cfg['SERIAL'])              ? htmlspecialchars($nut_cfg['SERIAL'])         : 'none';
 $nut_port          = isset($nut_cfg['PORT'])                ? htmlspecialchars($nut_cfg['PORT'])            : 'auto';
