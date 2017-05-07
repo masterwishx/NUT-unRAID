@@ -10,7 +10,7 @@ chmod +0755 $DOCROOT/scripts/* \
         /usr/sbin/nut-notify
 
 #copy the default configs if they don't exist
-cp -nr $DOCROOT/ups $BOOT
+cp -nr /etc/ups $BOOT
 cp -nr $DOCROOT/default.cfg $BOOT/nut.cfg
 
 # remove nut config directory and symlink to plugin directory on flash drive
