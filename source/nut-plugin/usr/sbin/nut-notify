@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # NUT NOTIFYCMD script macester macecapri@gmail.com
-# 2017.05.02 modified by Derek Macias
+# 2017.05.07 modified by Derek Macias
 PATH=/sbin:/usr/sbin:/bin:/usr/bin:/usr/local/sbin:/usr/local/bin
 PROG="nut"
 PLGPATH="/boot/config/plugins/$PROG"
@@ -23,7 +23,7 @@ if [ $SHUTDOWN == "batt_timer" ]; then
     BATTERY="runtime"
 fi
 
-f [ $SHUTDOWN == "sec_timer" ]; then
+if [ $SHUTDOWN == "sec_timer" ]; then
     TIMER=$SECONDS
     MESSAGE="$TIMEOUT seconds till system powers down..."
     BATTERY="runtime"
