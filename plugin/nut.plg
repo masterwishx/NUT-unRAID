@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name        "nut">
 <!ENTITY author      "dmacias72">
-<!ENTITY version     "2017.04.29">
+<!ENTITY version     "2017.05.17">
 <!ENTITY launch      "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/unRAID-plugins/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -16,6 +16,17 @@
 
 <CHANGES>
 ##&name;
+###2017.05.17
+- add manual mode, reload and config editor to settings page
+- reformat settings page, hide unused vars
+- add vars, rewrite, combine and move scripts
+- add snmp settings from Ambrotos fork - untested
+- add UPS summary, UPS details page and dashboard page
+- add dynamix plugin api
+- remove depreciated code
+- restructure and repackage plugin
+- rename nut plugin package to difer from nut package
+
 ###2015.09.19###
 - UPS statistics now auto updates(every two seconds)
 
@@ -92,6 +103,9 @@ else
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 
+# start network ups tools
+/etc/rc.d/rc.nut start
+
  # Cleaning old plugin source files
  find &plgPATH;/ -type f -iname "&name;*.txz" ! -iname "*&version;*" -delete
  find &plgPATH;/ -type f -iname "&name;*.md5" ! -iname "*&version;*" -delete
@@ -125,7 +139,8 @@ rm -f &plgPATH;/*.txz \
 echo ""
 echo "-----------------------------------------------------------"
 echo " &name; has been removed."
-echo " Copyright 2015-2017, &author;"
+echo " Copyright 2015, macester"
+echo " Copyright 2017, &author;"
 echo " Version: &version;"
 echo "-----------------------------------------------------------"
 echo ""
