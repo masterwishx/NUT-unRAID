@@ -151,14 +151,4 @@ echo ""
 </INLINE>
 </FILE>
 
-<FILE Name="/tmp/nut-chkconf" Run="/bin/bash">
-<INLINE>
-<![CDATA[
-#!/bin/sh
-# This will check each entry in the config so nothing is missing, and if missing, sets to default
-rm /tmp/cmdline-chkconf
-]]>
-</INLINE>
-</FILE>
-
 </PLUGIN>
