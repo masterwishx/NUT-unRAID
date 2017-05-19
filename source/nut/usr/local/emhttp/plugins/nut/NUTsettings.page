@@ -236,7 +236,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   <dl>
     <dt><input id="DEFAULT" class="nut-run" type="submit" name="#default" value="Default"></dt>
     <dd>
-      <input type="submit" id="btnApply" name="#apply" value="Apply"><input type="button" value="Done" onclick="done()"><input id="btnReload" type="submit" value="Reload" style="margin-bottom:8px;">
+      <input type="submit" id="btnApply" name="#apply" value="Apply"><input type="button" value="Done" onclick="done()"><input id="RELOAD" type="submit" value="Reload" style="margin-bottom:8px;">
     </dd>
   </dl>
 </form>
@@ -320,6 +320,4 @@ function checkSHUTDOWN (){
 function Reload(){
     $('#command').val('/usr/local/emhttp/plugins/nut/scripts/reload');
 }
-</script>
-
 </script>
