@@ -145,7 +145,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     <p>**standalone** - When the ups is only used by the local host**</p>
     <p>**netserver** - When nut clients/slaves need to connect to the ups**</p>
   </blockquote>
-
+</div>
 
   <dl>
     <dt>UPS Shutdown Mode:</dt>
@@ -222,7 +222,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     <p>Set to *Yes* to turn off the power to the UPS after a shutdown.</p>
     <p>Check your bios and enable, "Automatically power on after power loss" so that the server starts again when powers is restored.</p>
   </blockquote>
-</div>
+
 
   <br>
 
