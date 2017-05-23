@@ -114,28 +114,27 @@ write_config() {
             var9='POWERDOWNFLAG /etc/ups/flag/no_killpower'
             sed -i "3 s,.*,$var9," /etc/ups/upsmon.conf
         fi
-
-        # Link shutdown scripts for poweroff in rc.0 and rc.6
-        UDEV=$( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 )
-        if [ $UDEV -ge 1 ]; then
-            echo "UDEV lines already exist in rc.0,6"
-        else
-            sed -i '/\/bin\/mount -v -n -o remount,ro \//r [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut restart_udev' /etc/rc.d/rc.6
-        fi
     fi
 
-    KILL=$( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 )
-    if [ $KILL -ge 1 ]; then
-        echo "KILL_INVERTER lines already exist in rc.0,6"
+    # Link shutdown scripts for poweroff in rc.0 and rc.6
+    UDEV=$( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 )
+    if [ $UDEV -ge 1 ]; then
+        echo "UDEV lines already exist in rc.0,6"
     else
-         sed -i -e '/# Now halt (poweroff with APM or ACPI enabled kernels) or reboot./r [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut shutdown' -e //N /etc/rc.d/rc.6
+        sed -i '/\/bin\/mount -v -n -o remount,ro \//a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut restart_udev' /etc/rc.d/rc.6
     fi
 
+    UPSDRIVER=$( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 )
+    if [ $UPSDRIVER -ge 1 ]; then
+        echo "UPS shutdown lines already exist in rc.0,6"
+    else
+         sed -i -e '/# Now halt /a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut shutdown' -e //N /etc/rc.d/rc.6
+    fi
 }
 
 case "$1" in
-    shutdown) # shuts down the UPS
-        echo "Killing inverter..."
+    shutdown) # shuts down the UPS driver
+        echo "Shutting down UPS driver..."
         /usr/sbin/upsdrvctl shutdown
         ;;
     start)  # starts everything (for a ups server box)
