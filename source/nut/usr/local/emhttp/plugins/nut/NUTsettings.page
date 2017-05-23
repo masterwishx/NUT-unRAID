@@ -170,7 +170,9 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     <dl>
       <dt>Battery level to initiate shutdown (%):</dt>
       <dd>
-        <input type="text" name="BATTERYLEVEL" class="narrow nut-run" maxlength="2" value="<?=$nut_battery;?>">
+      <select class="nut-run" id="BATTERYLEVEL" name="BATTERYLEVEL" size="1">
+          <? echo get_battery_level($nut_battery);?>
+      </select>
       </dd>
     </dl>
 

@@ -1,4 +1,6 @@
 <?
+require_once '/usr/local/emhttp/plugins/nut/include/nut_helpers.php';
+
 $sName = "nut";
 $nut_cfg           = parse_ini_file("/boot/config/plugins/$sName/$sName.cfg");
 $nut_service     = isset($nut_cfg['SERVICE'])           ? htmlspecialchars($nut_cfg['SERVICE'])        : 'disable';
