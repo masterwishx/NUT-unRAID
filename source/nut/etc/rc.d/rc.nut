@@ -134,8 +134,10 @@ write_config() {
 
 case "$1" in
     shutdown) # shuts down the UPS driver
-        echo "Shutting down UPS driver..."
-        /usr/sbin/upsdrvctl shutdown
+        if [ -f /etc/ups/flag/killpower ]; then
+            echo "Shutting down UPS driver..."
+            /usr/sbin/upsdrvctl shutdown
+        fi
         ;;
     start)  # starts everything (for a ups server box)
         sleep 1
@@ -169,9 +171,11 @@ case "$1" in
         /usr/sbin/upsmon -c reload
         ;;
     restart_udev)
-        echo "Restarting udev to be able to shut the UPS inverter off..."
-        /etc/rc.d/rc.udev start
-        sleep 10
+        if [ -f /etc/ups/flag/killpower ]; then
+            echo "Restarting udev to be able to shut the UPS inverter off..."
+            /etc/rc.d/rc.udev start
+            sleep 10
+        fi
         ;;
     write_config)
         write_config
