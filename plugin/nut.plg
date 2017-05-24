@@ -115,8 +115,10 @@ else
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 
+    <![CDATA[
 # start network ups tools
-/etc/rc.d/rc.nut start 2>/dev/null
+/etc/rc.d/rc.nut start >/dev/null 2>&1 < /dev/null &
+    ]]>
 
  # Cleaning old plugin source files
  find &plgPATH;/ -type f -iname "&name;*.txz" ! -iname "*&version;*" -delete
