@@ -171,7 +171,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
       <dt>Battery level to initiate shutdown (%):</dt>
       <dd>
       <select class="nut-run" id="BATTERYLEVEL" name="BATTERYLEVEL" size="1">
-          <? echo get_battery_level($nut_battery);?>
+          <? echo get_battery_options($nut_battery);?>
       </select>
       </dd>
     </dl>
@@ -184,9 +184,11 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
   <div id="SHUTDOWN1">
     <dl>
-        <dt>Runtime left to initiate shutdown (seconds):</dt>
+        <dt>Runtime left to initiate shutdown (minutes):</dt>
         <dd>
-          <input type="text" name="SECONDS" class="narrow nut-run" maxlength="4" value="<?=$nut_seconds;?>">
+      <select class="nut-run" id="SECONDS" name="SECONDS" size="1">
+          <? echo get_minute_options($nut_seconds);?>
+      </select>
         </dd>
     </dl>
 
@@ -199,9 +201,11 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
   <div id="SHUTDOWN2">
     <dl>
-      <dt>Time on battery before shutdown (seconds):</dt>
+      <dt>Time on battery before shutdown (minutes):</dt>
       <dd>
-       <input type="text" name="TIMEOUT" class="narrow nut-run" maxlength="4" value="<?=$nut_timeout;?>">
+      <select class="nut-run" id="TIMEOUT" name="TIMEOUT" size="1">
+          <? echo get_minute_options($nut_timeout);?>
+      </select>
       </dd>
     </dl>
 

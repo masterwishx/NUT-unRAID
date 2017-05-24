@@ -1,6 +1,6 @@
 <?
 /* get options for battery level */
-function get_battery_level($selected=20){
+function get_battery_options($selected=20){
     $range = [1,99];
     rsort($range);
     $options = "";
@@ -15,4 +15,18 @@ function get_battery_level($selected=20){
     }
     return $options;
 }
+
+/* get options for time intervals */
+function get_minute_options($time){
+    $options = '';
+        for($i = 1; $i <= 60; $i++){
+            $options .= '<option value="'.($i*60).'"';
+            if(intval($time) === ($i*60))
+                $options .= ' selected';
+
+            $options .= '>'.$i.'</option>';
+        }
+    return $options;
+}
+
 ?>
