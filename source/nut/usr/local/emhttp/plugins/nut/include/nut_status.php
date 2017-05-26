@@ -11,6 +11,7 @@
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  */
+require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';
 
 $state = [
   'OL'       => 'Online',
@@ -27,7 +28,7 @@ $all    = $_GET['all']=='true';
 $result = [];
 
 if (file_exists('/var/run/upsmon.pid')) {
-  exec('/usr/bin/upsc ups 2>/dev/null', $rows);
+  exec("/usr/bin/upsc ups@$nut_ip 2>/dev/null", $rows);
   for ($i=0; $i<count($rows); $i++) {
     $row = array_map('trim', explode(':', $rows[$i], 2));
     $key = $row[0];
@@ -40,8 +41,8 @@ if (file_exists('/var/run/upsmon.pid')) {
       $status[1] = strtok($val,' ')<=10 ? "<td $red>$val</td>" : "<td $green>$val</td>";
       break;
     case 'battery.runtime':
-      $val = $val/60;
-      $status[2] = strtok($val,' ')<=5 ? "<td $red>$val</td>" : "<td $green>$val</td>";
+      $runtime = gmdate("H:i:s", $val);
+      $status[2] = strtok($val/60,' ')<=5 ? "<td $red>$runtime</td>" : "<td $green>$runtime</td>";
       break;
     case 'ups.realpower.nominal':
       $power = strtok($val,' ');
