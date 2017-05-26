@@ -70,39 +70,70 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
 <div id="SETTINGS">
   <dl>
-    <dt>UPS Driver:</dt>
+    <dt>UPS Mode:</dt>
     <dd>
-      <select class="nut-run" id="DRIVER" name="DRIVER" size="1" >
-        <?=mk_option($nut_driver, 'blazer_usb', 'Blazer_usb');?>
-        <?=mk_option($nut_driver, 'blazer_ser', 'Blazer_ser');?>
-        <?=mk_option($nut_driver, 'bcmxcp_usb', 'Bcmxcp_usb');?>
-        <?=mk_option($nut_driver, 'richcomm_usb', 'Richcomm_usb');?>
-        <?=mk_option($nut_driver, 'tripplite_usb', 'Tripplite_usb');?>
-        <?=mk_option($nut_driver, 'usbhid-ups', 'Usbhid-ups');?>
-        <?=mk_option($nut_driver, 'snmp-ups', 'SNMP-UPS');?>
-        <?=mk_option($nut_driver, 'custom', 'Custom');?>
-      </select><input type="hidden" class="narrow serial nut-run" id="SERIAL" name="SERIAL" class="narrow" maxlength="40" value="<?=$nut_serial;?>">
+      <select class="nut-run" id="MODE" name="MODE" size="1">
+        <?=mk_option($nut_mode, 'standalone', 'Standalone');?>
+        <?=mk_option($nut_mode, 'netserver', 'Netserver');?>
+        <?=mk_option($nut_mode, 'slave', 'Slave');?>
+        </select>
     </dd>
   </dl>
 
-  <blockquote class="inline_help">
-    <p>**Check the link below to find the driver matching your UPS**</p>
-    <p><a href="http://www.networkupstools.org/stable-hcl.html" target="_blank">http://www.networkupstools.org/stable-hcl.html</a></p>
-    <p>For other devices set **Custom** and enter the driver manually in the text input to the right.</p>
-    <p>Dont forget to match the port with your driver</p>
-    <p>Use the *Link* above to find which Driver to choose.</p>
+  <blockquote class="inline_help"
+    <p>Select the *mode* which mode your UPS will run in.</p>
+    <p>**standalone** - When the ups is only used by the local host**</p>
+    <p>**netserver** - When nut clients/slaves need to connect to the ups**</p>
+    <p>**slave** - When nut is slave to another machine connected to the ups**</p>
   </blockquote>
-
 
   <dl>
-    <dt>UPS Port:</dt>
-    <dd><input type="text" name="PORT" class="narrow nut-run" maxlength="40" value="<?=$nut_port;?>"></dd>
+    <dt>UPS IP Addresss:</dt>
+    <dd>
+      <input id="IPADDR" type="text" class="narrow nut-run nut-ipaddr" name="IPADDR" maxlength="66" value="<?=htmlspecialchars($nut_ip);?>" title="nut ip address" >
+    </dd>
   </dl>
-  <blockquote class="inline_help">
-    <p>Enter the *port* which your UPS connects to.</p>
-    <p>**auto** - Set to "auto" if the ups is connected by usb.</p>
-    <p>**/dev/tty0** - Example, for serial devices**</p>
+
+  <blockquote class="inline_help"
+    <p>IP address of master server connected to the ups**</p>
   </blockquote>
+
+  <div id="DRIVERS">
+    <dl>
+      <dt>UPS Driver:</dt>
+      <dd>
+        <select class="nut-run" id="DRIVER" name="DRIVER" size="1" title="nut driver">
+          <?=mk_option($nut_driver, 'blazer_usb', 'Blazer_usb');?>
+          <?=mk_option($nut_driver, 'blazer_ser', 'Blazer_ser');?>
+          <?=mk_option($nut_driver, 'bcmxcp_usb', 'Bcmxcp_usb');?>
+          <?=mk_option($nut_driver, 'richcomm_usb', 'Richcomm_usb');?>
+          <?=mk_option($nut_driver, 'tripplite_usb', 'Tripplite_usb');?>
+          <?=mk_option($nut_driver, 'usbhid-ups', 'Usbhid-ups');?>
+          <?=mk_option($nut_driver, 'snmp-ups', 'SNMP-UPS');?>
+          <?=mk_option($nut_driver, 'custom', 'Custom');?>
+        </select><input type="hidden" class="narrow serial nut-run" id="SERIAL" name="SERIAL" maxlength="40" value="<?=$nut_serial;?>">
+      </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+      <p>**Check the link below to find the driver matching your UPS**</p>
+      <p><a href="http://www.networkupstools.org/stable-hcl.html" target="_blank">http://www.networkupstools.org/stable-hcl.html</a></p>
+      <p>For other devices set **Custom** and enter the driver manually in the text input to the right.</p>
+      <p>Dont forget to match the port with your driver</p>
+      <p>Use the *Link* above to find which Driver to choose.</p>
+    </blockquote>
+
+
+    <dl>
+      <dt>UPS Port:</dt>
+      <dd><input type="text" name="PORT" class="narrow nut-run" maxlength="40" value="<?=$nut_port;?>"></dd>
+    </dl>
+    <blockquote class="inline_help">
+      <p>Enter the *port* which your UPS connects to.</p>
+      <p>**auto** - Set to "auto" if the ups is connected by usb.</p>
+      <p>**/dev/tty0** - Example, for serial devices**</p>
+    </blockquote>
+  </div>
 
   <div id="snmp" style="display: none;">
     <dl>
@@ -128,27 +159,10 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
       <p>Enter the desired polling frequency (in seconds).</p>
     </blockquote>
   </div>
-
-
-  <dl>
-    <dt>UPS Mode:</dt>
-    <dd>
-      <select class="nut-run" id="MODE" name="MODE" size="1">
-        <?=mk_option($nut_mode, 'standalone', 'Standalone');?>
-        <?=mk_option($nut_mode, 'netserver', 'Netserver');?>
-        </select>
-    </dd>
-  </dl>
-
-  <blockquote class="inline_help"
-    <p>Select the *mode* which mode your UPS will run in.</p>
-    <p>**standalone** - When the ups is only used by the local host**</p>
-    <p>**netserver** - When nut clients/slaves need to connect to the ups**</p>
-  </blockquote>
 </div>
 
   <dl>
-    <dt>UPS Shutdown Mode:</dt>
+    <dt>Shutdown Mode:</dt>
     <dd>
       <select class="nut-run" id="SHUTDOWN" name="SHUTDOWN" size="1">
         <?=mk_option($nut_shutdown, 'batt_level', 'Battery Level');?>
@@ -214,21 +228,22 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     </blockquote>
   </div>
 
-  <dl>
-    <dt>Turn off UPS after shutdown:</dt>
-    <dd>
-      <select class="nut-run" name="UPSKILL" size="1">
-        <?=mk_option($nut_upskill, 'disable', 'No');?>
-        <?=mk_option($nut_upskill, 'enable', 'Yes');?>
-      </select>
-    </dd>
-  </dl>
+  <div id="UPSKILL">
+    <dl>
+      <dt>Turn off UPS after shutdown:</dt>
+      <dd>
+        <select class="nut-run" name="UPSKILL" size="1">
+          <?=mk_option($nut_upskill, 'disable', 'No');?>
+          <?=mk_option($nut_upskill, 'enable', 'Yes');?>
+        </select>
+      </dd>
+    </dl>
 
-  <blockquote class="inline_help">
-    <p>Set to *Yes* to turn off the power to the UPS after a shutdown.</p>
-    <p>Check your bios and enable, "Automatically power on after power loss" so that the server starts again when powers is restored.</p>
-  </blockquote>
-
+    <blockquote class="inline_help">
+      <p>Set to *Yes* to turn off the power to the UPS after a shutdown.</p>
+      <p>Check your bios and enable, "Automatically power on after power loss" so that the server starts again when powers is restored.</p>
+    </blockquote>
+  </div>
 
   <br>
 
@@ -247,6 +262,9 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   </dl>
 </form>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js" integrity="sha256-X44h8GHeGHTkrwY/CVo4kYfEBYPJAzlG5Aaou4Jco1g=" crossorigin="anonymous">
+</script>
+
 <script>
 $(function() {
   showStatus('upsmon');
@@ -264,10 +282,12 @@ $(function() {
   $('#RELOAD').click(Reload);
   $('#SERVICE').change(checkRUNNING);
   $('#SHUTDOWN').change(checkSHUTDOWN);
+  $('#MODE').change(checkLOCAL);
 
   checkSETTINGS();
   checkRUNNING();
   checkDRIVER();
+  checkLOCAL();
   checkSHUTDOWN();
 });
 
@@ -277,10 +297,13 @@ function checkRUNNING() {
   else
     $('#command').val('/usr/local/emhttp/plugins/nut/scripts/stop');
 
-  if ("<?=$nut_running;?>" == true)
+  if ("<?=$nut_running;?>" == true){
     $('.nut-run').prop('disabled', true);
-  else
+    $('#RELOAD').prop('disabled', false);
+  }else{
     $('.nut-run').prop('disabled', false);
+    $('#RELOAD').prop('disabled', true);
+  }
 }
 
 function checkSETTINGS() {
@@ -320,6 +343,18 @@ function checkSHUTDOWN (){
       $('#SHUTDOWN'+i).show();
     else
       $('#SHUTDOWN'+i).hide();
+  }
+}
+
+function checkLOCAL() {
+  if ($('#MODE')[0].selectedIndex < 2){
+    $('#IPADDR').val('127.0.0.1').prop('disabled', true);
+    $('#DRIVERS').show();
+    $('.nut-ipaddr').mask('0ZZ.0ZZ.0ZZ.0ZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+  }else{
+    $('#IPADDR').val("<?=$nut_ip;?>").prop('disabled', false);;
+    $('#DRIVERS').hide();
+    $('#UPSKILL').hide();
   }
 }
 

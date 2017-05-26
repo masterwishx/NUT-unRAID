@@ -100,6 +100,16 @@ write_config() {
         sed -i "5 s/.*/$var11/" /etc/ups/ups.conf
         sed -i "6 s/.*/$var12/" /etc/ups/ups.conf
 
+        # Set monitor ip address, user, password and mode
+        if [ $MODE == "slave" ]; then
+            MONITOR="slave"
+        else
+            MONITOR="master"
+        fi
+
+        var1="MONITOR ups@${IPADDR} 1 monuser monpass ${MONITOR}"
+        sed -i "1 s,.*,$var1," /etc/ups/upsmon.conf
+
         # Set which shutdown script NUT should use
         sed -i "2 s,.*,SHUTDOWNCMD \"/sbin/poweroff\"," /etc/ups/upsmon.conf
 
@@ -117,15 +127,13 @@ write_config() {
     fi
 
     # Link shutdown scripts for poweroff in rc.0 and rc.6
-    UDEV=$( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 )
-    if [ $UDEV -ge 1 ]; then
+    if [ $( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 ) -ge 1 ]; then
         echo "UDEV lines already exist in rc.0,6"
     else
         sed -i '/\/bin\/mount -v -n -o remount,ro \//a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut restart_udev' /etc/rc.d/rc.6
     fi
 
-    UPSDRIVER=$( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 )
-    if [ $UPSDRIVER -ge 1 ]; then
+    if [ $( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 ) -ge 1 ]; then
         echo "UPS shutdown lines already exist in rc.0,6"
     else
          sed -i -e '/# Now halt /a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut shutdown' -e //N /etc/rc.d/rc.6
@@ -144,9 +152,11 @@ case "$1" in
         write_config
         sleep 3
         if [ "$SERVICE" == "enable" ]; then
-            start_driver
-            sleep 3
-            start_upsd
+            if [ "$MODE" != "slave" ]; then
+                start_driver
+                sleep 3
+                start_upsd
+            fi
             start_upsmon
         else
             echo "$PROG service is not enabled..."
@@ -156,7 +166,7 @@ case "$1" in
         start_upsmon
         ;;
     stop) # stops all UPS-related daemons
-        sleep 1
+        sleep 1127.0.0.1
         write_config
         sleep 3
         stop
@@ -165,10 +175,14 @@ case "$1" in
         sleep 1
         write_config
         sleep 3
-        start_driver
-        sleep 3
-        /usr/sbin/upsd -c reload
-        /usr/sbin/upsmon -c reload
+        if [ "$SERVICE" == "enable" ]; then
+            if [ "$MODE" != "slave" ]; then
+                start_driver
+                sleep 3
+                /usr/sbin/upsd -c reload
+            fi
+            /usr/sbin/upsmon -c reload
+        fi
         ;;
     restart_udev)
         if [ -f /etc/ups/flag/killpower ]; then
