@@ -28,11 +28,10 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 <tbody id="nut_summary"><tr><td colspan="6">&nbsp;</td></tr></tbody>
 </table>
 
-<form markdown="0" name="nut_settings" method="POST" action="/update.php" target="progressFrame">
+<form markdown="0" id="nut" name="nut_settings" method="POST" action="/update.php" target="progressFrame">
   <input type="hidden" name="#file" value="<?=$sName?>/<?=$sName?>.cfg">
   <input type="hidden" id="command" name="#command" value="" />
   <span style="float:right;margin-right:10px"><a href="http://www.networkupstools.org/docs/user-manual.chunked/" target="_blank" title="NUT UPS user manual"><i class="fa fa-file-text-o"></i> <u>Online Manual</u></a></span>
-
 
   <dl>
     <dt>Start Network UPS Tools service:</dt>
@@ -90,7 +89,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   <dl>
     <dt>UPS IP Addresss:</dt>
     <dd>
-      <input id="IPADDR" type="text" class="narrow nut-run nut-ipaddr" name="IPADDR" maxlength="66" value="<?=htmlspecialchars($nut_ip);?>" title="nut ip address" >
+      <input id="IPADDR" type="text" class="narrow nut-ipaddr" name="IPADDR" maxlength="66" value="<?=htmlspecialchars($nut_ip);?>" title="nut ip address" >
     </dd>
   </dl>
 
@@ -123,7 +122,6 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
       <p>Use the *Link* above to find which Driver to choose.</p>
     </blockquote>
 
-
     <dl>
       <dt>UPS Port:</dt>
       <dd><input type="text" name="PORT" class="narrow nut-run" maxlength="40" value="<?=$nut_port;?>"></dd>
@@ -146,7 +144,6 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     <blockquote class="inline_help">
       <p>Enter your UPS SNMP Agent's read community here.</p>
     </blockquote>
-
 
     <dl>
       <dt>SNMP Polling Frequency:</dt>
@@ -179,7 +176,6 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     <p>**Time on Battery** - Shuts down the system when the user defined timer reaches zero (in seconds)**</p>
   </blockquote>
 
-
   <div id="SHUTDOWN0">
     <dl>
       <dt>Battery level to initiate shutdown (%):</dt>
@@ -194,7 +190,6 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
       <p>If during a power failure, the remaining battery percentage (as reported by the UPS) is below or equal to *Battery level*, NUT will initiate a system shutdown.</p>
     </blockquote>
   </div>
-
 
   <div id="SHUTDOWN1">
     <dl>
@@ -211,7 +206,6 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
         <p>**Note** depeding on your ups this value can "fluctuate" so be aware. if your ups has an old battery dont use this</p>
     </blockquote>
   </div>
-
 
   <div id="SHUTDOWN2">
     <dl>
@@ -255,7 +249,10 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   </blockquote>
 
   <dl>
-    <dt><input id="DEFAULT" class="nut-run" type="submit" name="#default" value="Default"></dt>
+    <dt>
+        <input id="DEFAULT" class="nut-run" type="submit" name="#default" value="Default">
+        <input id="SCAN" class="nut-run" type="button" value="Autodetect">
+    </dt>
     <dd>
       <input type="submit" id="btnApply" name="#apply" value="Apply"><input type="button" value="Done" onclick="done()"><input id="RELOAD" type="submit" value="Reload" style="margin-bottom:8px;">
     </dd>
@@ -282,13 +279,19 @@ $(function() {
   $('#RELOAD').click(Reload);
   $('#SERVICE').change(checkRUNNING);
   $('#SHUTDOWN').change(checkSHUTDOWN);
-  $('#MODE').change(checkLOCAL);
+  $('#MODE').change(checkMODE);
 
+  checkMODE();
   checkSETTINGS();
   checkRUNNING();
   checkDRIVER();
-  checkLOCAL();
   checkSHUTDOWN();
+
+  $('#SCAN').click(function() {
+    // open shadowbox window (run in foreground)
+    openBox('/plugins/nut/scripts/nutscan', 'Nut Scanner', 600, 600, true);
+  });
+
 });
 
 function checkRUNNING() {
@@ -299,6 +302,7 @@ function checkRUNNING() {
 
   if ("<?=$nut_running;?>" == true){
     $('.nut-run').prop('disabled', true);
+    $('.nut-ipaddr').prop('disabled', true);
     $('#RELOAD').prop('disabled', false);
   }else{
     $('.nut-run').prop('disabled', false);
@@ -314,21 +318,13 @@ function checkSETTINGS() {
     $('#command').val('/usr/local/emhttp/plugins/nut/scripts/stop');
     $('#SETTINGS').show();
   }
-
-  if ("<?=$nut_manual;?>" == true)
-    $('.nut-run').prop('disabled', true);
-  else
-    $('.nut-run').prop('disabled', false);
 }
 
 function checkDRIVER() {
   if ($('#DRIVER').val() == 'custom' ) {
-    //$('#DRIVER').val("<?=htmlspecialchars($nut_serial);?>");
-    //$('#SERIAL').val($('#DRIVER option:selected').val());
       $('#SERIAL').prop('type', 'text');
   }else{
     $('#SERIAL').prop('type', 'hidden');
-    //$('#SERIAL').prop('title', '');
   }
   if ($('#DRIVER').val() == 'snmp-ups' )
     $('#snmp').show();
@@ -346,13 +342,15 @@ function checkSHUTDOWN (){
   }
 }
 
-function checkLOCAL() {
+function checkMODE() {
   if ($('#MODE')[0].selectedIndex < 2){
-    $('#IPADDR').val('127.0.0.1').prop('disabled', true);
+    $('#IPADDR').val('localhost').attr('readonly', 'readonly');
     $('#DRIVERS').show();
-    $('.nut-ipaddr').mask('0ZZ.0ZZ.0ZZ.0ZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+    $('#UPSKILL').show();
   }else{
-    $('#IPADDR').val("<?=$nut_ip;?>").prop('disabled', false);;
+    //Mode equals slave
+    $('.nut-ipaddr').mask('0ZZ.0ZZ.0ZZ.0ZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+    $('#IPADDR').val("<?=$nut_ip;?>").prop('disabled', false);
     $('#DRIVERS').hide();
     $('#UPSKILL').hide();
   }
