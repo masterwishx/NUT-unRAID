@@ -1,0 +1,33 @@
+#!/usr/bin/php -q
+<?php
+require_once '/usr/local/emhttp/plugins/nut/include/nut_helpers.php';
+
+echo "Scanning for UPS...\n\n";
+$cmd = '/usr/bin/nut-scanner -N -A -U 2>/dev/null';
+$cfg_file = '/boot/config/plugins/nut/nut.cfg';
+
+while (@ ob_end_flush()); // end all output buffers if any
+
+$proc = popen($cmd, 'r');
+ob_start();
+while(!feof($proc)) {
+    $buffer = trim(fgets($proc));
+    $msg = "$buffer\n";
+    $output = explode(" = ", $buffer);
+    if ((strpos($buffer, 'driver')) !== false)
+        $driver = trim($output[1]);
+    elseif ((strpos($buffer, 'port')) !== false)
+        $port = trim($output[1]);
+    echo "$msg";
+
+    ob_flush();
+}
+
+pclose($proc);
+ob_end_flush();
+
+$cfg = parse_ini_file($cfg_file);
+$cfg['DRIVER'] = $driver;
+$cfg['PORT'] = $port;
+write_php_ini($cfg, $cfg_file);
+?>
