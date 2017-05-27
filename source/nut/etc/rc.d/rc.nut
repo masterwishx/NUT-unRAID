@@ -150,11 +150,11 @@ case "$1" in
     start)  # starts everything (for a ups server box)
         sleep 1
         write_config
-        sleep 3
+        sleep 1
         if [ "$SERVICE" == "enable" ]; then
             if [ "$MODE" != "slave" ]; then
                 start_driver
-                sleep 3
+                sleep 1
                 start_upsd
             fi
             start_upsmon
@@ -166,19 +166,19 @@ case "$1" in
         start_upsmon
         ;;
     stop) # stops all UPS-related daemons
-        sleep 1127.0.0.1
+        sleep 1
         write_config
-        sleep 3
+        sleep 1
         stop
         ;;
     reload)
         sleep 1
         write_config
-        sleep 3
+        sleep 1
         if [ "$SERVICE" == "enable" ]; then
             if [ "$MODE" != "slave" ]; then
                 start_driver
-                sleep 3
+                sleep 1
                 /usr/sbin/upsd -c reload
             fi
             /usr/sbin/upsmon -c reload
