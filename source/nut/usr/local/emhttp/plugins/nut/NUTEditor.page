@@ -2,12 +2,14 @@ Menu="NUTsettings:2"
 Title="Config Editor"
 Markdown="false"
 ---
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.2/codemirror.min.css" integrity="sha256-GGAcbnLrt4/AHq5cP2+2UWetYcNsQNjNMqSRStBoPLQ=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/codemirror.min.css" integrity="sha256-GGAcbnLrt4/AHq5cP2+2UWetYcNsQNjNMqSRStBoPLQ=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/theme/dracula.min.css" integrity="sha256-jnxdBA9CAAte+TfBRYeDAnGFUXlXRhuo02cdaoGwcyY=" crossorigin="anonymous" />
+
 <style type="text/css">
     .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
     .CodeMirror pre.CodeMirror-placeholder { color: #999; }
-    .errortext{color: #EF3D47;display: none;}
-    .fileTree{width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
+    .errortext {color: #EF3D47;display: none;}
+    .fileTree {width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
 </style>
 <link type="text/css" rel="stylesheet" href="/webGui/styles/jquery.filetree.css">
 
@@ -32,7 +34,7 @@ Markdown="false"
 
 <img id="editfolder" style="cursor:pointer;margin-left: 10px;" src="/webGui/images/explore.png" >
 
-<input id="editfile" type="text" name="editfile" value="<?=htmlspecialchars($ups_file);?>" style="background-color: #f0f0f0;" readonly="" data-pickcloseonfile="true" data-pickfilter="conf,users" data-pickroot="/boot/config/plugins/nut/ups" data-pickfolders="false" required="required" >
+<input id="editfile" type="text" name="editfile" value="" readonly="" data-pickcloseonfile="true" data-pickfilter="conf,users" data-pickroot="/boot/config/plugins/nut/ups" data-pickfolders="false" required="required" >
 
 <textarea id="editdata" name="editdata" placeholder="Select Configuration File to Open." autofocus></textarea>
 <input type="hidden" name="commit" value="1" />
@@ -49,7 +51,7 @@ Markdown="false"
     </p>
 </blockquote>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.2/codemirror.min.js" integrity="sha256-faqXWPrUTyqXWeySd1Ri6Zre47Ul9H3bLPqUPLn10+M=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/codemirror.min.js" integrity="sha256-UQey9E6ZZXhvoLNXvVmU5lRSbOcCZe707EBLJTtMwSc=" crossorigin="anonymous"></script>
 <script src="/webGui/javascript/jquery.filetree.js"></script>
 
 <script>
@@ -60,6 +62,7 @@ $(function(){
     });
 
     var editor = CodeMirror.fromTextArea($('#editdata')[0], {
+        theme: '<?=($display["theme"] == 'white' || $display["theme"] == 'azure') ? "default" : "dracula";?>',
         mode: 'properties',
         lineNumbers: true,
         gutters: ['CodeMirror-linenumbers'],
