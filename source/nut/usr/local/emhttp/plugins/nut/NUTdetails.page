@@ -15,6 +15,11 @@ Title="NUT Details"
  * all copies or substantial portions of the Software.
  */
 ?>
+<style>
+table.tablesorter tbody tr:nth-child(odd) {
+    background-color: #<?=($display['theme'] == 'white' || $display['theme'] == 'azure') ? 'E0E0E0' : '202020';?>;
+}
+</style>
 
 <table class="tablesorter shift">
 <thead><tr><th style="width:15%">Key</th><th style="width:35%">Value</th><th style="width:15%">Key</th><th style="width:35%">Value</th></tr></thead>
