@@ -9,7 +9,6 @@ Markdown="false"
     .errortext{color: #EF3D47;display: none;}
     .fileTree{width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
 </style>
-</style>
 <link type="text/css" rel="stylesheet" href="/webGui/styles/jquery.filetree.css">
 
 <blockquote class="inline_help">
