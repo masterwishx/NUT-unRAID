@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name        "nut">
 <!ENTITY author      "dmacias72">
-<!ENTITY version     "2017.09.18">
+<!ENTITY version     "2017.09.17">
 <!ENTITY launch      "Settings/NUTsettings">
 <!ENTITY gitURL      "https://raw.githubusercontent.com/&author;/&name;-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,8 +17,9 @@
 
 <CHANGES>
 ##&name;
-###2017.09.18
+###2017.09.17
 - add ability to change UPS Monitor Name, User and Password
+- update icons
 ###2017.06.17a
 - add support for 6.4 themes
 ###2017.06.04
