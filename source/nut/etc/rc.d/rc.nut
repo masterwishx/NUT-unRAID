@@ -72,6 +72,9 @@ write_config() {
 
     if [ $MANUAL == "disable" ]; then
 
+        # add the name
+        sed -i "1 s~.*~[${NAME}]~" /etc/ups/ups.conf
+
         # Add the driver config
         if [ $DRIVER == "custom" ]; then
                 sed -i "2 s/.*/driver = ${SERIAL}/" /etc/ups/ups.conf
@@ -107,7 +110,7 @@ write_config() {
             MONITOR="master"
         fi
 
-        var1="MONITOR ups@${IPADDR} 1 monuser monpass ${MONITOR}"
+        var1="MONITOR ${NAME}@${IPADDR} 1 ${USERNAME} ${PASSWORD} ${MONITOR}"
         sed -i "1 s,.*,$var1," /etc/ups/upsmon.conf
 
         # Set which shutdown script NUT should use
