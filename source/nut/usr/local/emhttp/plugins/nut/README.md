@@ -1,4 +1,4 @@
 **Network UPS Tools (NUT)**
 
 A Plugin that supports a wide variety of UPS brands and models.
-[Support.](http://forums.lime-technology.com/topic/40690-plug-in-nut-network-ups-tools/)
+[Support.](https://forums.lime-technology.com/topic/60217-plugin-nut-v2-network-ups-tools/)
