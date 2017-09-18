@@ -54,11 +54,11 @@ then
             done
         else
             # Loop with one second interval to allow SIGTERM reception.
-            timer=$( /usr/bin/upsc ups|grep battery.$BATTERY:|awk '{print $2}' )
+            timer=$( /usr/bin/upsc $NAME@$IPADDR|grep battery.$BATTERY:|awk '{print $2}' )
             while [ $timer -gt $TIMER ]
             do
                 sleep 1
-                timer=$( /usr/bin/upsc ups|grep battery.$BATTERY:|awk '{print $2}' )
+                timer=$( /usr/bin/upsc $NAME@$IPADDR|grep battery.$BATTERY:|awk '{print $2}' )
             done
         fi
 
