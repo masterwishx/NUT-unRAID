@@ -5,7 +5,7 @@
 <!ENTITY author      "dmacias72">
 <!ENTITY version     "2017.09.17">
 <!ENTITY launch      "Settings/NUTsettings">
-<!ENTITY gitURL      "https://raw.githubusercontent.com/&author;/&name;-unRAID/master">
+<!ENTITY gitURL      "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
 <!ENTITY pkgURL     "&gitURL;/packages">
 <!ENTITY plgPATH    "/boot/config/plugins/&name;">
