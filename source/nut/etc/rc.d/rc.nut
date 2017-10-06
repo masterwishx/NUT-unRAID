@@ -15,7 +15,7 @@ export PATH=$DPATH:$PATH
 [ -e "$CONFIG" ] && source $CONFIG
 
 start_driver() {
-    /usr/sbin/upsdrvctl -u root start || exit 1
+    /usr/sbin/upsdrvctl -u root start 2>&1 || exit 1
 }
 
 start_upsd() {
@@ -37,12 +37,12 @@ start_upsmon() {
 stop() {
     echo "Stopping the UPS services... "
     if pgrep upsd 2>&1 >/dev/null; then
-        /usr/sbin/upsd -c stop
+        /usr/sbin/upsd -c stop 2>&1 >/dev/null
     fi
     if pgrep upsmon 2>&1 >/dev/null; then
-        /usr/sbin/upsmon -c stop
+        /usr/sbin/upsmon -c stop 2>&1 >/dev/null
     fi
-    /usr/sbin/upsdrvctl stop
+    /usr/sbin/upsdrvctl stop 2>&1 >/dev/null
     sleep 2
     if [ -f /var/run/upsmon.pid ]; then
         rm /var/run/upsmon.pid
@@ -127,6 +127,30 @@ write_config() {
             var9='POWERDOWNFLAG /etc/ups/flag/no_killpower'
             sed -i "3 s,.*,$var9," /etc/ups/upsmon.conf
         fi
+
+        # Set upsd users
+        var13="[admin]"
+        var14="password=adminpass"
+        var15="actions=set"
+        var16="actions=fsd"
+        var17="instcmds=all"
+        var18="[${USERNAME}]"
+        var19="password=${PASSWORD}"
+        var20="upsmon master"
+        var21="[slaveuser]"
+        var22="password=slavepass"
+        var23="upsmon slave"
+        sed -i "1 s,.*,$var13," /etc/ups/upsd.users
+        sed -i "2 s,.*,$var14," /etc/ups/upsd.users
+        sed -i "3 s,.*,$var15," /etc/ups/upsd.users
+        sed -i "4 s,.*,$var16," /etc/ups/upsd.users
+        sed -i "5 s,.*,$var17," /etc/ups/upsd.users
+        sed -i "6 s,.*,$var18," /etc/ups/upsd.users
+        sed -i "7 s,.*,$var19," /etc/ups/upsd.users
+        sed -i "8 s,.*,$var20," /etc/ups/upsd.users
+        sed -i "9 s,.*,$var21," /etc/ups/upsd.users
+        sed -i "10 s,.*,$var22," /etc/ups/upsd.users
+        sed -i "11 s,.*,$var23," /etc/ups/upsd.users
     fi
 
     # Link shutdown scripts for poweroff in rc.0 and rc.6
