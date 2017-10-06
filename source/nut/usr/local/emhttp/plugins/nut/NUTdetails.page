@@ -16,8 +16,11 @@ Title="NUT Details"
  */
 ?>
 <style>
+table.tablesorter tbody tr:nth-child(odd) {
+    background-color: #<?=($display['theme'] == 'white' || $display['theme'] == 'azure') ? 'F0F0F0' : '212421';?>;
+}
 table.tablesorter tbody tr:nth-child(even) {
-    background-color: #<?=($display['theme'] == 'white' || $display['theme'] == 'azure') ? 'E0E0E0' : '202020';?>;
+    background-color: #<?=($display['theme'] == 'white' || $display['theme'] == 'azure') ? 'e4e2e4' : '1b1d1b';?>;
 }
 </style>
 
