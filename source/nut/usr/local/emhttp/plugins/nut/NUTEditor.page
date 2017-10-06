@@ -2,8 +2,8 @@ Menu="NUTsettings:2"
 Title="Config Editor"
 Markdown="false"
 ---
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/codemirror.min.css" integrity="sha256-GGAcbnLrt4/AHq5cP2+2UWetYcNsQNjNMqSRStBoPLQ=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/theme/dracula.min.css" integrity="sha256-jnxdBA9CAAte+TfBRYeDAnGFUXlXRhuo02cdaoGwcyY=" crossorigin="anonymous" />
+<link rel="stylesheet" href="/plugins/nut/css/codemirror/codemirror.min.css"/>
+<link rel="stylesheet" href="/plugins/nut/css/codemirror/dracula.min.css"/>
 
 <style type="text/css">
     .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
@@ -51,7 +51,8 @@ Markdown="false"
     </p>
 </blockquote>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.26.0/codemirror.min.js" integrity="sha256-UQey9E6ZZXhvoLNXvVmU5lRSbOcCZe707EBLJTtMwSc=" crossorigin="anonymous"></script>
+<script src="/plugins/nut/js/codemirror/codemirror.min.js"></script>
+<script src="/plugins/nut/js/codemirror/autorefresh.min.js"></script>
 <script src="/webGui/javascript/jquery.filetree.js"></script>
 
 <script>
@@ -65,6 +66,7 @@ $(function(){
         theme: '<?=($display["theme"] == 'white' || $display["theme"] == 'azure') ? "default" : "dracula";?>',
         mode: 'properties',
         lineNumbers: true,
+        autoRefresh: true,
         gutters: ['CodeMirror-linenumbers'],
         extraKeys: {
             'Ctrl-Space': 'autocomplete'
