@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name        "nut">
 <!ENTITY author      "dmacias72">
-<!ENTITY version     "2017.10.05">
+<!ENTITY version     "2017.10.08">
 <!ENTITY launch      "Settings/NUTsettings">
 <!ENTITY gitURL      "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,6 +17,9 @@
 
 <CHANGES>
 ##&name;
+###2017.10.08
+- compile nut package to latest commit 2017.09.21
+- fix: new nut package uses /etc/nut and /var/run/nut
 ###2017.10.05
 - fix add username and password to upsd users
 - add autorefresh to editor to fix line number placement
@@ -90,17 +93,14 @@ dependency files
 <!--
 The 'nut-package' file.
 -->
-<FILE Name="&plgPATH;/nut-2.7.4-x86_64-1gds.txz" Min="6.1" Run="upgradepkg --install-new">
-<URL>&pkgURL;/nut-2.7.4-x86_64-1gds.txz</URL>
-<MD5>a7a7125af78c8744c721c9dce79ca0d9</MD5>
-</FILE>
-
-<!--
-The 'nut-package' file.
--->
 <FILE Name="&plgPATH;/net-snmp-5.7.3-x86_64-4.txz" Min="6.1" Run="upgradepkg --install-new">
 <URL>&pkgURL;/net-snmp-5.7.3-x86_64-4.txz</URL>
 <MD5>b9ef68216b97cb5f0bcd9f3312e5941e</MD5>
+</FILE>
+
+<FILE Name="&plgPATH;/nut-2.7.5pre-x86_64-1.txz" Min="6.1" Run="upgradepkg --install-new">
+<URL>&pkgURL;/nut-2.7.5pre-x86_64-1.txz</URL>
+<MD5>c03629d4a31fa44c7578df8e99d0afcf</MD5>
 </FILE>
 
 <!--
