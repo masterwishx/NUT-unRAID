@@ -14,3 +14,6 @@ cp -nr $DOCROOT/default.cfg $BOOT/nut.cfg
 # remove nut config directory and symlink to plugin directory on flash drive
 rm -rf /etc/ups
 ln -sfT $BOOT/ups /etc/ups
+
+rm -rf /etc/nut
+ln -sfT $BOOT/ups /etc/nut

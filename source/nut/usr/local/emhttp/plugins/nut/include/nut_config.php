@@ -20,5 +20,5 @@ $nut_timeout      = isset($nut_cfg['TIMEOUT'])          ? intval($nut_cfg ['TIME
 $nut_upskill        = isset($nut_cfg['UPSKILL'])           ? htmlspecialchars($nut_cfg ['UPSKILL'])        : 'disable';
 $nut_poll            = isset($nut_cfg['POLL'])                ? intval($nut_cfg ['POLL'])                             : 15;
 $nut_community = isset($nut_cfg['COMMUNITY'])     ? htmlspecialchars($nut_cfg ['COMMUNITY']) : 'public';
-$nut_running = (intval(trim(shell_exec( "[ -f /proc/`cat /var/run/upsmon.pid 2> /dev/null`/exe ] && echo 1 || echo 0 2> /dev/null" ))) === 1 );
+$nut_running = (intval(trim(shell_exec( "[ -f /proc/`cat /var/run/nut/upsmon.pid 2> /dev/null`/exe ] && echo 1 || echo 0 2> /dev/null" ))) === 1 );
 ?>
