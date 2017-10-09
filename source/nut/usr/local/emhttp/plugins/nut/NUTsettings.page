@@ -333,7 +333,7 @@ function checkRUNNING() {
   else
     $('#command').val('/usr/local/emhttp/plugins/nut/scripts/stop');
 
-  if ("<?=$nut_running;?>" == true){
+  if ("<?=$nut_running;?>" == 1){
     $('.nut-run').prop('disabled', true);
     $('.nut-ipaddr').prop('disabled', true);
     $('#RELOAD').prop('disabled', false);
