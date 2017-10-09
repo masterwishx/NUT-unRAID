@@ -17,3 +17,16 @@ ln -sfT $BOOT/ups /etc/ups
 
 rm -rf /etc/nut
 ln -sfT $BOOT/ups /etc/nut
+
+if [ -d /var/state/ups ]; then
+    if [ ! -d /var/run/nut ]; then
+        mkdir /var/run/nut
+        chown -R 218:218 /var/run/nut
+    fi
+    if [ -f /var/run/upsmon.pid ]; then
+        cp -nr /var/run/upsmon.pid /var/run/nut/upsmon.pid
+        rm -rf /var/run/upsmon.pid
+    fi
+    cp -nr /var/state/ups/* /var/run/nut/
+    rm -rf /var/state/ups
+fi
