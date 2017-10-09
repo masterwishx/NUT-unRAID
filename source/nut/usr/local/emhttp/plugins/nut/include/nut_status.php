@@ -28,7 +28,7 @@ $all    = $_GET['all']=='true';
 $result = [];
 
 if (file_exists('/var/run/nut/upsmon.pid')) {
-  exec("/usr/bin/upsc $nut_name@$nut_ip 2>/dev/null", $rows);
+  exec("/usr/bin/upsc ".escapeshellarg($nut_name)."@$nut_ip 2>/dev/null", $rows);
   for ($i=0; $i<count($rows); $i++) {
     $row = array_map('trim', explode(':', $rows[$i], 2));
     $key = $row[0];
