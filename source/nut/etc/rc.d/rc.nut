@@ -37,16 +37,50 @@ start_upsmon() {
 stop() {
     echo "Stopping the UPS services... "
     if pgrep upsd 2>&1 >/dev/null; then
-        /usr/sbin/upsd -c stop 2>&1 >/dev/null
+        /usr/sbin/upsd -c stop
+
+        TIMER=0
+        while `killall upsd 2>/dev/null`; do
+            sleep 1
+            killall upsd
+            TIMER=$((TIMER+1))
+            if [ $TIMER -ge 30 ]; then
+                killall -9 upsd
+                sleep 1
+                break
+            fi
+        done
     fi
+
     if pgrep upsmon 2>&1 >/dev/null; then
-        /usr/sbin/upsmon -c stop 2>&1 >/dev/null
+        /usr/sbin/upsmon -c stop
+
+        TIMER=0
+        while `killall upsmon 2>/dev/null`; do
+            sleep 1
+            killall upsmon
+            TIMER=$((TIMER+1))
+            if [ $TIMER -ge 30 ]; then
+                killall -9 upsmon
+                sleep 1
+                break
+            fi
+        done
     fi
-    /usr/sbin/upsdrvctl stop 2>&1 >/dev/null
+
     sleep 2
+
+    # remove pid from old package
+    if [ -f /var/run/upsmon.pid ]; then
+        rm /var/run/upsmon.pid
+    fi
+
     if [ -f /var/run/nut/upsmon.pid ]; then
         rm /var/run/nut/upsmon.pid
     fi
+
+    /usr/sbin/upsdrvctl stop
+
 }
 
 write_config() {
@@ -68,6 +102,20 @@ write_config() {
         echo "$PROG user already configured"
     else
         useradd -u 218 -g nut -s /bin/false nut
+    fi
+
+    # move old pids to new location
+    if [ -d /var/state/ups ]; then
+        if [ ! -d /var/run/nut ]; then
+            mkdir /var/run/nut
+            chown -R 218:218 /var/run/nut
+        fi
+        if [ -f /var/run/upsmon.pid ]; then
+            cp -nr /var/run/upsmon.pid /var/run/nut/upsmon.pid
+            rm -rf /var/run/upsmon.pid
+        fi
+        cp -nr /var/state/ups/* /var/run/nut/
+        rm -rf /var/state/ups
     fi
 
     if [ $MANUAL == "disable" ]; then
@@ -178,16 +226,12 @@ case "$1" in
         sleep 1
         write_config
         sleep 1
-        if [ "$SERVICE" == "enable" ]; then
-            if [ "$MODE" != "slave" ]; then
-                start_driver
-                sleep 1
-                start_upsd
-            fi
-            start_upsmon
-        else
-            echo "$PROG service is not enabled..."
+        if [ "$MODE" != "slave" ]; then
+            start_driver
+            sleep 1
+            start_upsd
         fi
+        start_upsmon
         ;;
     start_upsmon) # starts upsmon only (for a ups client box)
         start_upsmon
@@ -202,14 +246,12 @@ case "$1" in
         sleep 1
         write_config
         sleep 1
-        if [ "$SERVICE" == "enable" ]; then
-            if [ "$MODE" != "slave" ]; then
-                start_driver
-                sleep 1
-                /usr/sbin/upsd -c reload
-            fi
-            /usr/sbin/upsmon -c reload
+        if [ "$MODE" != "slave" ]; then
+            start_driver
+            sleep 1
+            /usr/sbin/upsd -c reload
         fi
+        /usr/sbin/upsmon -c reload
         ;;
     restart_udev)
         if [ -f /etc/nut/flag/killpower ]; then
