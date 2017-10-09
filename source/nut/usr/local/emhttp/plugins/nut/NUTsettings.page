@@ -89,7 +89,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   <dl>
     <dt>UPS IP Addresss:</dt>
     <dd>
-      <input id="IPADDR" type="text" class="narrow nut-ipaddr" name="IPADDR" maxlength="66" value="<?=htmlspecialchars($nut_ip);?>" title="nut ip address" >
+      <input id="IPADDR" type="text" class="narrow nut-ipaddr" name="IPADDR" maxlength="66" value="<?=htmlspecialchars($nut_ip);?>" title="nut ip address" maxlength="15">
     </dd>
   </dl>
 
@@ -100,7 +100,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   <dl>
     <dt>UPS Name:</dt>
     <dd>
-      <input id="NAME" type="text" class="narrow nut-run" name="NAME" maxlength="66" value="<?=htmlspecialchars($nut_name);?>" title="nut ups name" >
+      <input id="NAME" type="text" class="narrow nut-run nut-name" name="NAME" maxlength="30" value="<?=htmlspecialchars($nut_name);?>" title="nut ups name">
     </dd>
   </dl>
 
@@ -111,7 +111,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   <dl>
     <dt>UPS Username:</dt>
     <dd>
-      <input id="USERNAME" type="text" class="narrow nut-run" name="USERNAME" maxlength="66" value="<?=htmlspecialchars($nut_user);?>" title="nut ups username" >
+      <input id="USERNAME" type="text" class="narrow nut-run nut-username" name="USERNAME" maxlength="30" value="<?=htmlspecialchars($nut_user);?>" title="nut ups username" >
     </dd>
   </dl>
 
@@ -157,7 +157,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
     <dl>
       <dt>UPS Port:</dt>
-      <dd><input type="text" name="PORT" class="narrow nut-run" maxlength="40" value="<?=$nut_port;?>"></dd>
+      <dd><input type="text" name="PORT" class="narrow nut-run" maxlength="10" value="<?=$nut_port;?>"></dd>
     </dl>
     <blockquote class="inline_help">
       <p>Enter the *port* which your UPS connects to.</p>
@@ -292,8 +292,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
   </dl>
 </form>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.10/jquery.mask.min.js" integrity="sha256-X44h8GHeGHTkrwY/CVo4kYfEBYPJAzlG5Aaou4Jco1g=" crossorigin="anonymous">
-</script>
+<script src="/plugins/nut/js/jquery.mask.min.js"></script>
 
 <script>
 $(function() {
@@ -306,6 +305,12 @@ $(function() {
       $('#user-notice').empty();
     });
   <?endif;?>
+
+  $('.nut-ipaddr').mask('0ZZ.0ZZ.0ZZ.0ZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+
+  $('.nut-name').mask('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[A-Za-z0-9]/, optional: true}}});
+
+  $('.nut-username').mask('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[A-Za-z0-9]/, optional: true}}});
 
   $('#DRIVER').change(checkDRIVER);
   $('#MANUAL').change(checkSETTINGS);
@@ -377,13 +382,12 @@ function checkSHUTDOWN (){
 
 function checkMODE() {
   if ($('#MODE')[0].selectedIndex < 2){
-    $('#IPADDR').val('localhost').attr('readonly', 'readonly');
+    $('#IPADDR').val('127.0.0.1').attr('readonly', true);
     $('#DRIVERS').show();
     $('#UPSKILL').show();
   }else{
     //Mode equals slave
-    $('.nut-ipaddr').mask('0ZZ.0ZZ.0ZZ.0ZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
-    $('#IPADDR').val("<?=$nut_ip;?>").prop('disabled', false);
+    $('#IPADDR').val("<?=$nut_ip;?>").prop('disabled', false).attr('readonly', false);
     $('#DRIVERS').hide();
     $('#UPSKILL').hide();
   }
