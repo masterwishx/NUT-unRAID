@@ -1,22 +1,25 @@
 <?xml version='1.0' standalone='yes'?>
 
 <!DOCTYPE PLUGIN [
-<!ENTITY name        "nut">
-<!ENTITY author      "dmacias72">
-<!ENTITY version     "2017.10.08a">
-<!ENTITY launch      "Settings/NUTsettings">
-<!ENTITY gitURL      "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
+<!ENTITY name      "nut">
+<!ENTITY author    "dmacias72">
+<!ENTITY version   "2017.10.09">
+<!ENTITY launch    "Settings/NUTsettings">
+<!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
-<!ENTITY pkgURL     "&gitURL;/packages">
-<!ENTITY plgPATH    "/boot/config/plugins/&name;">
+<!ENTITY pkgURL    "&gitURL;/packages">
+<!ENTITY plgPATH   "/boot/config/plugins/&name;">
 <!ENTITY plgNAME   "&name;-plugin-&version;-x86_64-1">
-<!ENTITY emhttp      "/usr/local/emhttp/plugins/&name;">
+<!ENTITY emhttp    "/usr/local/emhttp/plugins/&name;">
 ]>
 
 <PLUGIN name="&name;" author="&author;" version="&version;" launch="&launch;" pluginURL="&pluginURL;">
 
 <CHANGES>
 ##&name;
+###2017.10.09
+- fix ipaddr filter
+- update input masks for ipaddr, name and username
 ###2017.10.08a
 - fix move old pids to new location
 - compile nut package to latest commit 2017.09.21
@@ -94,14 +97,14 @@ dependency files
 <!--
 The 'nut-package' file.
 -->
+<FILE Name="&plgPATH;/nut-2.7.5pre2-x86_64-1.txz" Min="6.1" Run="upgradepkg --install-new">
+<URL>&pkgURL;/nut-2.7.5pre2-x86_64-1.txz</URL>
+<MD5>d49c9b069de1e510b0837ae881690f7a</MD5>
+</FILE>
+
 <FILE Name="&plgPATH;/net-snmp-5.7.3-x86_64-4.txz" Min="6.1" Run="upgradepkg --install-new">
 <URL>&pkgURL;/net-snmp-5.7.3-x86_64-4.txz</URL>
 <MD5>b9ef68216b97cb5f0bcd9f3312e5941e</MD5>
-</FILE>
-
-<FILE Name="&plgPATH;/nut-2.7.5pre-x86_64-1.txz" Min="6.1" Run="upgradepkg --install-new">
-<URL>&pkgURL;/nut-2.7.5pre-x86_64-1.txz</URL>
-<MD5>c03629d4a31fa44c7578df8e99d0afcf</MD5>
 </FILE>
 
 <!--
@@ -152,13 +155,12 @@ echo "checking network ups tools configuration..."
 sleep 1
 
  # Cleaning old plugin source files
- find &plgPATH;/ -type f -iname "&name;*.txz" ! -iname "*&version;*" -delete
- find &plgPATH;/ -type f -iname "&name;*.md5" ! -iname "*&version;*" -delete
+ find &plgPATH;/ -type f -iname "&name;-plugin*.txz" ! -iname "*&version;*" -delete
+ find &plgPATH;/ -type f -iname "&name;-plugin*.md5" ! -iname "*&version;*" -delete
 
  echo ""
  echo "-----------------------------------------------------------"
  echo " &name; has been installed."
- echo " This plugin requires Dynamix webGui to operate"
  echo " Copyright 2015-2017, &author;"
  echo " Version: &version;"
  echo "-----------------------------------------------------------"
@@ -175,6 +177,13 @@ The 'remove' script.
 <INLINE>
 # Stop service
 /etc/rc.d/rc.nut stop 2>/dev/null
+
+#for filename in &plgPATH;/*.txz; do
+    if [ `find /boot/config/plugins/ -type f -iname "*.plg" ! -iname "*&name;.plg*" | xargs grep "net-snmp" -sl`] then;
+        echo "net-snmp inuse by another plugin"
+        rm -f &plgPATH;/net-snmp*.txz
+    fi
+#done
 
 removepkg &plgPATH;/*.txz
 rm -rf &emhttp;
