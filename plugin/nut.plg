@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name        "nut">
 <!ENTITY author      "dmacias72">
-<!ENTITY version     "2017.10.08">
+<!ENTITY version     "2017.10.08a">
 <!ENTITY launch      "Settings/NUTsettings">
 <!ENTITY gitURL      "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,7 +17,8 @@
 
 <CHANGES>
 ##&name;
-###2017.10.08
+###2017.10.08a
+- fix move old pids to new location
 - compile nut package to latest commit 2017.09.21
 - fix: new nut package uses /etc/nut and /var/run/nut
 ###2017.10.05
