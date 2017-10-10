@@ -178,13 +178,6 @@ The 'remove' script.
 # Stop service
 /etc/rc.d/rc.nut stop 2>/dev/null
 
-#for filename in &plgPATH;/*.txz; do
-    if [ `find /boot/config/plugins/ -type f -iname "*.plg" ! -iname "*&name;.plg*" | xargs grep "net-snmp" -sl`] then;
-        echo "net-snmp inuse by another plugin"
-        rm -f &plgPATH;/net-snmp*.txz
-    fi
-#done
-
 removepkg &plgPATH;/*.txz
 rm -rf &emhttp;
 rm -f &plgPATH;/*.txz \
