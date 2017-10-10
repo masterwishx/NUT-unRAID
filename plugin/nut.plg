@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "nut">
 <!ENTITY author    "dmacias72">
-<!ENTITY version   "2017.10.09">
+<!ENTITY version   "2017.10.10">
 <!ENTITY launch    "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,7 +17,7 @@
 
 <CHANGES>
 ##&name;
-###2017.10.09
+###2017.10.10
 - fix ipaddr filter
 - update input masks for ipaddr, name and username
 ###2017.10.08a
