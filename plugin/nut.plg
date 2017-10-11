@@ -121,6 +121,14 @@ The 'plugin' package MD5 hash.
 <URL>&gitURL;/archive/&plgNAME;.md5</URL>
 </FILE>
 
+<!-- WORKAROUND -->
+<FILE Name="/tmp/start_service" Mode="0770">
+<INLINE>
+#!/bin/bash
+/etc/rc.d/rc.nut start
+</INLINE>
+</FILE>
+
 <!--
 The 'install' script.
 -->
@@ -129,8 +137,8 @@ The 'install' script.
 #Verify unRAID Version
 source /etc/unraid-version
 if [[ ${version:0:3} == 6.0 ]]; then
-  echo "unRAID version 6.1 or higher is required"
-  exit 1
+    echo "unRAID version 6.1 or higher is required"
+    exit 1
 fi
 
 # Verify and install plugin package
@@ -145,26 +153,29 @@ else
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 
-# Stop service
-echo "stopping services..."
-/etc/rc.d/rc.nut stop 2>/dev/null
+    # Stop service
+    echo "stopping services..."
+    /etc/rc.d/rc.nut stop 2>/dev/null
 
-# start network ups tools
-echo "checking network ups tools configuration..."
-/etc/rc.d/rc.nut start 2>/dev/null
-sleep 1
+    # start network ups tools
+    echo "checking network ups tools configuration..."
+    at -M -f /tmp/start_service now 2>/dev/null
 
- # Cleaning old plugin source files
- find &plgPATH;/ -type f -iname "&name;-plugin*.txz" ! -iname "*&version;*" -delete
- find &plgPATH;/ -type f -iname "&name;-plugin*.md5" ! -iname "*&version;*" -delete
+    sleep 1
 
- echo ""
- echo "-----------------------------------------------------------"
- echo " &name; has been installed."
- echo " Copyright 2015-2017, &author;"
- echo " Version: &version;"
- echo "-----------------------------------------------------------"
- echo ""
+    rm -f /tmp/start_service
+
+    # Cleaning old plugin source files
+    find &plgPATH;/ -type f -iname "&name;-plugin*.txz" ! -iname "*&version;*" -delete
+    find &plgPATH;/ -type f -iname "&name;-plugin*.md5" ! -iname "*&version;*" -delete
+
+    echo ""
+    echo "-----------------------------------------------------------"
+    echo " &name; has been installed."
+    echo " Copyright 2015-2017, &author;"
+    echo " Version: &version;"
+    echo "-----------------------------------------------------------"
+    echo ""
 
 fi
 </INLINE>
@@ -178,10 +189,15 @@ The 'remove' script.
 # Stop service
 /etc/rc.d/rc.nut stop 2>/dev/null
 
+# check if net-snmp is used by another plugin
+if [ `find /boot/config/plugins/ -type f -iname "*.plg" ! -iname "*&name;.plg*" | xargs grep "net-snmp" -sl` ]; then
+echo "net-snmp inuse by another plugin"
+rm -f &plgPATH;/net-snmp*.txz
+
 removepkg &plgPATH;/*.txz
 rm -rf &emhttp;
 rm -f &plgPATH;/*.txz \
-  &plgPATH;/*.md5
+    &plgPATH;/*.md5
 
 echo ""
 echo "-----------------------------------------------------------"
