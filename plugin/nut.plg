@@ -190,7 +190,7 @@ The 'remove' script.
 /etc/rc.d/rc.nut stop 2>/dev/null
 
 # check if net-snmp is used by another plugin
-if [ `find /boot/config/plugins/ -type f -iname "*.plg" ! -iname "*&name;.plg*" | xargs grep "net-snmp" -sl` ]; then
+if [ `find /boot/config/plugins/*.plg -type f ! -iname "*&name;.plg*" | xargs grep "net-snmp" -sl` ]; then
 echo "net-snmp inuse by another plugin"
 rm -f &plgPATH;/net-snmp*.txz
 
