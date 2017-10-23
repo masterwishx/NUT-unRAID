@@ -122,7 +122,7 @@ The 'plugin' package MD5 hash.
 </FILE>
 
 <!-- WORKAROUND -->
-<FILE Name="/tmp/start_service" Mode="0770">
+<FILE Name="/tmp/start_&name;" Mode="0770">
 <INLINE>
 #!/bin/bash
 /etc/rc.d/rc.nut start
@@ -159,11 +159,11 @@ else
 
     # start network ups tools
     echo "checking network ups tools configuration..."
-    at -M -f /tmp/start_service now 2>/dev/null
+    at -M -f /tmp/start_&name; now 2>/dev/null
 
     sleep 1
 
-    rm -f /tmp/start_service
+    rm -f /tmp/start_&name;
 
     # Cleaning old plugin source files
     find &plgPATH;/ -type f -iname "&name;-plugin*.txz" ! -iname "*&version;*" -delete
