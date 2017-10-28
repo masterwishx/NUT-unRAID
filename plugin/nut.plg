@@ -18,7 +18,7 @@
 <CHANGES>
 ##&name;
 ###2017.10.28
-- downgrade nut package to 2.7.4 due to usb resets
+- downgrade nut package to 2.7.4 due to usb resets in 6.4rc10b
 ###2017.10.10
 - fix ipaddr filter
 - update input masks for ipaddr, name and username
