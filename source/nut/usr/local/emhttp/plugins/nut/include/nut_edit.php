@@ -1,5 +1,5 @@
 <?
-$base = '/boot/config/plugins/nut/ups/';
+$base = '/etc/nut/';
 $file = realpath($_GET['editfile']);
 $editfile = 'Invalid File';
 
