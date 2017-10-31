@@ -85,38 +85,6 @@ stop() {
 
 write_config() {
     echo "Writing $PROG config"
-    # Killpower flag permissions
-    #[ -e /etc/nut/flag ] && chmod 777 /etc/nut/flag
-
-    # Add nut user and group for udev at shutdown
-    GROUP=$( grep -ic "218" /etc/group )
-    USER=$( grep -ic "218" /etc/passwd )
-
-    if [ $GROUP -ge 1 ]; then
-        echo "$PROG group already configured"
-    else
-        groupadd -g 218 nut
-    fi
-
-    if [ $USER -ge 1 ]; then
-        echo "$PROG user already configured"
-    else
-        useradd -u 218 -g nut -s /bin/false nut
-    fi
-
-    # move old pids to new location
-    if [ -d /var/state/ups ]; then
-        if [ ! -d /var/run/nut ]; then
-            mkdir /var/run/nut
-            chown -R 218:218 /var/run/nut
-        fi
-        if [ -f /var/run/upsmon.pid ]; then
-            cp -nr /var/run/upsmon.pid /var/run/nut/upsmon.pid
-            rm -rf /var/run/upsmon.pid
-        fi
-        cp -nr /var/state/ups/* /var/run/nut/
-        rm -rf /var/state/ups
-    fi
 
     if [ $MANUAL == "disable" ]; then
 
@@ -158,7 +126,31 @@ write_config() {
             MONITOR="master"
         fi
 
-        var1="MONITOR ${NAME}@${IPADDR} 1 ${USERNAME} ${PASSWORD} ${MONITOR}"
+        # check for old USERNAME in the config then convert it
+        if [ -v USERNAME ]; then
+            if [ ! -v MONUSER ]; then
+                MONUSER=$USERNAME
+                sed -i "/USERNAME/c\MONUSER=\"${MONUSER}\"" $CONFIG
+            else
+                sed -i "/USERNAME/d" $CONFIG
+            fi
+        fi
+
+        # check for old PASSWORD in the config then convert it
+        if [ -v PASSWORD ]; then
+            if [ ! -v MONPASS ]; then
+                MONPASS=$(echo $PASSWORD | base64)
+                sed -i "/PASSWORD/c\MONPASS=\"${MONPASS}\"" $CONFIG
+            else
+                sed -i "/PASSWORD/d" $CONFIG
+            fi
+        fi
+
+        # decode monitor passwords
+        MONPASS=$(echo $MONPASS | base64 --decode)
+        SLAVEPASS=$(echo $SLAVEPASS | base64 --decode)
+
+        var1="MONITOR ${NAME}@${IPADDR} 1 ${MONUSER} ${MONPASS} ${MONITOR}"
         sed -i "1 s,.*,$var1," /etc/nut/upsmon.conf
 
         # Set which shutdown script NUT should use
@@ -169,10 +161,10 @@ write_config() {
 
         # Set if the ups should be turned off
         if [ $UPSKILL == "enable" ]; then
-            var8='POWERDOWNFLAG /etc/nut/flag/killpower'
+            var8='POWERDOWNFLAG /etc/nut/killpower'
             sed -i "3 s,.*,$var8," /etc/nut/upsmon.conf
         else
-            var9='POWERDOWNFLAG /etc/nut/flag/no_killpower'
+            var9='POWERDOWNFLAG /etc/nut/no_killpower'
             sed -i "3 s,.*,$var9," /etc/nut/upsmon.conf
         fi
 
@@ -182,11 +174,11 @@ write_config() {
         var15="actions=set"
         var16="actions=fsd"
         var17="instcmds=all"
-        var18="[${USERNAME}]"
-        var19="password=${PASSWORD}"
+        var18="[${MONUSER}]"
+        var19="password=${MONPASS}"
         var20="upsmon master"
-        var21="[slaveuser]"
-        var22="password=slavepass"
+        var21="[${SLAVEUSER}]"
+        var22="password=${SLAVEPASS}"
         var23="upsmon slave"
         sed -i "1 s,.*,$var13," /etc/nut/upsd.users
         sed -i "2 s,.*,$var14," /etc/nut/upsd.users
@@ -199,25 +191,39 @@ write_config() {
         sed -i "9 s,.*,$var21," /etc/nut/upsd.users
         sed -i "10 s,.*,$var22," /etc/nut/upsd.users
         sed -i "11 s,.*,$var23," /etc/nut/upsd.users
+    else
+        # manual mode save conf's to flash
+        if [ -d $PLGPATH/ups ]; then
+            if [ $( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 ) -ge 1 ]; then
+                cp -f /etc/nut/* $PLGPATH/ups
+            else
+                cp -f $PLGPATH/ups/* /etc/nut
+            fi
+        fi
     fi
 
-    # Link shutdown scripts for poweroff in rc.0 and rc.6
-    if [ $( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 ) -ge 1 ]; then
-        echo "UDEV lines already exist in rc.0,6"
-    else
+    # update permissions
+    if [ -d /etc/nut ]; then
+        chown -R 218:218 /etc/nut
+        chmod -R -r /etc/nut
+    fi
+
+    # Link shutdown scripts for poweroff in rc.6
+    if [ $( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 ) -eq 0 ]; then
+        echo "adding UDEV lines to rc.6"
         sed -i '/\/bin\/mount -v -n -o remount,ro \//a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut restart_udev' /etc/rc.d/rc.6
     fi
 
-    if [ $( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 ) -ge 1 ]; then
-        echo "UPS shutdown lines already exist in rc.0,6"
-    else
+    if [ $( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 ) -eq 0 ]; then
+        echo "adding UPS shutdown lines to rc.6"
          sed -i -e '/# Now halt /a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut shutdown' -e //N /etc/rc.d/rc.6
     fi
+
 }
 
 case "$1" in
     shutdown) # shuts down the UPS driver
-        if [ -f /etc/nut/flag/killpower ]; then
+        if [ -f /etc/nut/killpower ]; then
             echo "Shutting down UPS driver..."
             /usr/sbin/upsdrvctl shutdown
         fi
@@ -254,7 +260,7 @@ case "$1" in
         /usr/sbin/upsmon -c reload
         ;;
     restart_udev)
-        if [ -f /etc/nut/flag/killpower ]; then
+        if [ -f /etc/nut/killpower ]; then
             echo "Restarting udev to be able to shut the UPS inverter off..."
             /etc/rc.d/rc.udev start
             sleep 10

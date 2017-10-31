@@ -2,22 +2,33 @@
 BOOT="/boot/config/plugins/nut"
 DOCROOT="/usr/local/emhttp/plugins/nut"
 
+# Add nut user and group for udev at shutdown
+if [ $( grep -ic "218" /etc/group ) -eq 0 ]; then
+    groupadd -g 218 nut
+fi
+
+if [ $( grep -ic "218" /etc/passwd ) -eq 0 ]; then
+    useradd -u 218 -g nut -s /bin/false nut
+fi
+
 # Update file permissions of scripts
 chmod +0755 $DOCROOT/scripts/* \
         /etc/rc.d/rc.nut \
         /usr/sbin/nut-notify
 
-#copy the default configs if they don't exist
-cp -nr $DOCROOT/ups $BOOT
+# copy the default
 cp -nr $DOCROOT/default.cfg $BOOT/nut.cfg
 
-# remove nut config directory and symlink to plugin directory on flash drive
-rm -rf /etc/ups
-ln -sfT $BOOT/ups /etc/ups
+# remove nut symlink
+if [ -L /etc/nut ]; then
+    rm -f /etc/nut
+    mkdir /etc/nut
+fi
 
-rm -rf /etc/nut
-ln -sfT $BOOT/ups /etc/nut
+# copy conf files
+cp -nr /usr/local/emhttp/plugins/nut/nut/* /etc/nut
 
+# copy old pids to new locaition
 if [ -d /var/state/ups ]; then
     if [ ! -d /var/run/nut ]; then
         mkdir /var/run/nut
