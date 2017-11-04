@@ -26,7 +26,11 @@ if [ -L /etc/nut ]; then
 fi
 
 # copy conf files
-cp -nr /usr/local/emhttp/plugins/nut/nut/* /etc/nut
+cp -nr $DOCROOT/nut/* /etc/nut
+
+if [ -d $BOOT/ups ]; then
+    cp -f $BOOT/ups/* /etc/nut
+fi
 
 # copy old pids to new locaition
 if [ -d /var/state/ups ]; then
@@ -40,4 +44,10 @@ if [ -d /var/state/ups ]; then
     fi
     cp -nr /var/state/ups/* /var/run/nut/
     rm -rf /var/state/ups
+fi
+
+# update permissions
+if [ -d /etc/nut ]; then
+    chown -R 218:218 /etc/nut
+    chmod -R -r /etc/nut
 fi
