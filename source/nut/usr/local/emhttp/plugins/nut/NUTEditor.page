@@ -38,6 +38,7 @@ Markdown="false"
 
 <textarea id="editdata" name="editdata" placeholder="Select Configuration File to Open." autofocus></textarea>
 <input type="hidden" name="commit" value="1" />
+<input type="hidden" name="manual" value="<?=$nut_manual?>" />
 <dl>
     <dt></dt>
     <dd><input type="button" value="Save" id="btnSubmit" title="save configuration changes" />
