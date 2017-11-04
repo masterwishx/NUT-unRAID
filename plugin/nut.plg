@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "nut">
 <!ENTITY author    "dmacias72">
-<!ENTITY version   "2017.10.28">
+<!ENTITY version   "2017.11.03">
 <!ENTITY launch    "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,6 +17,11 @@
 
 <CHANGES>
 ##&name;
+###2017.11.03
+- update killpower flag
+- update permissions and security for nut configs
+- change username and password variables
+- add slave user and password
 ###2017.10.28
 - downgrade nut package to 2.7.4 due to usb resets in 6.4rc10b
 ###2017.10.10
@@ -193,8 +198,9 @@ The 'remove' script.
 
 # check if net-snmp is used by another plugin
 if [ `find /boot/config/plugins/*.plg -type f ! -iname "*&name;.plg*" | xargs grep "net-snmp" -sl` ]; then
-echo "net-snmp inuse by another plugin"
-rm -f &plgPATH;/net-snmp*.txz
+    echo "net-snmp inuse by another plugin"
+    rm -f &plgPATH;/net-snmp*.txz
+fi
 
 removepkg &plgPATH;/*.txz
 rm -rf &emhttp;
