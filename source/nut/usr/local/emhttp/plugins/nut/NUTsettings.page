@@ -130,27 +130,29 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
             <p>Password used to access of ups monitor**</p>
         </blockquote>
 
-        <dl>
-            <dt>UPS Slave Username:</dt>
-            <dd>
-                <input id="SLAVEUSER" type="text" class="narrow nut-run nut-slaveuser" name="SLAVEUSER" maxlength="30" value="<?=htmlspecialchars($nut_slaveuser);?>" title="nut ups slave username" >
-            </dd>
-        </dl>
+        <div id="SLAVE">
+            <dl>
+                <dt>UPS Slave Username:</dt>
+                <dd>
+                    <input id="SLAVEUSER" type="text" class="narrow nut-run nut-slaveuser" name="SLAVEUSER" maxlength="30" value="<?=htmlspecialchars($nut_slaveuser);?>" title="nut ups slave username" >
+                </dd>
+            </dl>
 
-        <blockquote class="inline_help"
-            <p>Username used by slave to access of ups monitor**</p>
-        </blockquote>
+            <blockquote class="inline_help"
+                <p>Username used by slave to access of ups monitor**</p>
+            </blockquote>
 
-        <dl>
-            <dt>UPS Slave Password:</dt>
-            <dd>
-                <input id="SLAVEPASS" type="password" class="narrow nut-run" name="SLAVEPASS" maxlength="66" value="<?=htmlspecialchars($nut_slavepass);?>" title="nut ups slave password" >
-            </dd>
-        </dl>
+            <dl>
+                <dt>UPS Slave Password:</dt>
+                <dd>
+                    <input id="SLAVEPASS" type="password" class="narrow nut-run" name="SLAVEPASS" maxlength="66" value="<?=htmlspecialchars($nut_slavepass);?>" title="nut ups slave password" >
+                </dd>
+            </dl>
 
-        <blockquote class="inline_help"
-            <p>Password used by slave to access of ups monitor**</p>
-        </blockquote>
+            <blockquote class="inline_help"
+                <p>Password used by slave to access of ups monitor**</p>
+            </blockquote>
+        </div>
 
         <div id="DRIVERS">
             <dl>
@@ -436,6 +438,10 @@ function checkMODE(){
         $('#DRIVERS').hide();
         $('#UPSKILL').hide();
     }
+    if ($('#MODE')[0].selectedIndex < 1)
+        $('#SLAVE').hide();
+    else
+        $('#SLAVE').show();
 }
 
 function Reload(){
