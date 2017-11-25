@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "nut">
 <!ENTITY author    "dmacias72">
-<!ENTITY version   "2017.11.03">
+<!ENTITY version   "2017.11.25">
 <!ENTITY launch    "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,6 +17,8 @@
 
 <CHANGES>
 ##&name;
+###2017.11.25
+- fix snmp port input box length and add ip mask
 ###2017.11.03
 - update killpower flag
 - update permissions and security for nut configs
