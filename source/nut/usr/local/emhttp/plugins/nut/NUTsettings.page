@@ -181,7 +181,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
             <dl>
               <dt>UPS Port:</dt>
-              <dd><input type="text" name="PORT" class="narrow nut-run" maxlength="10" value="<?=$nut_port;?>"></dd>
+              <dd><input type="text" name="PORT" class="narrow nut-run nut-port" maxlength="15" value="<?=$nut_port;?>"></dd>
             </dl>
 
             <blockquote class="inline_help">
@@ -411,10 +411,13 @@ function checkDRIVER(){
     }else
         $('#SERIAL').prop('type', 'hidden');
 
-    if ($('#DRIVER').val() == 'snmp-ups' )
+    if ($('#DRIVER').val() == 'snmp-ups' ){
         $('#snmp').show();
-    else
+        $('.nut-port').mask('0ZZ.0ZZ.0ZZ.0ZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+    }else{
         $('#snmp').hide();
+        $('.nut-port').unmask();
+    }
 }
 
 function checkSHUTDOWN(){
