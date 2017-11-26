@@ -15,11 +15,11 @@ else
 
 
     for x in '' a b c d e d f g h ; do
-        PKG="${ARCHIVE}/${PLUGIN}-${VERSION}${x}${ARCH}.txz"
+        PKG="${ARCHIVE}/${PLUGIN}-plugin-${VERSION}${x}${ARCH}.txz"
         if [[ ! -f $PKG ]]; then
           PACKAGE=$PKG
           VERSION="${VERSION}${x}"
-          MD5="${ARCHIVE}/${PLUGIN}-${VERSION}${ARCH}.md5"
+          MD5="${ARCHIVE}/${PLUGIN}-plugin-${VERSION}${ARCH}.md5"
           break
         fi
     done
