@@ -204,18 +204,23 @@ write_config() {
 
     # update permissions
     if [ -d /etc/nut ]; then
-        chown -R 218:218 /etc/nut
-        chmod -R -r /etc/nut
+        echo "Updating permissions..."
+        chown root:nut /etc/nut/*
+        chmod 640 /etc/nut/*
+        chown root:nut /var/run/nut
+        chmod 0770 /var/run/nut
+        #chown -R 218:218 /etc/nut
+        #chmod -R 0644 /etc/nut
     fi
 
     # Link shutdown scripts for poweroff in rc.6
     if [ $( grep -ic "/etc/rc.d/rc.nut restart_udev" /etc/rc.d/rc.6 ) -eq 0 ]; then
-        echo "adding UDEV lines to rc.6"
+        echo "Adding UDEV lines to rc.6"
         sed -i '/\/bin\/mount -v -n -o remount,ro \//a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut restart_udev' /etc/rc.d/rc.6
     fi
 
     if [ $( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 ) -eq 0 ]; then
-        echo "adding UPS shutdown lines to rc.6"
+        echo "Adding UPS shutdown lines to rc.6"
          sed -i -e '/# Now halt /a [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut shutdown' -e //N /etc/rc.d/rc.6
     fi
 
