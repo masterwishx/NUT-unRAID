@@ -44,6 +44,10 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       $runtime = gmdate("H:i:s", $val);
       $status[2] = strtok($val/60,' ')<=5 ? "<td $red>$runtime</td>" : "<td $green>$runtime</td>";
       break;
+    case 'ups.power.nominal':
+      $power = strtok($val,' ');
+      $status[3] = $power==0 ? "<td $red>$val</td>" : "<td $green>$val</td>";
+      break;
     case 'ups.realpower.nominal':
       $power = strtok($val,' ');
       $status[3] = $power==0 ? "<td $red>$val</td>" : "<td $green>$val</td>";
