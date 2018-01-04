@@ -275,5 +275,5 @@ case "$1" in
         write_config
         ;;
     *)
-    echo "Usage: $0 {start|start_upsmon|stop|shutdown|reload|restart|write_config}"
+    echo "Usage: $0 {start|start_upsmon|stop|shutdown|reload|write_config}"
 esac
