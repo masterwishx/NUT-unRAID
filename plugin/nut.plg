@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "nut">
 <!ENTITY author    "dmacias72">
-<!ENTITY version   "2018.01.03">
+<!ENTITY version   "2018.01.06">
 <!ENTITY launch    "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,6 +17,8 @@
 
 <CHANGES>
 ##&name;
+###2018.01.06
+- add Eaton use-case to improve load accuracy thanks @realies
 ###2018.01.03
 - fix load for ups with ups.power.nominal vs ups.realpower.nominal
 ###2017.11.29
