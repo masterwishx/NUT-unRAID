@@ -48,7 +48,6 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
         <p>Setting 'Yes' will also enable NUT on unRAID boot.</p>
     </blockquote>
 
-
     <dl>
         <dt>Enable Manual Config Only:</dt>
         <dd>
@@ -200,7 +199,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
             </dl>
 
             <blockquote class="inline_help">
-                <p>Enter your UPS SNMP Agent's read community here.</p>
+                <p>Enter your UPS SNMP Agent read community here.</p>
             </blockquote>
 
             <dl>
@@ -318,6 +317,64 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     </dl>
 </form>
 
+<div id="title" >
+    <span class="left"><img class="icon" src="/plugins/nut/icons/nutdetails.png"> Display Settings</span>
+</div>
+
+<form markdown="0" id="nut-display" name="nut_display" method="POST" action="/update.php" target="progressFrame">
+    <input type="hidden" name="#file" value="<?=$sName?>/<?=$sName?>.cfg">
+
+    <dl>
+        <dt>UPS Power and Load Display Settings:</dt>
+        <dd>
+            <select id="POWER" name="POWER" size="1">
+                <?=mk_option($nut_power, "auto", "Auto");?>
+                <?=mk_option($nut_power, "manual", "Manual");?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+        <p>Enter your UPS Output Capacity Watts and Volt-Amperes</p>
+        <p>Used to calculate the Power Factor and Watts used</p>
+        <p>For UPS that do not present a real power nominal variable</p>
+    </blockquote>
+
+    <div id="POWER-SETTINGS">
+        <dl>
+            <dt>UPS Output Volt Amp Capacity (VA):</dt>
+            <dd>
+                <input id="POWERVA" type="text" class="narrow nut-power" name="POWERVA" maxlength="5" value="<?=htmlspecialchars($nut_powerva);?>" title="nut ups capacity (VA)">
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+            <p>Enter your UPS Output Capacity in Volt-Amperes</p>
+        </blockquote>
+
+        <dl>
+            <dt>UPS Output Watt Capacity (Watts):</dt>
+            <dd>
+                <input id="POWERW" type="text" class="narrow nut-power" name="POWERW" maxlength="4" value="<?=htmlspecialchars($nut_powerw);?>" title="nut ups name">
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+            <p>Enter your UPS Output Capacity Watts</p>
+        </blockquote>
+
+    </div>
+
+    <dl>
+        <dt>
+            &nbsp;
+        </dt>
+        <dd>
+            <input type="submit"  value="Apply"><input type="button" value="Done" onclick="done()">
+        </dd>
+    </dl>
+</form>
+
 <script src="/plugins/nut/js/jquery.mask.min.js"></script>
 
 <script>
@@ -340,6 +397,8 @@ $(function() {
 
     $('.nut-slaveuser').mask('ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ', {translation:  {'Z': {pattern: /[A-Za-z0-9]/, optional: true}}});
 
+    $('.nut-power').mask('ZZZZZ', {translation:  {'Z': {pattern: /[0-9]/, optional: true}}});
+
     $('#SCAN').click(function() {
         // open shadowbox window (run in foreground)
         openBox('/plugins/nut/scripts/nutscan', 'Nut Scanner', 600, 600, true);
@@ -358,6 +417,7 @@ $(function() {
         $('#nut-settings').submit();
     });
 
+    $('#POWER').change(checkPOWER);
     $('#DRIVER').change(checkDRIVER);
     $('#MANUAL').change(checkSETTINGS);
     $('#RELOAD').click(Reload);
@@ -366,6 +426,7 @@ $(function() {
     $('#MODE').change(checkMODE);
 
     checkMODE();
+    checkPOWER();
     checkSETTINGS();
     checkRUNNING();
     checkDRIVER();
@@ -403,6 +464,13 @@ function checkSETTINGS(){
         $('#command').val('/usr/local/emhttp/plugins/nut/scripts/stop');
         $('#SETTINGS').show();
     }
+}
+
+function checkPOWER(){
+    if ($('#POWER')[0].selectedIndex < 1)
+        $('#POWER-SETTINGS').hide();
+    else
+        $('#POWER-SETTINGS').show();
 }
 
 function checkDRIVER(){

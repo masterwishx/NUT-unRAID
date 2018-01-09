@@ -16,8 +16,8 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';
 $state = [
   'OL'       => 'Online',
   'OB'       => 'On battery',
-  'OL LB'     => 'Online low battery',
-  'OB LB'       => 'Low battery'
+  'OL LB'    => 'Online low battery',
+  'OB LB'    => 'Low battery'
 ];
 
 $red    = "class='red-text'";
@@ -41,24 +41,15 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       $status[1] = strtok($val,' ')<=10 ? "<td $red>$val</td>" : "<td $green>$val</td>";
       break;
     case 'battery.runtime':
-      $runtime = gmdate("H:i:s", $val);
+      $runtime   = gmdate("H:i:s", $val);
       $status[2] = strtok($val/60,' ')<=5 ? "<td $red>$runtime</td>" : "<td $green>$runtime</td>";
       break;
-    case 'ups.power.nominal':
-      $power = strtok($val,' ');
-      $status[3] = $power==0 ? "<td $red>$val</td>" : "<td $green>$val</td>";
-      break;
     case 'ups.realpower.nominal':
-      $real = true;
-      $power = strtok($val,' ');
-      $status[3] = $power==0 ? "<td $red>$val</td>" : "<td $green>$val</td>";
+      $power     = strtok($val,' ');
       break;
     case 'ups.load':
-      $load = strtok($val,' ');
+      $load      = strtok($val,' ');
       $status[5] = $load>=90 ? "<td $red>$val</td>" : "<td $green>$val</td>";
-      break;
-    case 'ups.mfr':
-      $mfr = strtok($val, ' ');
       break;
     }
     if ($all) {
@@ -67,11 +58,13 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       if ($i%2==1) $result[] = "</tr>";
     }
   }
-  if ($all && count($rows)%2==1) $result[] = "<td></td><td></td></tr>";
-  if ($power && $load) {
-    $realpower = (@$real !== true && strtolower($mfr) === "eaton") ? round($load * 0.01 * $power * 0.80) : round($power * $load / 100);
-    $status[4] = ($load>=90 ? "<td $red>" : "<td $green>").$realpower." W</td>";
+  if ($nut_power == 'manual'){
+    $power   = $nut_powerva;
+    $pfactor = floatval($nut_powerw/$nut_powerva);
   }
+  $status[3] = $power==0 ? "<td $red>$power</td>" : "<td $green>$power</td>";
+  if ($all && count($rows)%2==1) $result[] = "<td></td><td></td></tr>";
+  if ($power && $load) $status[4] = ($load>=90 ? "<td $red>" : "<td $green>").intval($power*$load*$pfactor/100)." Watts</td>";
 }
 if ($all && !$rows) $result[] = "<tr><td colspan='4' style='text-align:center'>No information available</td></tr>";
 
