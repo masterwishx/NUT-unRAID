@@ -8,7 +8,7 @@ PLGPATH="/boot/config/plugins/$PROG"
 CONFIG=$PLGPATH/$PROG.cfg
 NOTIFY="/usr/local/emhttp/plugins/dynamix/scripts/notify"
 HOST="$(echo $HOSTNAME | awk '{print toupper($0)}')"
-EVENT="unRAID Server Alert"
+EVENT="UPS Status"
 SUBJECT="[$HOST] - UPS "
 
 # read our configuration
