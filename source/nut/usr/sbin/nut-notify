@@ -7,6 +7,9 @@ PROG="nut"
 PLGPATH="/boot/config/plugins/$PROG"
 CONFIG=$PLGPATH/$PROG.cfg
 NOTIFY="/usr/local/emhttp/plugins/dynamix/scripts/notify"
+HOST="$(echo $HOSTNAME | awk '{print toupper($0)}')"
+EVENT="unRAID Server Alert"
+SUBJECT="[$HOST] - UPS "
 
 # read our configuration
 [ -e "$CONFIG" ] && source $CONFIG
@@ -33,7 +36,7 @@ trap "exit 0" SIGTERM
 if [ "$NOTIFYTYPE" = "ONLINE" ]
 then
         echo $0: power restored | wall
-        $NOTIFY -e "UPS Notification" -s "UPS is no longer on battery" -i "normal"
+        $NOTIFY -e "$EVENT" -s "Notice $SUBJECT Online" -d "The UPS is back on line." -i "normal"
 
         # Cause all instances of this script to exit.
         killall -s SIGTERM `basename $0`
@@ -42,7 +45,7 @@ fi
 if [ "$NOTIFYTYPE" = "ONBATT" ]
 then
         echo $0: $MESSAGE | wall
-        $NOTIFY -e "UPS Notification" -s "UPS is on battery" -i "alert"
+        $NOTIFY -e "$EVENT" -s "Alert $SUBJECT On battery" -d "The UPS is on battery." -i "alert"
 
         if [ $SHUTDOWN == "sec_timer" ]; then
             # Loop with one second interval to allow SIGTERM reception.
@@ -63,6 +66,6 @@ then
         fi
 
         echo $0: commencing shutdown | wall
-        $NOTIFY -e "UPS Notification" -s "UPS is shutting down unRAID" -i "alert"
+        $NOTIFY -e "$EVENT" -s "Alert $SUBJECT Shutdown" -d "unRAID is being shut down." -i "alert"
         upsmon -c fsd
 fi
