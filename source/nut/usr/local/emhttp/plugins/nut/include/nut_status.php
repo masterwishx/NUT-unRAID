@@ -42,7 +42,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       break;
     case 'battery.runtime':
       $runtime   = gmdate("H:i:s", $val);
-      $status[2] = strtok($val/60,' ')<=5 ? "<td $red>$runtime</td>" : "<td $green>$runtime</td>";
+      $status[2] = strtok($val/60,' ')<=5 && !in_array('ups.status: OL', $rows) ? "<td $red>$runtime</td>" : "<td $green>$runtime</td>";
       break;
     case 'ups.realpower.nominal':
       $power     = strtok($val,' ');
