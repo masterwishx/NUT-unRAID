@@ -19,7 +19,7 @@ start_driver() {
 }
 
 start_upsd() {
-    if pgrep upsd 2>&1 >/dev/null; then
+    if pgrep -x upsd 2>&1 >/dev/null; then
         echo "$PROG upsd is running..."
     else
         /usr/sbin/upsd -u root || exit 1
@@ -36,7 +36,7 @@ start_upsmon() {
 
 stop() {
     echo "Stopping the UPS services... "
-    if pgrep upsd 2>&1 >/dev/null; then
+    if pgrep -x upsd 2>&1 >/dev/null; then
         /usr/sbin/upsd -c stop
 
         TIMER=0
