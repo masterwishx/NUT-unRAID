@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "nut">
 <!ENTITY author    "dmacias72">
-<!ENTITY version   "2018.04.29">
+<!ENTITY version   "2018.05.09">
 <!ENTITY launch    "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,6 +17,9 @@
 
 <CHANGES>
 ##&name;
+###2018.05.09
+- fix Autodetect
+- fix null port error
 ###2018.04.29
 - fix rc script interfering with cupsd
 - fix Run time in red only when on battery thanks @realies
