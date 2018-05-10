@@ -3,7 +3,7 @@
 require_once '/usr/local/emhttp/plugins/nut/include/nut_helpers.php';
 
 echo "Scanning for UPS...\n\n";
-$cmd = '/usr/bin/nut-scanner -N -U 2>/dev/null';
+$cmd = '/usr/bin/nut-scanner -N 2>/dev/null';
 $cfg_file = '/boot/config/plugins/nut/nut.cfg';
 
 while (@ ob_end_flush()); // end all output buffers if any
