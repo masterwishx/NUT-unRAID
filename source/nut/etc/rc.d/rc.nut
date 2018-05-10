@@ -99,7 +99,11 @@ write_config() {
         fi
 
         # add the port
-        sed -i "3 s~.*~port = ${PORT}~" /etc/nut/ups.conf
+        if [ -n "$PORT" ]; then
+            sed -i "3 s~.*~port = ${PORT}~" /etc/nut/ups.conf
+        else
+            sed -i "3 s~.*~port = auto~" /etc/nut/ups.conf
+        fi
 
         # add mode standalone/netserver
         sed -i "1 s/.*/MODE=${MODE}/" /etc/nut/nut.conf
