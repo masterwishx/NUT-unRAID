@@ -20,6 +20,7 @@
 ###2018.11.25
 - add autov to css and js
 - build nut package from usblib-1.0 branch
+- remove support link from readme
 ###2018.05.09
 - fix Autodetect
 - fix null port error
