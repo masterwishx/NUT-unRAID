@@ -375,7 +375,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     </dl>
 </form>
 
-<script src="/plugins/nut/js/jquery.mask.min.js"></script>
+<script src="<?=autov('/plugins/nut/js/jquery.mask.min.js');?>"></script>
 
 <script>
 $(function() {

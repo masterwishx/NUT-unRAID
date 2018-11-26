@@ -2,8 +2,8 @@ Menu="NUTsettings:2"
 Title="Config Editor"
 Markdown="false"
 ---
-<link rel="stylesheet" href="/plugins/nut/css/codemirror/codemirror.min.css"/>
-<link rel="stylesheet" href="/plugins/nut/css/codemirror/dracula.min.css"/>
+<link rel="stylesheet" href="<?=autov('/plugins/nut/css/codemirror/codemirror.min.css');?>">
+<link rel="stylesheet" href="<?=autov('/plugins/nut/css/codemirror/dracula.min.css');?>">
 
 <style type="text/css">
     .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
@@ -11,7 +11,7 @@ Markdown="false"
     .errortext {color: #EF3D47;display: none;}
     .fileTree {width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
 </style>
-<link type="text/css" rel="stylesheet" href="/webGui/styles/jquery.filetree.css">
+<link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 
 <blockquote class="inline_help">
     <p>NUT Config Editor is used to get and set configuration parameters.</p>
@@ -52,9 +52,12 @@ Markdown="false"
     </p>
 </blockquote>
 
-<script src="/plugins/nut/js/codemirror/codemirror.min.js"></script>
-<script src="/plugins/nut/js/codemirror/autorefresh.min.js"></script>
-<script src="/webGui/javascript/jquery.filetree.js"></script>
+<script src="<?=autov('/plugins/nut/js/codemirror/codemirror.min.js');?>"></script>
+
+<script src="<?=autov('/plugins/nut/js/codemirror/autorefresh.min.js');?>"></script>
+
+<script src="<?=autov('/webGui/javascript/jquery.filetree.js');?>"></script>
+
 
 <script>
 $(function(){
