@@ -133,9 +133,9 @@ dependency files
 <!--
 The 'nut-package' file.
 -->
-<FILE Name="&plgPATH;/nut-2.7.4.20180429-x86_64-1.txz" Min="6.5" Run="upgradepkg --install-new">
-<URL>&pkgURL;/nut-2.7.4.20180429-x86_64-1.txz</URL>
-<MD5>3c314fcb5816b052cc5efd0b85122290</MD5>
+<FILE Name="&plgPATH;/nut-2.7.4.20181125-x86_64-1.txz" Min="6.5" Run="upgradepkg --install-new">
+<URL>&pkgURL;/nut-2.7.4.20181125-x86_64-1.txz</URL>
+<MD5>a46d656085991e02a605786007412d76</MD5>
 </FILE>
 
 <FILE Name="&plgPATH;/nut-2.7.4.20171129-x86_64-1.txz" Min="6.1" Max="6.4.99" Run="upgradepkg --install-new">
