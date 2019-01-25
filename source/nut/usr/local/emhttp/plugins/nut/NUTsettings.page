@@ -1,7 +1,7 @@
 Menu="OtherSettings"
 Type="xmenu"
 Title="NUT Settings"
-Icon="nut.png"
+Icon="icon-ups"
 Markdown="false"
 ---
 <?PHP
