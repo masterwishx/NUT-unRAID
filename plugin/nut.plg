@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "nut">
 <!ENTITY author    "dmacias72">
-<!ENTITY version   "2018.11.25">
+<!ENTITY version   "2019.01.24">
 <!ENTITY launch    "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;.plg">
@@ -17,6 +17,8 @@
 
 <CHANGES>
 ##&name;
+###2019.01.24
+- update settings icon to fa font
 ###2018.11.25
 - add autov to css and js
 - build nut package from usblib-1.0 branch
@@ -184,10 +186,10 @@ The 'install' script.
 -->
 <FILE Run="/bin/bash">
 <INLINE>
-#Verify unRAID Version
+#Verify Unraid Version
 source /etc/unraid-version
 if [[ ${version:0:3} == 6.0 ]]; then
-    echo "unRAID version 6.1 or higher is required"
+    echo "Unraid version 6.1 or higher is required"
     exit 1
 fi
 
@@ -223,7 +225,7 @@ else
     echo "-----------------------------------------------------------"
     echo " &name; has been installed."
     echo " Copyright 2015, macester"
-    echo " Copyright 2015-2018, &author;"
+    echo " Copyright 2015-2019, &author;"
     echo " Version: &version;"
     echo "-----------------------------------------------------------"
     echo ""
@@ -255,7 +257,7 @@ echo ""
 echo "-----------------------------------------------------------"
 echo " &name; has been removed."
 echo " Copyright 2015, macester"
-echo " Copyright 2017-2018, &author;"
+echo " Copyright 2017-2019, &author;"
 echo " Version: &version;"
 echo "-----------------------------------------------------------"
 echo ""
