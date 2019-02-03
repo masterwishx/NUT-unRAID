@@ -1,7 +1,8 @@
 Menu="OtherSettings"
 Type="xmenu"
 Title="NUT Settings"
-Icon="icon-ups"
+Icon="battery-three-quarters"
+Tag="cog"
 Markdown="false"
 ---
 <?PHP
@@ -318,7 +319,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 </form>
 
 <div id="title" >
-    <span class="left"><img class="icon" src="/plugins/nut/icons/nutdetails.png"> Display Settings</span>
+    <span class="left"><i class="icon fa fa-desktop"></i> Display Settings</span>
 </div>
 
 <form markdown="0" id="nut-display" name="nut_display" method="POST" action="/update.php" target="progressFrame">

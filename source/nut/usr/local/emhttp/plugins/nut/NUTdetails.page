@@ -1,5 +1,6 @@
 Menu="NUTsettings:1"
 Title="NUT Details"
+Tag="file"
 ---
 <?PHP
 /* Copyright 2017, Derek Macias.

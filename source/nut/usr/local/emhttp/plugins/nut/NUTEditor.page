@@ -1,5 +1,6 @@
 Menu="NUTsettings:2"
 Title="Config Editor"
+Tag="cogs"
 Markdown="false"
 ---
 <link rel="stylesheet" href="<?=autov('/plugins/nut/css/codemirror/codemirror.min.css');?>">
@@ -9,7 +10,7 @@ Markdown="false"
     .CodeMirror { border: 1px solid #eee; cursor: text; margin-top: 15px; margin-bottom: 10px; }
     .CodeMirror pre.CodeMirror-placeholder { color: #999; }
     .errortext {color: #EF3D47;display: none;}
-    .fileTree {width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
+    .fileTree {color:#486dba;width:305px;max-height:150px;overflow:scroll;position:absolute;z-index:100;display:none;}
 </style>
 <link type="text/css" rel="stylesheet" href="<?=autov('/webGui/styles/jquery.filetree.css');?>">
 
