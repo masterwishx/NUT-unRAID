@@ -50,6 +50,17 @@ Link="nav-user"
     {
       footer = $("<span id='nut_footer'></span>").insertAfter("div#footer > span#copyright").css("float","right").css("margin-right", "6px");
       getNUTfooter();
+      $('body').on('mouseenter', '.tooltip-nut:not(.tooltipstered)', function()
+      {
+        $(this).tooltipster({
+          delay:600,
+          zIndex:999,
+          trigger:'custom',
+          triggerOpen:{mouseenter:true, touchstart:true},
+          triggerClose:{click:true, scroll:true, mouseleave:true, tap:true}
+        });
+        $(this).trigger('mouseenter');
+      });
     }
   );
 </script>

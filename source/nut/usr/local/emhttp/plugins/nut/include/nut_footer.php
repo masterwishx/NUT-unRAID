@@ -13,9 +13,9 @@
  */
 require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';
 
-$red    = "class='red-text'";
-$green  = "class='green-text'";
-$orange = "class='orange-text'";
+$red    = "class='tooltip-nut red-text'";
+$green  = "class='tooltip-nut green-text'";
+$orange = "class='tooltip-nut orange-text'";
 $all    = $_GET['all']=='true';
 
 function get_ups($name, $ip="localhost")
