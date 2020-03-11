@@ -15,7 +15,7 @@ $nut_slaveuser = isset($nut_cfg['SLAVEUSER'])    ? htmlspecialchars($nut_cfg['SL
 $nut_slavepass = isset($nut_cfg['SLAVEPASS'])    ? htmlspecialchars($nut_cfg['SLAVEPASS'])  : base64_encode('slavepass');
 $nut_driver    = isset($nut_cfg['DRIVER'])       ? htmlspecialchars($nut_cfg['DRIVER'])     : 'custom';
 $nut_serial    = isset($nut_cfg['SERIAL'])       ? htmlspecialchars($nut_cfg['SERIAL'])     : 'none';
-$nut_port      = isset($nut_cfg['PORT'])         ? htmlspecialchars($nut_cfg['PORT'])            : 'auto';
+$nut_port      = isset($nut_cfg['PORT'])         ? htmlspecialchars($nut_cfg['PORT'])       : 'auto';
 $nut_ip        = preg_match('/^(?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)(?:[.](?:25[0-5]|2[0-4]\d|1\d\d|[1-9]\d|\d)){3}$/', $nut_cfg['IPADDR']) ? htmlspecialchars($nut_cfg['IPADDR']) : '127.0.0.1';
 $nut_mode      = isset($nut_cfg['MODE'])         ? htmlspecialchars($nut_cfg['MODE'])       : 'standalone';
 $nut_shutdown  = isset($nut_cfg['SHUTDOWN'])     ? htmlspecialchars($nut_cfg['SHUTDOWN'])   : 'sec_timer';
@@ -25,5 +25,6 @@ $nut_timeout   = isset($nut_cfg['TIMEOUT'])      ? intval($nut_cfg ['TIMEOUT']) 
 $nut_upskill   = isset($nut_cfg['UPSKILL'])      ? htmlspecialchars($nut_cfg ['UPSKILL'])   : 'disable';
 $nut_poll      = isset($nut_cfg['POLL'])         ? intval($nut_cfg ['POLL'])                : 15;
 $nut_community = isset($nut_cfg['COMMUNITY'])    ? htmlspecialchars($nut_cfg ['COMMUNITY']) : 'public';
+$nut_footer    = isset($nut_cfg['FOOTER'])       ? htmlspecialchars($nut_cfg ['FOOTER'])    : 'disable';
 $nut_running   = (intval(trim(shell_exec( "[ -f /proc/`cat /var/run/nut/upsmon.pid 2> /dev/null`/exe ] && echo 1 || echo 0 2> /dev/null" ))) === 1 );
 ?>

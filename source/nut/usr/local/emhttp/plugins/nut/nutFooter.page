@@ -1,0 +1,56 @@
+Menu="Buttons:199"
+Link="nav-user"
+---
+<?require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';?>
+<?if ($nut_footer == "enable"):?>
+<style type="text/css">
+@keyframes battery-charging {
+  0% { content: "\f244"; }
+  20% { content: "\f243"; }
+  40% { content: "\f242"; }
+  60% { content: "\f241"; }
+  80% { content: "\f240"; }
+}
+.fa-battery-charging:before {
+  content: "\f244";
+  animation: 2s battery-charging infinite;
+}
+@keyframes battery-discharging {
+  0% { content: "\f240"; }
+  20% { content: "\f241"; }
+  40% { content: "\f242"; }
+  60% { content: "\f243"; }
+  80% { content: "\f244"; }
+}
+.fa-battery-discharging:before {
+  content: "\f240";
+  animation: 2s battery-discharging infinite;
+}
+
+</style>
+<script type="text/javascript">
+  function getNUTfooter() {
+    $.get('/plugins/nut/include/nut_footer.php',function(data) {
+      if (data) {
+        animed = $("#nut_footer").find("i[class^='fa fa-battery-discharging'], i[class^='fa fa-battery-charging']");
+        if (animed.length > 0) {
+          animed.one('animationiteration webkitAnimationIteration', function(e) {
+            $('#nut_footer').html(data);
+          });
+        } else {
+          $('#nut_footer').html(data);
+        }
+      }
+      <?if ($update):?>
+      setTimeout(getNUTfooter, <?=max(abs($display['refresh']),15000)?>);
+      <?endif;?>
+    });
+  }
+  $(function()
+    {
+      footer = $("<span id='nut_footer'></span>").insertAfter("div#footer > span#copyright").css("float","right").css("margin-right", "6px");
+      getNUTfooter();
+    }
+  );
+</script>
+<?endif;?>
