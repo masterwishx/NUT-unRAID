@@ -61,11 +61,13 @@ if (count($ups_status)) {
 
     $status[0] = $icon;
   } else {
-    $status[0] = "<span><i class='fa battery-empty'></i>n/a</span>";
+    $status[0] = "<span style='margin:0 6px 0 12px' title='$nut_name: battery info not available'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
   }
   $wattage = round($power*$load*0.01)."w";
   if ($power && $load) $status[1] = "<span title='${nut_name}: consuming $wattage ($load% of capacity)' ".($load>=90 ? "$red" : "$green")."><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
 
+  echo "<span>".implode('</span><span style="margin:0 6px 0 12px">', $status)."</span>";
+} else {
+  echo "<span style='margin:0 6px 0 12px' title='$nut_name: UPS info not availabe, check your settings'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
 }
-echo "<span>".implode('</span><span style="margin:0 6px 0 12px">', $status)."</span>";
 ?>
