@@ -13,9 +13,9 @@
  */
 require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';
 
-$red    = "class='red-text'";
-$green  = "class='green-text'";
-$orange = "class='orange-text'";
+$red    = "class='tooltip-nut red-text'";
+$green  = "class='tooltip-nut green-text'";
+$orange = "class='tooltip-nut orange-text'";
 $all    = $_GET['all']=='true';
 
 function get_ups($name, $ip="localhost")
@@ -54,20 +54,20 @@ if (count($ups_status)) {
   }
 
   if ($battery !== false) {
-    if ($online && $battery < 100) $icon = "<span $green title='${nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;${battery}%</span>";
-    else if ($online && $battery  == 100) $icon = "<span $green title='${nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;${battery}%</span>";
-    else if (!$online) $icon = "<span $red title='${nut_name}: offline - battery is discharging'><i class='fa fa-battery-discharging'></i>&thinsp;${battery}%</span>";
-    else $icon = "<span $green title='${nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
+    if ($online && $battery < 100) $icon = "<span id='nut_battery' $green title='${nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;${battery}%</span>";
+    else if ($online && $battery  == 100) $icon = "<span id='nut_battery' $green title='${nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;${battery}%</span>";
+    else if (!$online) $icon = "<span id='nut_battery' $red title='${nut_name}: offline - battery is discharging'><i class='fa fa-battery-discharging'></i>&thinsp;${battery}%</span>";
+    else $icon = "<span id='nut_battery' $green title='${nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
 
     $status[0] = $icon;
   } else {
-    $status[0] = "<span style='margin:0 6px 0 12px' title='$nut_name: battery info not available'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
+    $status[0] = "<span id='nut_battery' style='margin:0 6px 0 12px' title='$nut_name: battery info not available'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
   }
   $wattage = round($power*$load*0.01)."w";
-  if ($power && $load) $status[1] = "<span title='${nut_name}: consuming $wattage ($load% of capacity)' ".($load>=90 ? "$red" : "$green")."><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
+  if ($power && $load) $status[1] = "<span id='nut_power' title='${nut_name}: consuming $wattage ($load% of capacity)' ".($load>=90 ? "$red" : "$green")."><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
 
   echo "<span>".implode('</span><span style="margin:0 6px 0 12px">', $status)."</span>";
 } else {
-  echo "<span style='margin:0 6px 0 12px' title='$nut_name: UPS info not availabe, check your settings'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
+  echo "<span style='margin:0 6px 0 12px' id='nut_power' class='tooltip-nut' title='$nut_name: UPS info not availabe, check your settings'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
 }
 ?>

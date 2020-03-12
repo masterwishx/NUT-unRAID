@@ -33,6 +33,7 @@ Link="nav-user"
     $.get('/plugins/nut/include/nut_footer.php',function(data) {
       if (data) {
         animed = $("#nut_footer").find("i[class^='fa fa-battery-discharging'], i[class^='fa fa-battery-charging']");
+        hovered = $( ".tooltip-nut:hover" ).map(function(){return this.id;}).get();
         if (animed.length > 0) {
           animed.one('animationiteration webkitAnimationIteration', function(e) {
             $('#nut_footer').html(data);
@@ -40,6 +41,7 @@ Link="nav-user"
         } else {
           $('#nut_footer').html(data);
         }
+        $.each(hovered, function(k,v){ if(v.length) { $("#"+v).trigger("mouseenter");} });
       }
       <?if ($update):?>
       setTimeout(getNUTfooter, <?=max(abs($display['refresh']),15000)?>);
@@ -50,6 +52,16 @@ Link="nav-user"
     {
       footer = $("<span id='nut_footer'></span>").insertAfter("div#footer > span#copyright").css("float","right").css("margin-right", "6px");
       getNUTfooter();
+      $('body').on('mouseenter', '.tooltip-nut:not(.tooltipstered)', function()
+      {
+        $(this).tooltipster({
+          delay:100,
+          zIndex:999,
+          trigger:'custom',
+          triggerOpen:{mouseenter:true, touchstart:true},
+          triggerClose:{click:false, scroll:true, mouseleave:true, tap:true}
+        }).tooltipster('open');
+      });
     }
   );
 </script>
