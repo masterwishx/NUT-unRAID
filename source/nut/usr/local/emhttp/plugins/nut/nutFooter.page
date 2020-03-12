@@ -27,6 +27,108 @@ Link="nav-user"
   animation: 2s battery-discharging infinite;
 }
 
+Menu="Buttons:199"
+Link="nav-user"
+---
+<?require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';?>
+<?if ($nut_footer == "enable"):?>
+<style type="text/css">
+@keyframes battery-charging {
+  0% { content: "\f244"; }
+  20% { content: "\f243"; }
+  40% { content: "\f242"; }
+  60% { content: "\f241"; }
+  80% { content: "\f240"; }
+}
+.fa-battery-charging:before {
+  content: "\f244";
+  animation: 2s battery-charging infinite;
+}
+@keyframes battery-discharging {
+  0% { content: "\f240"; }
+  20% { content: "\f241"; }
+  40% { content: "\f242"; }
+  60% { content: "\f243"; }
+  80% { content: "\f244"; }
+}
+.fa-battery-discharging:before {
+  content: "\f240";
+  animation: 2s battery-discharging infinite;
+}
+@keyframes ring{
+  0%{-webkit-transform:rotate(-15deg);transform:rotate(-15deg)}
+  2%{-webkit-transform:rotate(15deg);transform:rotate(15deg)}
+  4%{-webkit-transform:rotate(-18deg);transform:rotate(-18deg)}
+  6%{-webkit-transform:rotate(18deg);transform:rotate(18deg)}
+  8%{-webkit-transform:rotate(-22deg);transform:rotate(-22deg)}
+  10%{-webkit-transform:rotate(22deg);transform:rotate(22deg)}
+  12%{-webkit-transform:rotate(-18deg);transform:rotate(-18deg)}
+  14%{-webkit-transform:rotate(18deg);transform:rotate(18deg)}
+  16%{-webkit-transform:rotate(-12deg);transform:rotate(-12deg)}
+  18%{-webkit-transform:rotate(12deg);transform:rotate(12deg)}
+  100%,20%{-webkit-transform:rotate(0);transform:rotate(0)}
+}
+.faa-parent.animated-hover:hover>.faa-ring,.faa-ring.animated,.faa-ring.animated-hover:hover{
+  -webkit-animation:ring 2s ease infinite;
+  animation:ring 2s ease infinite;
+  transform-origin-x:50%;
+  transform-origin-y:0;
+  transform-origin-z:initial
+}
+.faa-parent.animated-hover:hover>.faa-ring.faa-fast,.faa-ring.animated-hover.faa-fast:hover,.faa-ring.animated.faa-fast{
+  -webkit-animation:ring 1s ease infinite;
+  animation:ring 1s ease infinite
+}
+.faa-parent.animated-hover:hover>.faa-ring.faa-slow,.faa-ring.animated-hover.faa-slow:hover,.faa-ring.animated.faa-slow{
+  -webkit-animation:ring 3s ease infinite;
+  animation:ring 3s ease infinite
+}
+</style>
+<script type="text/javascript">
+  function getNUTfooter() {
+    $.get('/plugins/nut/include/nut_footer.php',function(data) {
+      if (data) {
+        animed = $("#nut_footer").find("i[class^='fa fa-battery-discharging'], i[class^='fa fa-battery-charging']");
+        hovered = $( ".tooltip-nut:hover" ).map(function(){return this.id;}).get();
+        if (animed.length > 0) {
+          animed.one('animationiteration webkitAnimationIteration', function(e) {
+            $('#nut_footer').html(data);
+          });
+        } else {
+          $('#nut_footer').html(data);
+        }
+        $.each(hovered, function(k,v){ if(v.length) { $("#"+v).trigger("mouseenter");} });
+      }
+      <?if ($update):?>
+      setTimeout(getNUTfooter, <?=max(abs($display['refresh']),15000)?>);
+      <?endif;?>
+    });
+  }
+  $(function()
+    {
+      footer = $("<span id='nut_footer'></span>").insertAfter("div#footer > span#copyright").css("float","right").css("margin-right", "6px");
+      getNUTfooter();
+      $('body').on('mouseenter', '.tooltip-nut:not(.tooltipstered)', function()
+      {
+        $(this).tooltipster({
+          delay:100,
+          zIndex:999,
+          trigger:'custom',
+          interactive: true,
+          contentAsHTML: true,
+          triggerOpen:{mouseenter:true, touchstart:true},
+          triggerClose:{click:false, scroll:true, mouseleave:true, tap:true},
+          functionBefore: function(instance, helper)
+          {
+            console.log($(helper.origin));
+            instance.content($(helper.origin).attr("data"));
+          }
+        }).tooltipster('open');
+      });
+    }
+  );
+</script>
+<?endif;?>
 </style>
 <script type="text/javascript">
   function getNUTfooter() {
@@ -59,7 +161,11 @@ Link="nav-user"
           zIndex:999,
           trigger:'custom',
           triggerOpen:{mouseenter:true, touchstart:true},
-          triggerClose:{click:false, scroll:true, mouseleave:true, tap:true}
+          triggerClose:{click:false, scroll:true, mouseleave:true, tap:true},
+          functionBefore: function(instance, helper)
+          {
+            instance.content($(helper.origin).attr("data"));
+          }
         }).tooltipster('open');
       });
     }
