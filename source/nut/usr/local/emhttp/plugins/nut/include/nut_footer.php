@@ -13,42 +13,44 @@
  */
 require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';
 
+//  exit if NUT daemon isn't working
+if (! file_exists('/var/run/nut/upsmon.pid')) {
+  echo " ";
+  exit(0);
+}
+
 $red    = "class='tooltip-nut red-text'";
 $green  = "class='tooltip-nut green-text'";
 $orange = "class='tooltip-nut orange-text'";
-$all    = $_GET['all']=='true';
 
 function get_ups($name, $ip="localhost")
 {
   $output = [];
   $alarm = 0;
-  if (file_exists('/var/run/nut/upsmon.pid')) {
-    // echo "/bin/upsc ".escapeshellarg($name)."@".escapeshellarg($ip)." 2>/dev/null";
-    exec("/usr/bin/upsc ".escapeshellarg($name)."@".escapeshellarg($ip)." 2>/dev/null", $rows);
-    for ($i=0; $i<count($rows); $i++) {
-      $row = array_map('trim', explode(':', $rows[$i], 2));
-      $prop = $row[0];
-      if (stripos($prop, "ups.alarm")) {
-        $prop = "${prop}".$alarm++;
-      }
-      $output[$prop] = $row[1];
+  exec("/usr/bin/upsc ".escapeshellarg($name)."@".escapeshellarg($ip)." 2>/dev/null", $rows);
+  for ($i=0; $i<count($rows); $i++) {
+    $row = array_map('trim', explode(':', $rows[$i], 2));
+    $prop = $row[0];
+    if (stripos($prop, "ups.alarm")!== false) {
+      $prop = "${prop}".$alarm++;
     }
+    $output[$prop] = $row[1];
   }
   return $output;
 }
 
-function array_key_exists_wildcard ( $arr, $nee )
-{
-    $nee = str_replace( '\\*', '.*?', preg_quote( $nee, '/' ) );
-    return array_values(preg_grep( '/^' . $nee . '$/i', array_keys( $arr ) ));
+function array_key_exists_wildcard ( $arr, $nee ) {
+  $nee = str_replace( '\\*', '.*?', preg_quote( $nee, '/' ) );
+  return array_values(preg_grep( '/^' . $nee . '$/i', array_keys( $arr ) ));
+}
+
+function format_time($seconds) {
+  $t = round($seconds);
+  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
 }
 
 $status = [];
 $ups_status = get_ups($nut_name, $nut_ip);
-// $ups_status["ups.alarm1"] = "alarm1";
-// $ups_status["ups.alarm2"] = "alarm2";
-// $ups_status["ups.alarm3"] = "alarm3";
-// $ups_status["ups.alarm4"] = "alarm4";
 if (count($ups_status)) {
   $online  = ( array_key_exists("ups.status", $ups_status) && stripos($ups_status["ups.status"],'OL')!==false );
   $battery = (array_key_exists("battery.charge",$ups_status)) ? intval(strtok($ups_status['battery.charge'],' ')) : false;
@@ -72,9 +74,10 @@ if (count($ups_status)) {
   }
 
   if ($battery !== false) {
+    $battery_runtime = array_key_exists("battery.runtime", $ups_status) ? format_time($ups_status["battery.runtime"]) : "n/a";
     if ($online && $battery < 100) $icon = "<span id='nut_battery' $green data='${nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;${battery}%</span>";
     else if ($online && $battery  == 100) $icon = "<span id='nut_battery' $green data='${nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;${battery}%</span>";
-    else if (!$online) $icon = "<span id='nut_battery' $red data='${nut_name}: offline - battery is discharging'><i class='fa fa-battery-discharging'></i>&thinsp;${battery}%</span>";
+    else if (!$online) $icon = "<span id='nut_battery' $red data='${nut_name}: offline - battery is discharging - est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;${battery}%</span>";
     else $icon = "<span id='nut_battery' $green data='${nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
 
     $status[0] = $icon;
@@ -86,6 +89,6 @@ if (count($ups_status)) {
 
   echo "<span>".implode('</span><span style="margin:0 6px 0 12px">', $status)."</span>";
 } else {
-  echo "<span style='margin:0 6px 0 12px' id='nut_power' class='tooltip-nut' data='$nut_name: UPS info not availabe, check your settings'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
+  echo "<span style='margin:0 6px 0 12px' id='nut_power' class='tooltip-nut' data='$nut_name: UPS info not availabe, check your settings'><i class='fa fa-battery-empty'></i>&nbsp;n/a</span>";
 }
 ?>
