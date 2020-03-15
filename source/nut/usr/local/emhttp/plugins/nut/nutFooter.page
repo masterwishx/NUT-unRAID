@@ -120,7 +120,6 @@ Link="nav-user"
           triggerClose:{click:false, scroll:true, mouseleave:true, tap:true},
           functionBefore: function(instance, helper)
           {
-            console.log($(helper.origin));
             instance.content($(helper.origin).attr("data"));
           }
         }).tooltipster('open');
