@@ -133,10 +133,12 @@ Link="nav-user"
   function getNUTfooter() {
     $.get('/plugins/nut/include/nut_footer.php',function(data) {
       if (data) {
+        clearTimeout(timers.getNUTfooter);
         animed = $("#nut_footer").find("i[class^='fa fa-battery-discharging'], i[class^='fa fa-battery-charging']");
         hovered = $( ".tooltip-nut:hover" ).map(function(){return this.id;}).get();
         if (animed.length > 0) {
           animed.one('animationiteration webkitAnimationIteration', function(e) {
+            $.each(hovered, function(k,v){ if(v.length) { $("#"+v).trigger("mouseenter");} });
             $('#nut_footer').html(data);
           });
         } else {
@@ -145,7 +147,7 @@ Link="nav-user"
         $.each(hovered, function(k,v){ if(v.length) { $("#"+v).trigger("mouseenter");} });
       }
       <?if ($update):?>
-      setTimeout(getNUTfooter, <?=max(abs($display['refresh']),15000)?>);
+      timers.getNUTfooter = setTimeout(getNUTfooter, <?=max(abs($display['refresh']),15000)?>);
       <?endif;?>
     });
   }
@@ -153,19 +155,23 @@ Link="nav-user"
     {
       footer = $("<span id='nut_footer'></span>").insertAfter("div#footer > span#copyright").css("float","right").css("margin-right", "6px");
       getNUTfooter();
-      $('body').on('mouseenter', '.tooltip-nut:not(.tooltipstered)', function()
+      $('body').on('mouseenter', '.tooltip-nut', function()
       {
-        $(this).tooltipster({
-          delay:100,
-          zIndex:999,
-          trigger:'custom',
-          triggerOpen:{mouseenter:true, touchstart:true},
-          triggerClose:{click:false, scroll:true, mouseleave:true, tap:true},
-          functionBefore: function(instance, helper)
-          {
-            instance.content($(helper.origin).attr("data"));
-          }
-        }).tooltipster('open');
+        if (!$(this).hasClass("tooltipstered"))
+        {
+          $(this).tooltipster({
+            delay:100,
+            zIndex:999,
+            trigger:'custom',
+            triggerOpen:{mouseenter:true, touchstart:true},
+            triggerClose:{click:false, scroll:true, mouseleave:true, tap:true},
+            functionBefore: function(instance, helper)
+            {
+              instance.content($(helper.origin).attr("data"));
+            }
+          }).tooltipster('open');
+
+        }
       });
     }
   );
