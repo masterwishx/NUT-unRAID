@@ -38,7 +38,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       $status[0] = $val ? (stripos($val,'online')===false ? "<td $red>$val</td>" : "<td $green>$val</td>") : "<td $orange>Refreshing...</td>";
       break;
     case 'battery.charge':
-      $status[1] = strtok($val,' ')<=10 ? "<td $red>$val</td>" : "<td $green>$val</td>";
+      $status[1] = strtok($val,' ')<=10 ? "<td $red>".intval($val)."%</td>" : "<td $green>".intval($val)."%</td>";
       break;
     case 'battery.runtime':
       $runtime   = gmdate("H:i:s", $val);
@@ -49,7 +49,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       break;
     case 'ups.load':
       $load      = strtok($val,' ');
-      $status[5] = $load>=90 ? "<td $red>$val</td>" : "<td $green>$val</td>";
+      $status[5] = $load>=90 ? "<td $red>".intval($val)."%</td>" : "<td $green>".intval($val)."%</td>";
       break;
     }
     if ($all) {
@@ -61,7 +61,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
   if ($nut_power == 'manual'){
     $power   = intval($nut_powerw);
   }
-  $status[3] = $power==0 ? "<td $red>$power</td>" : "<td $green>$power</td>";
+  $status[3] = $power==0 ? "<td $red>${power}w</td>" : "<td $green>${power}w</td>";
   if ($all && count($rows)%2==1) $result[] = "<td></td><td></td></tr>";
   if ($power && $load) $status[4] = ($load>=90 ? "<td $red>" : "<td $green>").round($power*$load*0.01)." Watts</td>";
 }
