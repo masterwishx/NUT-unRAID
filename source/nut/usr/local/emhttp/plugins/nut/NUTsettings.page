@@ -79,7 +79,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
             </dd>
         </dl>
 
-        <blockquote class="inline_help"
+        <blockquote class="inline_help">
             <p>Select the *mode* which mode your UPS will run in.</p>
             <p>**standalone** - When the ups is only used by the local host**</p>
             <p>**netserver** - When nut clients/slaves need to connect to the ups**</p>
@@ -93,7 +93,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
             </dd>
         </dl>
 
-        <blockquote class="inline_help"
+        <blockquote class="inline_help">
             <p>IP address of master server connected to the ups**</p>
         </blockquote>
 
@@ -104,7 +104,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
             </dd>
         </dl>
 
-        <blockquote class="inline_help"
+        <blockquote class="inline_help">
             <p>Name of ups**</p>
         </blockquote>
 
@@ -115,7 +115,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
             </dd>
         </dl>
 
-        <blockquote class="inline_help"
+        <blockquote class="inline_help">
             <p>Username used to access of ups monitor**</p>
         </blockquote>
 
@@ -126,7 +126,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
             </dd>
         </dl>
 
-        <blockquote class="inline_help"
+        <blockquote class="inline_help">
             <p>Password used to access of ups monitor**</p>
         </blockquote>
 
@@ -138,7 +138,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
                 </dd>
             </dl>
 
-            <blockquote class="inline_help"
+            <blockquote class="inline_help">
                 <p>Username used by slave to access of ups monitor**</p>
             </blockquote>
 
@@ -149,7 +149,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
                 </dd>
             </dl>
 
-            <blockquote class="inline_help"
+            <blockquote class="inline_help">
                 <p>Password used by slave to access of ups monitor**</p>
             </blockquote>
         </div>
@@ -233,6 +233,22 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
         <p>**Battery Level** - Shuts down the system when there is X percentage left on the battery **</p>
         <p>**Runtime Left** - Shuts down the system when there is X runtime left on the battery (in seconds)**</p>
         <p>**Time on Battery** - Shuts down the system when the user defined timer reaches zero (in seconds)**</p>
+    </blockquote>
+
+    <dl>
+        <dt>Battery Runtime Left:</dt>
+        <dd>
+            <select class="nut-run" id="RUNTIME" name="RUNTIME" size="1">
+                <?=mk_option($nut_runtime, 'battery.runtime', 'Battery Runtime');?>
+                <?=mk_option($nut_runtime, 'battery.runtime.low', 'Battery Runtime Low');?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+        <p>Select the *Runtime* attribute that correctly reflects your UPS remaining runtime.</p>
+        <p>**Battery Runtime** - usually reflects the remaining runtime (seconds) of the UPS.</p>
+        <p>**Battery Runtime Low** - remaining battery runtime when UPS switches to Low Battery.</p>
     </blockquote>
 
     <div id="SHUTDOWN0">

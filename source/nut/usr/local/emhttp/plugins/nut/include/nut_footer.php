@@ -74,7 +74,7 @@ if (count($ups_status)) {
   }
 
   if ($battery !== false) {
-    $battery_runtime = array_key_exists("battery.runtime", $ups_status) ? format_time($ups_status["battery.runtime"]) : "n/a";
+    $battery_runtime = array_key_exists($nut_runtime, $ups_status) ? format_time($ups_status[$nut_runtime]) : "n/a";
     if ($online && $battery < 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='${nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;${battery}%</span>";
     else if ($online && $battery  == 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='${nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;${battery}%</span>";
     else if (!$online) $icon = "<span id='nut_battery' class='tooltip-nut $red' data='${nut_name}: offline - battery is discharging - est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;${battery}%</span>";
