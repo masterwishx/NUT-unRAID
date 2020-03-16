@@ -119,7 +119,7 @@ Link="nav-user"
 <?if(stripos($path, "dashboard") !== false):?>
 <script type="text/javascript">
   function addNUTDashboard() {
-    if (! $("#ups_loadpct").length){
+    if (! $("#ups_loadpct").length && $("#db-box1").length){
       i = $("#db-box1 > tbody.sortable").length;
       toggleView('nut_view',true);
       nut_dashboard = $("#nut_dashboard-defaults").clone();
