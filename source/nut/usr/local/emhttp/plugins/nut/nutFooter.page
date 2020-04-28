@@ -72,16 +72,6 @@ Link="nav-user"
         }
         $.each(hovered, function(k,v){ if(v.length) { $("#"+v).trigger("mouseenter");} });
       }
-      <?if(stripos($path, "dashboard") !== false):?>
-      $.get('/plugins/nut/include/nut_status.php',{all:'false'},function(d) {
-        var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>;').split(';');
-        $("#db-box1").find('.nut_status').html(data[0]);
-        $("#db-box1").find('.nut_bcharge').html(data[1]);
-        $("#db-box1").find('.nut_timeleft').html(data[2]);
-        $("#db-box1").find('.nut_nompower').html(data[3]);
-        $("#db-box1").find('.nut_loadpct').html(data[5]+' - '+data[4]);
-      });
-      <?endif;?>
       <?if ($update):?>
       timers.getNUTfooter = setTimeout(getNUTfooter, <?=max(abs($display['refresh']),15000)?>);
       <?endif;?>
@@ -115,9 +105,25 @@ Link="nav-user"
     }
   );
 </script>
+<?endif;?>
 
-<?if(stripos($path, "dashboard") !== false):?>
+<?if(stripos($path, "dashboard") !== false && $nut_running):?>
 <script type="text/javascript">
+  function getNUTDashboard() {
+    $.get('/plugins/nut/include/nut_status.php',{all:'false'},function(d) {
+      var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>;').split(';');
+      $("#db-box1").find('.nut_status').html(data[0]);
+      $("#db-box1").find('.nut_bcharge').html(data[1]);
+      $("#db-box1").find('.nut_timeleft').html(data[2]);
+      $("#db-box1").find('.nut_nompower').html(data[3]);
+      $("#db-box1").find('.nut_loadpct').html(data[5]+' - '+data[4]);
+      <?if ($update):?>
+      clearTimeout(timers.getNUTDashboard);
+      timers.getNUTDashboard = setTimeout(getNUTDashboard, <?=max(abs($display['refresh']),15000)?>);
+      <?endif;?>
+    });
+  }
+
   function addNUTDashboard() {
     if (! $("#ups_loadpct").length && $("#db-box1").length){
       i = $("#db-box1 > tbody.sortable").length;
@@ -126,6 +132,7 @@ Link="nav-user"
       sort = nut_dashboard.find("thead, tbody").attr("sort",i);
       $("#db-box1").append(nut_dashboard.html());
       sortTable($('#db-box1'),$.cookie('db-box1'));
+      getNUTDashboard();
     }
   }
   $(function(){
@@ -148,5 +155,4 @@ Link="nav-user"
 </td><td></td></tr>
 </tbody>
 </table>
-<?endif;?>
 <?endif;?>
