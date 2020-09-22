@@ -231,8 +231,8 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     <blockquote class="inline_help">
         <p>Select the *Shutdown mode* for NUT, this mode determines which "timer" to use for when the UPS will shutdown the system.</p>
         <p>**Battery Level** - Shuts down the system when there is X percentage left on the battery **</p>
-        <p>**Runtime Left** - Shuts down the system when there is X runtime left on the battery (in seconds)**</p>
-        <p>**Time on Battery** - Shuts down the system when the user defined timer reaches zero (in seconds)**</p>
+        <p>**Runtime Left** - Shuts down the system when there is X runtime left on the battery (in minutes)**</p>
+        <p>**Time on Battery** - Shuts down the system when the user defined timer reaches zero (in minutes)**</p>
     </blockquote>
 
     <dl>
@@ -247,7 +247,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
     <blockquote class="inline_help">
         <p>Select the *Runtime* attribute that correctly reflects your UPS remaining runtime.</p>
-        <p>**Battery Runtime** - usually reflects the remaining runtime (seconds) of the UPS.</p>
+        <p>**Battery Runtime** - usually reflects the remaining runtime of the UPS.</p>
         <p>**Battery Runtime Low** - remaining battery runtime when UPS switches to Low Battery.</p>
     </blockquote>
 
@@ -277,7 +277,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
         </dl>
 
         <blockquote class="inline_help">
-            <p>If during a power failure, the remaining runtime seconds (as calculated internally by the UPS) is below or equal to *seconds*, NUT will initiate a system shutdown.</p>
+            <p>If during a power failure, the remaining runtime minutes (as calculated internally by the UPS) is below or equal to minutes, NUT will initiate a system shutdown.</p>
             <p>**Note** depeding on your ups this value can "fluctuate" so be aware. if your ups has an old battery dont use this</p>
         </blockquote>
     </div>
@@ -293,7 +293,7 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
         </dl>
 
         <blockquote class="inline_help">
-            <p>The time in seconds before the system will power down if a power failure accours.</p>
+            <p>The time in minutes before the system will power down if a power failure accours.</p>
         </blockquote>
     </div>
 
