@@ -55,6 +55,7 @@ if (count($ups_status)) {
   $online  = ( array_key_exists("ups.status", $ups_status) && stripos($ups_status["ups.status"],'OL')!==false );
   $battery = (array_key_exists("battery.charge",$ups_status)) ? intval(strtok($ups_status['battery.charge'],' ')) : false;
   $load    = (array_key_exists("ups.load", $ups_status)) ? intval(strtok($ups_status['ups.load'],' ')) : 0;
+  $realpower    = (array_key_exists("ups.realpower", $ups_status)) ? intval(strtok($ups_status['ups.realpower'],' ')) : NULL;
 
   $power_attr = array_key_exists_wildcard($ups_status, 'ups.*power.nominal');
   if (count($power_attr)) {
@@ -86,6 +87,7 @@ if (count($ups_status)) {
   }
   $wattage = round($power*$load*0.01)."w";
   if ($power && $load) $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='${nut_name}: consuming $wattage ($load% of capacity)'><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
+  if ($realpower != NULL && $load) {$realpower=$realpower.'w' ; $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='${nut_name}: consuming $realpower ($load% of capacity) Calculated Wattage: $wattage'><i class='fa fa-plug'></i>&thinsp;$realpower</span>"; }
 
   echo "<span style='margin:0 6px 0 12px'>".implode('</span><span style="margin:0 6px 0 6px">', $status)."</span>";
 } else {
