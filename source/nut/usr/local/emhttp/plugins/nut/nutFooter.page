@@ -1,8 +1,47 @@
 Menu="Buttons:199"
 Link="nav-user"
 ---
+<?PHP
+/*
+  Create a .page file based on this example file and store the file in your plugin directory
+  Make sure this file has a unique name not used by the GUI or other plugins
+
+  This is an example configuration which is used to add custom tiles to the dashboard
+  Placement of one or more custom tiles is done under column1, column2 or column3
+  A column can have as many new custom tiles as needed, each custom tile is a <tbody> element
+  Each tile must have these two properties set:
+
+  "_(description)_"    - this is the (translated) description shown in the Content Manager window
+  "_(Tile tile)_"      - this is the (translated) title of the tile shown in bold on the screen
+
+  The content of the tile can be any text as required by your plugin, this content is placed inside the <td> element
+  A number of predefined spans are available to make fields of certain widths and maybe used to follow the GUI alignment
+  These are:
+  <span class="w18">
+  <span class="w26">
+  <span class="w36">
+  <span class="w44">
+  <span class="w72">
+*/
+
+$pluginname = "UPS(NUT)"; // substitute this entry with the name of your plugin
+if (version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')) {
+
+$mytiles[$pluginname]['column2'] =
+<<<EOT
+<tbody id="tblUPSNUTDash" title="_(UPS(NUT))_">
+<tr><td><i class='icon-ups f32'></i>
+<div class='section'>_(UPS(NUT))_<br><span><i class='ups fa fa-line-chart'></i><span id='load'>Load: <span class='nut_loadpct' id='nut_loadpct'></span></span>
+<br><br></div>
+<a href="/Dashboard/NUTsettings" title="_(Go to UPS NUT settings)_"><i class="fa fa-fw fa-cog control"></i></a></td></tr>
+</tbody>
+EOT;
+}
+?>
+
 <?require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';?>
 <?if ($nut_footer == "enable" && $nut_running):?>
+<?$update= $nut_refresh == "enable" ? true : false;?>
 <style type="text/css">
 @keyframes battery-charging {
   0% { content: "\f244"; }
@@ -73,7 +112,7 @@ Link="nav-user"
         $.each(hovered, function(k,v){ if(v.length) { $("#"+v).trigger("mouseenter");} });
       }
       <?if ($update):?>
-      timers.getNUTfooter = setTimeout(getNUTfooter, <?=max(abs($display['refresh']),15000)?>);
+      timers.getNUTfooter = setTimeout(getNUTfooter, <?=max(abs($display['refresh']),($nut_interval * 1000))?>);
       <?endif;?>
     });
   }
@@ -107,6 +146,33 @@ Link="nav-user"
 </script>
 <?endif;?>
 
+<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta5', '>')):?>
+<script type="text/javascript">
+  function UPSNUTArray() {
+    $.get('/plugins/nut/include/nut_status.php',{all:'false'},function(d) {
+      var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>;').split(';')
+
+	  $('#tblUPSNUTDash').find('tr.updated').remove();
+
+      $('#tblUPSNUTDash').append('<tr class="updated"><td>'+
+        "<tr class='updated'><td><span class='w36 ups'>UPS status:</span><span class='nut_status'>"+data[0]+"</span></td></tr>" +
+        "<tr class='updated'><td><span class='w36 ups'>Battery charge:</span><span class='nut_bcharge'>"+data[1]+"</span></td></tr>" +
+        "<tr class='updated'><td><span class='w36 ups'>Runtime left:</span><span class='nut_timeleft'>"+data[2]+"</span></td></tr>" +
+        "<tr class='updated'><td><span class='w36 ups'>Nominal power:</span>"+data[3]+"</td></tr>");
+    $("#tblUPSNUTDash").find('.nut_loadpct').html(data[5]+' - '+data[4]);    
+    setTimeout(UPSNUTArray, <?=($nut_interval * 1000)?>);
+  }) ;
+};
+
+$(function(){
+  UPSNUTArray();
+});
+</script> 
+<?endif;?>
+
+
+
+<?if(version_compare(parse_ini_file('/etc/unraid-version')['version'],'6.12.0-beta6', '<')):?>
 <?if(stripos($path, "dashboard") !== false && $nut_running):?>
 <script type="text/javascript">
   function getNUTDashboard() {
@@ -119,7 +185,7 @@ Link="nav-user"
       $("#db-box1").find('.nut_loadpct').html(data[5]+' - '+data[4]);
       <?if ($update):?>
       clearTimeout(timers.getNUTDashboard);
-      timers.getNUTDashboard = setTimeout(getNUTDashboard, <?=max(abs($display['refresh']),15000)?>);
+      timers.getNUTDashboard = setTimeout(getNUTDashboard, <?=max(abs($display['refresh']),($nut_interval * 1000))?>);
       <?endif;?>
     });
   }
@@ -138,6 +204,11 @@ Link="nav-user"
   $(function(){
     addNUTDashboard();
   });
+<?endif;?>
+
+
+
+
 </script>
 <table id="nut_dashboard-defaults" style="display: none;">
 <thead sort=''><tr class='hidden'><td></td><td colspan='3'></td><td></td></tr></thead>

@@ -32,7 +32,7 @@ function get_ups($name, $ip="localhost")
     $row = array_map('trim', explode(':', $rows[$i], 2));
     $prop = $row[0];
     if (stripos($prop, "ups.alarm")!== false) {
-      $prop = "${prop}".$alarm++;
+      $prop = "{$prop}".$alarm++;
     }
     $output[$prop] = $row[1];
   }
@@ -46,7 +46,7 @@ function array_key_exists_wildcard ( $arr, $nee ) {
 
 function format_time($seconds) {
   $t = round($seconds);
-  return sprintf('%02d:%02d:%02d', ($t/3600),($t/60%60), $t%60);
+  return sprintf('%02d:%02d:%02d', round($t/3600,0),round($t/60%60,0), round($t%60,0));
 }
 
 $status = [];
@@ -76,18 +76,18 @@ if (count($ups_status)) {
 
   if ($battery !== false) {
     $battery_runtime = array_key_exists($nut_runtime, $ups_status) ? format_time($ups_status[$nut_runtime]) : "n/a";
-    if ($online && $battery < 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='${nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;${battery}%</span>";
-    else if ($online && $battery  == 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='${nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;${battery}%</span>";
-    else if (!$online) $icon = "<span id='nut_battery' class='tooltip-nut $red' data='${nut_name}: offline - battery is discharging - est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;${battery}%</span>";
-    else $icon = "<span id='nut_battery' class='tooltip-nut $green' data='${nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
+    if ($online && $battery < 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='{$nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;{$battery}%</span>";
+    else if ($online && $battery  == 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='{$nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;{$battery}%</span>";
+    else if (!$online) $icon = "<span id='nut_battery' class='tooltip-nut $red' data='{$nut_name}: offline - battery is discharging - est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;{$battery}%</span>";
+    else $icon = "<span id='nut_battery' class='tooltip-nut $green' data='{$nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
 
     $status[0] = $icon;
   } else {
     $status[0] = "<span id='nut_battery'class='tooltip-nut' style='margin:0 6px 0 12px' data='$nut_name: battery info not available'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
   }
   $wattage = round($power*$load*0.01)."w";
-  if ($power && $load) $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='${nut_name}: consuming $wattage ($load% of capacity)'><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
-  if ($realpower != NULL && $load) {$realpower=$realpower.'w' ; $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='${nut_name}: consuming $realpower ($load% of capacity) Calculated Wattage: $wattage'><i class='fa fa-plug'></i>&thinsp;$realpower</span>"; }
+  if ($power && $load) $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='{$nut_name}: consuming $wattage ($load% of capacity)'><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
+  if ($realpower != NULL && $load) {$realpower=$realpower.'w' ; $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='{$nut_name}: consuming $realpower ($load% of capacity) Calculated Wattage: $wattage'><i class='fa fa-plug'></i>&thinsp;$realpower</span>"; }
 
   echo "<span style='margin:0 6px 0 12px'>".implode('</span><span style="margin:0 6px 0 6px">', $status)."</span>";
 } else {

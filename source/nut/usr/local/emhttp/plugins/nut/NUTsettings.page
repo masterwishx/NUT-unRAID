@@ -356,6 +356,31 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     </blockquote>
 
     <dl>
+        <dt>Display Page Refresh:</dt>
+        <dd>
+            <select class="" name="REFRESH" size="1">
+                <?=mk_option($nut_refresh, 'disable', 'No');?>
+                <?=mk_option($nut_refresh, 'enable', 'Yes');?>
+            </select>
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+        <p>Enable or disable page refreshes.</p>
+    </blockquote>
+
+    <dl>
+        <dt>Display Page Refresh Interval:</dt>
+        <dd>
+            <input id="INTERVAL" type="text" class="narrow nut-power" name="INTERVAL" maxlength="5" value="<?=htmlspecialchars($nut_interval);?>" title="nut page refresh interval(Seconds)">
+        </dd>
+    </dl>
+
+    <blockquote class="inline_help">
+        <p>Refresh interval is enable value in seconds.</p>
+    </blockquote>
+
+    <dl>
         <dt>UPS Power and Load Display Settings:</dt>
         <dd>
             <select id="POWER" name="POWER" size="1">
