@@ -26,6 +26,8 @@ $nut_upskill   = isset($nut_cfg['UPSKILL'])      ? htmlspecialchars($nut_cfg ['U
 $nut_poll      = isset($nut_cfg['POLL'])         ? intval($nut_cfg ['POLL'])                : 15;
 $nut_community = isset($nut_cfg['COMMUNITY'])    ? htmlspecialchars($nut_cfg ['COMMUNITY']) : 'public';
 $nut_footer    = isset($nut_cfg['FOOTER'])       ? htmlspecialchars($nut_cfg ['FOOTER'])    : 'disable';
+$nut_refresh   = isset($nut_cfg['REFRESH'])      ? htmlspecialchars($nut_cfg ['REFRESH'])   : 'disable';
+$nut_interval  = isset($nut_cfg['INTERVAL'])     ? intval($nut_cfg['INTERVAL'])             : 15 ;
 $nut_runtime   = isset($nut_cfg['RUNTIME'])      ? htmlspecialchars($nut_cfg ['RUNTIME'])   : 'battery.runtime';
 $nut_running   = (intval(trim(shell_exec( "[ -f /proc/`cat /var/run/nut/upsmon.pid 2> /dev/null`/exe ] && echo 1 || echo 0 2> /dev/null" ))) === 1 );
 ?>

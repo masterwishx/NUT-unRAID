@@ -15,6 +15,8 @@ Tag="file"
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
  */
+require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';
+$update = $nut_refresh == "enable" ? true : false;
 ?>
 <style>
 table.tablesorter tbody tr:nth-child(odd) {
@@ -39,7 +41,7 @@ function getNUTstatus() {
       $('#nut_status').html(data[1]);
     }
 <?if ($update):?>
-    setTimeout(getNUTstatus,<?=max(abs($display['refresh']),15000)?>);
+    setTimeout(getNUTstatus,<?=max(abs($display['refresh']),(1000 * $nut_interval))?>);
 <?endif;?>
   });
 }

@@ -61,7 +61,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
   if ($nut_power == 'manual'){
     $power   = intval($nut_powerw);
   }
-  $status[3] = $power==0 ? "<td $red>${power}w</td>" : "<td $green>${power}w</td>";
+  $status[3] = $power==0 ? "<td $red>{$power}w</td>" : "<td $green>{$power}w</td>";
   if ($all && count($rows)%2==1) $result[] = "<td></td><td></td></tr>";
   if ($power && $load) $status[4] = ($load>=90 ? "<td $red>" : "<td $green>").round($power*$load*0.01)." Watts</td>";
 }
