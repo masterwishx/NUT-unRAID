@@ -237,6 +237,11 @@ else
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 
+    rm -rf /etc/ups
+    ln -s /etc/nut /etc/ups
+    mkdir /var/run/nut
+    ln -s /var/run/upsmon.pid /var/run/nut/upsmon.pid
+
     # Stop service
     echo "stopping services..."
     /etc/rc.d/rc.nut stop 2>/dev/null
