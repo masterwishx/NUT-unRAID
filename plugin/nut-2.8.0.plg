@@ -171,8 +171,8 @@ The 'nut-package' file.
 <MD5>24702ef930855db3432ed9ee73e93d42</MD5>
 </FILE>
 
-<FILE Name="&plgPATH;/net-snmp-5.9.3-x86_64-4.txz" Min="6.10" Run="upgradepkg --install-new">
-<URL>&pkgURL;/net-snmp-5.9.3-x86_64-4.txz</URL>
+<FILE Name="&plgPATH;/net-snmp-5.9.3-x86_64-1.txz" Min="6.10" Run="upgradepkg --install-new">
+<URL>&pkgURL;/net-snmp-5.9.3-x86_64-1.txz</URL>
 <MD5>5beebc819894c94bedbc531d47cfe497</MD5>
 </FILE>
 
