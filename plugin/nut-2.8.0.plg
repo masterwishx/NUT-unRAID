@@ -237,14 +237,28 @@ else
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 
-    rm -rf /etc/ups
-    ln -s /etc/nut /etc/ups
-    mkdir /var/run/nut
-    ln -s /var/run/upsmon.pid /var/run/nut/upsmon.pid
-
     # Stop service
     echo "stopping services..."
     /etc/rc.d/rc.nut stop 2>/dev/null
+
+    # nut-2.7.4 and nut plugin expects:
+    #   Config: /etc/nut
+    #   Pid   : /var/run/nut/upsmon.pid
+
+    # nut-2.8.0 expects
+    #   Config: /etc/ups
+    #   Pid   : /var/run/upsmon.pid
+
+    if [ ! -d /etc/nut ]; then
+        # Link nut-2.8.0 config to nut-2.7.4 config
+        mkdir /etc/nut
+        cp /etc/ups/* /etc/nut
+        rm -rf /etc/ups
+        ln -s /etc/nut /etc/ups
+        # Link nut-2.7.4 pid to nut-2.8.0 pid
+        mkdir /var/run/nut
+        ln -s /var/run/upsmon.pid /var/run/nut/upsmon.pid
+    fi
 
     # start network ups tools
     echo "checking network ups tools configuration..."
@@ -290,6 +304,11 @@ removepkg &plgPATH;/*.txz
 rm -rf &emhttp;
 rm -f &plgPATH;/*.txz \
     &plgPATH;/*.md5
+
+# Remove links for nut-2.8.0 vs nut-2.7.4
+rm -rf /etc/nut
+rm /etc/ups
+rm -rf /var/run/nut
 
 echo ""
 echo "-----------------------------------------------------------"
