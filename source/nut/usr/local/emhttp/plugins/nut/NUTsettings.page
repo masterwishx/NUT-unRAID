@@ -356,6 +356,16 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
     </blockquote>
 
     <dl>
+        <dt>Display Footer Style:</dt>
+        <dd>
+            <select class="" name="FOOTER_STYLE" size="1">
+                <?=mk_option($nut_footer_style, '0', 'Default');?>
+                <?=mk_option($nut_footer_style, '1', 'Small');?>
+            </select>
+        </dd>
+    </dl>
+
+    <dl>
         <dt>Display Page Refresh:</dt>
         <dd>
             <select class="" name="REFRESH" size="1">
