@@ -12,6 +12,7 @@
  * all copies or substantial portions of the Software.
  */
 require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php';
+$config = parse_ini_file('/boot/config/plugins/nut/nut.cfg');
 
 //  exit if NUT daemon isn't working
 if (! file_exists('/var/run/nut/upsmon.pid')) {
@@ -22,6 +23,7 @@ if (! file_exists('/var/run/nut/upsmon.pid')) {
 $red    = "red-text";
 $green  = "green-text";
 $orange = "orange-text";
+$black  = "black-text";
 
 function get_ups($name, $ip="localhost")
 {
@@ -76,18 +78,18 @@ if (count($ups_status)) {
 
   if ($battery !== false) {
     $battery_runtime = array_key_exists($nut_runtime, $ups_status) ? format_time($ups_status[$nut_runtime]) : "n/a";
-    if ($online && $battery < 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='{$nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;{$battery}%</span>";
-    else if ($online && $battery  == 100) $icon = "<span id='nut_battery' class='tooltip-nut $green' data='{$nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;{$battery}%</span>";
-    else if (!$online) $icon = "<span id='nut_battery' class='tooltip-nut $red' data='{$nut_name}: offline - battery is discharging - est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;{$battery}%</span>";
-    else $icon = "<span id='nut_battery' class='tooltip-nut $green' data='{$nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
+    if ($online && $battery < 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='{$nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;{$battery}%</span>";
+    else if ($online && $battery  == 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='{$nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;{$battery}%</span>";
+    else if (!$online) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut $red' data='{$nut_name}: offline - battery is discharging - est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;{$battery}%</span>";
+    else $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='{$nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
 
     $status[0] = $icon;
   } else {
     $status[0] = "<span id='nut_battery'class='tooltip-nut' style='margin:0 6px 0 12px' data='$nut_name: battery info not available'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
   }
   $wattage = round($power*$load*0.01)."w";
-  if ($power && $load) $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='{$nut_name}: consuming $wattage ($load% of capacity)'><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
-  if ($realpower != NULL && $load) {$realpower=$realpower.'w' ; $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : "$green")."' data='{$nut_name}: consuming $realpower ($load% of capacity) Calculated Wattage: $wattage'><i class='fa fa-plug'></i>&thinsp;$realpower</span>"; }
+  if ($power && $load) $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut ".($load>=90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green"))."' data='{$nut_name}: consuming $wattage ($load% of capacity)'><i class='fa fa-plug'></i>&thinsp;$wattage</span>";
+  if ($realpower != NULL && $load) {$realpower=$realpower.'w' ; $status[1] = "<span id='nut_power' class='tooltip-nut ".($load>=90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green"))."' data='{$nut_name}: consuming $realpower ($load% of capacity) Calculated Wattage: $wattage'><i class='fa fa-plug'></i>&thinsp;$realpower</span>"; }
 
   echo "<span style='margin:0 6px 0 12px'>".implode('</span><span style="margin:0 6px 0 6px">', $status)."</span>";
 } else {
