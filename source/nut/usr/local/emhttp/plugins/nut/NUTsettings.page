@@ -311,6 +311,8 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
         <blockquote class="inline_help">
             <p>Set to *Yes* to shutdown the system when the UPS emits a LOWBATT event.</p>
             <p>This can be considered a fail-safe in case the UPS battery is dying before any above conditions are met.</p>
+            <p>Please note that the UPS decides what it considers a LOWBATT event (usually around 20% remaining charge).</p>
+            <p>Some vendors allow for the LOWBATT value to be changed either via the software or directly on the UPS screen.</p>
         </blockquote>
     </div>
 
