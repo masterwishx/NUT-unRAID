@@ -195,17 +195,18 @@ write_config() {
         sed -i "9 s,.*,$var21," /etc/nut/upsd.users
         sed -i "10 s,.*,$var22," /etc/nut/upsd.users
         sed -i "11 s,.*,$var23," /etc/nut/upsd.users
-    else
-        # manual mode save conf's to flash
-        if [ -d $PLGPATH/ups ]; then
-            if [ $( grep -ic "/etc/rc.d/rc.nut shutdown" /etc/rc.d/rc.6 ) -ge 1 ]; then
-                cp -f /etc/nut/* $PLGPATH/ups
-            else
-                cp -f $PLGPATH/ups/* /etc/nut
-            fi
-        fi
     fi
-
+    
+	# save conf files to flash drive regardless of mode
+	# also here in case someone directly modified files in /etc/nut
+	# flash directory will be created if missing (shouldn't happen)
+	
+	if [ ! -d $PLGPATH/ups ]; then
+		mkdir $PLGPATH/ups
+	fi
+	
+    cp -f /etc/nut/* $PLGPATH/ups
+ 
     # update permissions
     if [ -d /etc/nut ]; then
         echo "Updating permissions..."
