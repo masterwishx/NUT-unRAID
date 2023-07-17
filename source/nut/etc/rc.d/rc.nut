@@ -197,13 +197,13 @@ write_config() {
         sed -i "11 s,.*,$var23," /etc/nut/upsd.users
     fi
     
-	# save conf files to flash drive regardless of mode
-	# also here in case someone directly modified files in /etc/nut
-	# flash directory will be created if missing (shouldn't happen)
+    # save conf files to flash drive regardless of mode
+    # also here in case someone directly modified files in /etc/nut
+    # flash directory will be created if missing (shouldn't happen)
 	
-	if [ ! -d $PLGPATH/ups ]; then
-		mkdir $PLGPATH/ups
-	fi
+    if [ ! -d $PLGPATH/ups ]; then
+        mkdir $PLGPATH/ups
+    fi
 	
     cp -f /etc/nut/* $PLGPATH/ups
  

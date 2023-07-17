@@ -27,7 +27,7 @@ fi
 
 # prepare conf backup directory on flash drive, if it does not already exist
 if [ ! -d $BOOT/ups ]; then
-	mkdir $BOOT/ups
+    mkdir $BOOT/ups
 fi
 
 # copy default conf files to flash drive, if no backups exist there
