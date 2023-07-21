@@ -24,6 +24,7 @@ $nut_seconds      = isset($nut_cfg['SECONDS'])      ? intval($nut_cfg ['SECONDS'
 $nut_timeout      = isset($nut_cfg['TIMEOUT'])      ? intval($nut_cfg ['TIMEOUT'])                : 240;
 $nut_upskill      = isset($nut_cfg['UPSKILL'])      ? htmlspecialchars($nut_cfg ['UPSKILL'])      : 'disable';
 $nut_lowbattdown  = isset($nut_cfg['LOWBATTDOWN'])  ? htmlspecialchars($nut_cfg ['LOWBATTDOWN'])  : 'disable';
+$nut_replbattmsg  = isset($nut_cfg['REPLBATTMSG'])  ? htmlspecialchars($nut_cfg ['REPLBATTMSG'])  : 'disable';
 $nut_poll         = isset($nut_cfg['POLL'])         ? intval($nut_cfg ['POLL'])                   : 15;
 $nut_community    = isset($nut_cfg['COMMUNITY'])    ? htmlspecialchars($nut_cfg ['COMMUNITY'])    : 'public';
 $nut_footer       = isset($nut_cfg['FOOTER'])       ? htmlspecialchars($nut_cfg ['FOOTER'])       : 'disable';

@@ -297,9 +297,26 @@ require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
         </blockquote>
     </div>
 
+    <div id="REPLBATTMSG">
+        <dl>
+            <dt>Battery Replacement Notification:</dt>
+            <dd>
+                <select class="nut-run" name="REPLBATTMSG" size="1">
+                    <?=mk_option($nut_replbattmsg, 'disable', 'No');?>
+                    <?=mk_option($nut_replbattmsg, 'enable', 'Yes');?>
+                </select>
+            </dd>
+        </dl>
+
+        <blockquote class="inline_help">
+            <p>Set to *Yes* to receive a notification when the UPS batteries need replacement.</p>
+            <p>By default this notification will be sent every 12 hours until the batteries are replaced.</p>
+        </blockquote>
+    </div>
+
     <div id="LOWBATTDOWN">
         <dl>
-            <dt>Low Battery Event Fail-Safe:</dt>
+            <dt>Low Battery Event Shutdown (Fail-Safe):</dt>
             <dd>
                 <select class="nut-run" name="LOWBATTDOWN" size="1">
                     <?=mk_option($nut_lowbattdown, 'disable', 'No');?>
