@@ -70,3 +70,16 @@ then
         $NOTIFY -e "$EVENT" -s "Alert $SUBJECT Shutdown" -d "unRAID is being shut down." -i "alert"
         upsmon -c fsd
 fi
+
+if [ "$NOTIFYTYPE" = "LOWBATT" ] && [ $LOWBATTDOWN == "enable" ]
+then
+        echo $0: commencing low battery shutdown | wall
+        $NOTIFY -e "$EVENT" -s "Alert $SUBJECT Low Battery Event Shutdown (Fail-Safe)" -d "unRAID is being shut down from a UPS low battery event." -i "alert"
+        upsmon -c fsd
+fi
+
+if [ "$NOTIFYTYPE" = "REPLBATT" ] && [ $REPLBATTMSG == "enable" ]
+then
+        echo $0: batteries need replacement | wall
+        $NOTIFY -e "$EVENT" -s "Alert $SUBJECT Battery Replacement Notification" -d "The UPS reports that the batteries need replacement." -i "alert"
+fi

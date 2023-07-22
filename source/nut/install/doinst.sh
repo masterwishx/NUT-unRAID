@@ -25,12 +25,16 @@ if [ -L /etc/nut ]; then
     mkdir /etc/nut
 fi
 
-# copy conf files
-cp -nr $DOCROOT/nut/* /etc/nut
-
-if [ -d $BOOT/ups ]; then
-    cp -f $BOOT/ups/* /etc/nut
+# prepare conf backup directory on flash drive, if it does not already exist
+if [ ! -d $BOOT/ups ]; then
+    mkdir $BOOT/ups
 fi
+
+# copy default conf files to flash drive, if no backups exist there
+cp -nr $DOCROOT/nut/* $BOOT/ups
+
+# copy conf files from flash drive to local system, for our services to use
+cp -f $BOOT/ups/* /etc/nut
 
 # update permissions
 if [ -d /etc/nut ]; then
