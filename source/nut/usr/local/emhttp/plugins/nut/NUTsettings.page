@@ -25,8 +25,8 @@ Markdown="false"
 require_once '/usr/local/emhttp/plugins/nut/include/nut_config.php'; ?>
 
 <table class="tablesorter shift nut" <?if (!file_exists('/var/run/nut/upsmon.pid')):?>style="display:none"<?endif;?>>
-<thead><tr><th>UPS Status</th><th>Battery Charge %</th><th>Runtime Left </th><th>Nominal Power</th><th>UPS Load</th><th>UPS Load %</th></tr></thead>
-<tbody id="nut_summary"><tr><td colspan="6">&nbsp;</td></tr></tbody>
+<thead><tr><th>UPS Status</th><th>Battery Charge</th><th>Runtime Left </th><th>Nominal Power</th><th>UPS Load</th><th>UPS Load</th><th>Power Factor</th></tr></tr></thead>
+<tbody id="nut_summary"><tr><td colspan="7">&nbsp;</td></tr></tbody>
 </table>
 
 <form markdown="0" id="nut-settings" name="nut_settings" method="POST" action="/update.php" target="progressFrame">
