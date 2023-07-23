@@ -99,11 +99,11 @@ if (count($ups_status)) {
     $realPower  = $realPowerNominal && $load ? round($realPowerNominal * $load * 0.01) : -1;
 
   if ($realPower > 1 && $apparentPower > 0) {
-    $status[1] = "<span id='nut_power' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load % - Real power: $realPower W - Apparent power: $apparentPower VA'><i class='fa fa-plug'></i>&thinsp;$realPower W ($apparentPower VA)</span>";
+    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load % - Real power: $realPower W - Apparent power: $apparentPower VA'><i class='fa fa-plug'></i>&thinsp;{$realPower}W ({$apparentPower}VA)</span>";
   } else if ($realPower > 1 && $load) {
-    $status[1] = "<span id='nut_power' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load % - Real power: $realPower W'><i class='fa fa-plug'></i>&thinsp;$realPower W</span>";
+    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load % - Real power: $realPower W'><i class='fa fa-plug'></i>&thinsp;{$realPower}W</span>";
   } else if ($apparentPower > 0){
-    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut ".($load>=90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green"))."' data='[{$nut_name}] Load: $load % - Apparent power: $apparentPower VA'><i class='fa fa-plug'></i>&thinsp;$apparentPower VA</span>";
+    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut " . ($load>=90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green"))."' data='[{$nut_name}] Load: $load % - Apparent power: $apparentPower VA'><i class='fa fa-plug'></i>&thinsp;{$apparentPower}VA</span>";
   }
 
   echo "<span style='margin:0 6px 0 12px'>".implode('</span><span style="margin:0 6px 0 6px">', $status)."</span>";
