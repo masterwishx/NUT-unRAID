@@ -17,6 +17,12 @@
 
 <CHANGES>
 ##&name;
+###2023.07.23
+- fix: updated code for better calculation and display (in settings/footer/dashboard) between apparent power, real/true power and data available from NUT
+- add: display power factor in settings page
+- add: use ups.realpower if available
+
+          Thanks to forum member Peuuuur Noel  for the PR.
 ###2023.07.22
 - fix: persist config files when rebooting
 - add: implement lowbatt event fail-safe in settings
