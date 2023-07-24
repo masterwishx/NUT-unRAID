@@ -38,7 +38,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       $status[0] = $val ? (stripos($val,'online')===false ? "<td $red>$val</td>" : "<td $green>$val</td>") : "<td $orange>Refreshing...</td>";
       break;
     case 'battery.charge':
-      $status[1] = strtok($val,' ')<=10 ? "<td $red>".intval($val)." %</td>" : "<td $green>".intval($val)." %</td>";
+      $status[1] = strtok($val,' ')<=10 ? "<td $red>".intval($val). "&thinsp;%</td>" : "<td $green>".intval($val). "&thinsp;%</td>";
       break;
     case $nut_runtime:
       $runtime   = gmdate("H:i:s", $val);
@@ -55,7 +55,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
       break;
     case 'ups.load':
       $load      = strtok($val,' ');
-      $status[5] = $load>=90 ? "<td $red>".intval($val)." %</td>" : "<td $green>".intval($val)." %</td>";
+      $status[5] = $load>=90 ? "<td $red>".intval($val). "&thinsp;%</td>" : "<td $green>".intval($val). "&thinsp;%</td>";
       break;
     }
     if ($all) {
@@ -65,47 +65,37 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
     }
   }
 
+  # if manual, override values
+  if ($nut_power == 'manual') {
+    $powerNominal = intval($nut_powerva);
+    $realPowerNominal = intval($nut_powerw);
+    if ($realPowerNominal >= 0)
+      $realPower = -1;
+  }
+
   # ups.power.nominal (in VA) or compute from load and ups.power.nominal
   $apparentPower = $powerNominal && $load ? round($powerNominal * $load * 0.01) : -1;
 
   # ups.realpower (in W)
-  $realPower  = $realPower > 1 && $load ? $realPower : -1;
+  $realPower = $realPower > 1 && $load ? $realPower : -1;
   # if no ups.realpower compute from load and ups.realpower.nominal (in W)
   if ($realPower < 0)
-    $realPower  = $realPowerNominal && $load ? round($realPowerNominal * $load * 0.01) : -1;
-
-  # if manual, override values
-  if ($nut_power == 'manual'){
-    if (intval($nut_powerva) >= 0) {
-      $powerNominal = intval($nut_powerva);
-      if ($load)
-        $apparentPower = round($powerNominal*$load*0.01);
-    } else {
-      $apparentPower = -1;
-    }
-    if (intval($nut_powerw) >= 0) {
-      $realPowerNominal = intval($nut_powerw);
-      if ($load)
-        $realPower = round($realPowerNominal*$load*0.01);
-    } else {
-      $realPower = -1;
-    }
-  }
+    $realPower = $realPowerNominal && $load ? round($realPowerNominal * $load * 0.01) : -1;
 
   if ($powerNominal > 0 && $realPowerNominal > 0)
-    $status[3] = "<td " . ($load >= 90 ? $red : $green) . ">$realPowerNominal W ($powerNominal VA)</td>";
+    $status[3] = "<td " . ($load >= 90 ? $red : $green) . ">$realPowerNominal&thinsp;W ($powerNominal&thinsp;VA)</td>";
   else if ($powerNominal > 0)
-    $status[3] = "<td " . ($load >= 90 ? $red : $green) . ">$powerNominal VA</td>";
+    $status[3] = "<td " . ($load >= 90 ? $red : $green) . ">$powerNominal&thinsp;VA</td>";
   else if ($realPowerNominal > 0)
-    $status[3] = "<td " . ($load >= 90 ? $red : $green) . ">$realPowerNominal W</td>";
+    $status[3] = "<td " . ($load >= 90 ? $red : $green) . ">$realPowerNominal&thinsp;W</td>";
 
   # display apparent power and real power if exists
-  if ($apparentPower > 0 && $realPower > 0)
-    $status[4] = "<td " . ($apparentPower == 0 ? $red : $green) . ">$realPower W ($apparentPower VA)</td>";
-  else if ($apparentPower > 0)
-    $status[4] = "<td " . ($apparentPower == 0 ? $red : $green) . ">$apparentPower VA</td>";
-  else if ($realPower > 0)
-    $status[4] = "<td " . ($realPower == 0 ? $red : $green) . ">$realPower W</td>";
+  if ($apparentPower >= 0 && $realPower >= 0)
+    $status[4] = "<td " . ($realPower == 0 || $apparentPower == 0 ? $red : $green) . ">$realPower&thinsp;W ($apparentPower&thinsp;VA)</td>";
+  else if ($apparentPower >= 0)
+    $status[4] = "<td " . ($apparentPower == 0 ? $red : $green) . ">$apparentPower&thinsp;VA</td>";
+  else if ($realPower >= 0)
+    $status[4] = "<td " . ($realPower == 0 ? $red : $green) . ">$realPower&thinsp;W</td>";
 
   # compute power factor from ups.realpower.nominal and ups.power.nominal if available
   if ($realPowerNominal > 0 && $powerNominal > 0) {

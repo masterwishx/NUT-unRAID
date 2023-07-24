@@ -3,7 +3,7 @@
 <!DOCTYPE PLUGIN [
 <!ENTITY name      "nut">
 <!ENTITY author    "SimonFair">
-<!ENTITY version   "2023.07.23">
+<!ENTITY version   "2023.07.24">
 <!ENTITY launch    "Settings/NUTsettings">
 <!ENTITY gitURL    "https://raw.githubusercontent.com/&author;/NUT-unRAID/master">
 <!ENTITY pluginURL "&gitURL;/plugin/&name;-2.8.0.plg">
@@ -17,7 +17,13 @@
 
 <CHANGES>
 ##&name;
-###2023.07.23
+###2023.07.24
+- fix override realpower if realpower nominal set manually
+- simplification of realpower/apparent power if value set manually
+- used   to separate number and unit (W/VA)
+- remove obsolete lowbatt fail-safe
+        Thanks to forum member Peuuuur Noel and Rysz for the PRs.
+###2023.07.23a
 - fix: updated code for better calculation and display (in settings/footer/dashboard) between apparent power, real/true power and data available from NUT
 - add: display power factor in settings page
 - add: use ups.realpower if available
