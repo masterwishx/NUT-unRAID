@@ -17,6 +17,12 @@
 
 <CHANGES>
 ##&name;
+###2023.07.24
+- fix override realpower if realpower nominal set manually
+- simplification of realpower/apparent power if value set manually
+- used   to separate number and unit (W/VA)
+- remove obsolete lowbatt fail-safe
+        Thanks to forum member Peuuuur Noel and Rysz for the PRs.
 ###2023.07.23a
 - fix: updated code for better calculation and display (in settings/footer/dashboard) between apparent power, real/true power and data available from NUT
 - add: display power factor in settings page
