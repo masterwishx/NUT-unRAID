@@ -79,14 +79,14 @@ if (count($ups_status)) {
 
   if ($battery !== false) {
     $battery_runtime = array_key_exists($nut_runtime, $ups_status) ? format_time($ups_status[$nut_runtime]) : "n/a";
-    if ($online && $battery < 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='{$nut_name}: online - battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;{$battery}&thinsp;%</span>";
-    else if ($online && $battery  == 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='{$nut_name}: online - battery is full'><i class='fa fa-battery-full'></i>&thinsp;{$battery}&thinsp;%</span>";
-    else if (!$online) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut $red' data='{$nut_name}: offline - battery is discharging - est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;{$battery}&thinsp;%</span>";
-    else $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='{$nut_name}: battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
+    if ($online && $battery < 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Online - Battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;{$battery}&thinsp;%</span>";
+    else if ($online && $battery  == 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Online - Battery is full'><i class='fa fa-battery-full'></i>&thinsp;{$battery}&thinsp;%</span>";
+    else if (!$online) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut $red' data='[{$nut_name}] Offline - Battery is discharging - Est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;{$battery}&thinsp;%</span>";
+    else $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
 
     $status[0] = $icon;
   } else {
-    $status[0] = "<span id='nut_battery'class='tooltip-nut' style='margin:0 6px 0 12px' data='$nut_name: battery info not available'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
+    $status[0] = "<span id='nut_battery'class='tooltip-nut' style='margin:0 6px 0 12px' data='[$nut_name] Battery info not available'><i class='fa fa-battery-empty'></i>&thinsp;n/a</span>";
   }
 
   # ups.power.nominal (in VA) or compute from load and ups.power.nominal
