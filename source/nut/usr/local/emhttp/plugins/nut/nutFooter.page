@@ -151,7 +151,7 @@ EOT;
   function UPSNUTArray() {
     $.get('/plugins/nut/include/nut_status.php',{all:'false'},function(d) {
       var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>').split('</span>');
-	    $('#tblUPSNUTDash').find('tr.updated').remove();
+      $('#tblUPSNUTDash').find('tr.updated').remove();
 
       $('#tblUPSNUTDash').append('<tr class="updated"><td>'+
         "<tr class='updated'><td><span class='w36 ups'>UPS status:</span><span class='nut_status'>"+data[0]+"</span></td></tr>" +
