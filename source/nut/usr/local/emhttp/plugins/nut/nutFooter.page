@@ -150,16 +150,15 @@ EOT;
 <script type="text/javascript">
   function UPSNUTArray() {
     $.get('/plugins/nut/include/nut_status.php',{all:'false'},function(d) {
-      var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>;').split(';')
-
-	  $('#tblUPSNUTDash').find('tr.updated').remove();
+      var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>').split('</span>');
+      $('#tblUPSNUTDash').find('tr.updated').remove();
 
       $('#tblUPSNUTDash').append('<tr class="updated"><td>'+
         "<tr class='updated'><td><span class='w36 ups'>UPS status:</span><span class='nut_status'>"+data[0]+"</span></td></tr>" +
         "<tr class='updated'><td><span class='w36 ups'>Battery charge:</span><span class='nut_bcharge'>"+data[1]+"</span></td></tr>" +
         "<tr class='updated'><td><span class='w36 ups'>Runtime left:</span><span class='nut_timeleft'>"+data[2]+"</span></td></tr>" +
         "<tr class='updated'><td><span class='w36 ups'>Nominal power:</span>"+data[3]+"</td></tr>");
-    $("#tblUPSNUTDash").find('.nut_loadpct').html(data[5]+' - '+data[4]);    
+    $("#tblUPSNUTDash").find('.nut_loadpct').html(data[5]+' - '+data[4]);
     setTimeout(UPSNUTArray, <?=($nut_interval * 1000)?>);
   }) ;
 };
@@ -167,7 +166,7 @@ EOT;
 $(function(){
   UPSNUTArray();
 });
-</script> 
+</script>
 <?endif;?>
 
 
@@ -177,7 +176,7 @@ $(function(){
 <script type="text/javascript">
   function getNUTDashboard() {
     $.get('/plugins/nut/include/nut_status.php',{all:'false'},function(d) {
-      var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>;').split(';');
+      var data = d.replace(/<\/?tr>/g,'').replace(/<td/g,'<span').replace(/td>/g,'span>').split('</span>');
       $("#db-box1").find('.nut_status').html(data[0]);
       $("#db-box1").find('.nut_bcharge').html(data[1]);
       $("#db-box1").find('.nut_timeleft').html(data[2]);
