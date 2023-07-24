@@ -64,7 +64,7 @@ if (count($ups_status)) {
   if ($nut_power == 'manual'){
     $powerNominal = intval($nut_powerva);
     $realPowerNominal = intval($nut_powerw);
-    if ($realPowerNominal <= 0)
+    if ($realPowerNominal >= 0)
       $realPower = -1;
   }
 
