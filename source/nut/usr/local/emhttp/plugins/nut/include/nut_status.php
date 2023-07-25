@@ -29,6 +29,18 @@ $result = [];
 
 if (file_exists('/var/run/nut/upsmon.pid')) {
   exec("/usr/bin/upsc ".escapeshellarg($nut_name)."@$nut_ip 2>/dev/null", $rows);
+
+  if ($_GET['diagsave'] == "true") {
+
+  $diagstring = implode("\n",$rows);
+  header('Content-Disposition: attachment; filename="nut-diagnostics.dev"');
+  header('Content-Type: text/plain');
+  header('Content-Length: ' . strlen($diagstring));
+  header('Connection: close');
+  die($diagstring);
+
+  }
+
   for ($i=0; $i<count($rows); $i++) {
     $row = array_map('trim', explode(':', $rows[$i], 2));
     $key = $row[0];
