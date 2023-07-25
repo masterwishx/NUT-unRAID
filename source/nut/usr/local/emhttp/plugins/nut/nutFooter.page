@@ -66,6 +66,13 @@ EOT;
   content: "\f240";
   animation: 2s battery-discharging infinite;
 }
+@keyframes fa-blink {
+  0% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.fa-blink {
+  animation: fa-blink .6s linear infinite;
+}
 @keyframes ring{
   0%{-webkit-transform:rotate(-15deg);transform:rotate(-15deg)}
   2%{-webkit-transform:rotate(15deg);transform:rotate(15deg)}
@@ -162,7 +169,7 @@ EOT;
       $('#tblUPSNUTDash').find('tr.updated').remove();
 
       $('#tblUPSNUTDash').append('<tr class="updated"><td>'+
-        "<tr class='updated'><td><span class='w36 ups'>UPS status:</span><span class='nut_status'>"+data[0]+"</span></td></tr>" +
+        "<tr class='updated'><td style='display: flex;'><span class='w36 ups'>UPS status:</span><span class='nut_status' style='flex: 1; white-space: normal;'>"+data[0]+"</span></td></tr>" +
         "<tr class='updated'><td><span class='w36 ups'>Battery charge:</span><span class='nut_bcharge'>"+data[1]+"</span></td></tr>" +
         "<tr class='updated'><td><span class='w36 ups'>Runtime left:</span><span class='nut_timeleft'>"+data[2]+"</span></td></tr>" +
         "<tr class='updated'><td><span class='w36 ups'>Nominal power:</span>"+data[3]+"</td></tr>");

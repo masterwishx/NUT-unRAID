@@ -45,7 +45,8 @@ function write_php_ini($array, $file)
 }
 
 function safefilerewrite($fileName, $dataToSave)
-{    if ($fp = fopen($fileName, 'w'))
+{
+    if ($fp = fopen($fileName, 'w'))
     {
         $startTime = microtime();
         do
@@ -61,6 +62,35 @@ function safefilerewrite($fileName, $dataToSave)
         }
         fclose($fp);
     }
+}
+
+function nut_ups_status($rows, $valueOnly = false)
+{
+    global $nut_states;
+
+    $severity = 0;
+    $status_values = [];
+    $status_fulltext = [];
+    array_walk($rows, function($var) use (&$severity, &$status_fulltext, &$status_values, $nut_states, $valueOnly) {
+        if ($valueOnly)
+            $status_values = explode(' ', $var);
+        else if (preg_match('/^ups.status:\s*([^$]+)/i', $var, $matches))
+            $status_values = explode(' ', $matches[1]);
+        else
+            return;
+
+        if (defined('NUT_STATUS_DEBUG'))
+            $status_values = explode(' ', NUT_STATUS_DEBUG);
+
+        $status_fulltext = array_map(function($var) use (&$severity, $nut_states) {
+            if (isset($nut_states[$var]) && $nut_states[$var]) {
+                $severity = max($severity, $nut_states[$var]['severity']);
+                return $nut_states[$var]['msg'];
+            }
+        }, $status_values);
+    });
+
+    return ['severity' => $severity, 'value' => $status_values, 'fulltext' => $status_fulltext];
 }
 
 ?>
