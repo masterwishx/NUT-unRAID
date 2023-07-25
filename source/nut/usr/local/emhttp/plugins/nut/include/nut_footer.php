@@ -79,10 +79,10 @@ if (count($ups_status)) {
 
   if ($battery !== false) {
     $battery_runtime = array_key_exists($nut_runtime, $ups_status) ? format_time($ups_status[$nut_runtime]) : "n/a";
-    if ($online && $battery < 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Online - Battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;{$battery}&thinsp;%</span>";
-    else if ($online && $battery  == 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Online - Battery is full'><i class='fa fa-battery-full'></i>&thinsp;{$battery}&thinsp;%</span>";
-    else if (!$online) $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut $red' data='[{$nut_name}] Offline - Battery is discharging - Est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;{$battery}&thinsp;%</span>";
-    else $icon = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_battery")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
+    if ($online && $battery < 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_battery" : "")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Online - Battery is charging'><i class='fa fa-battery-charging'></i>&thinsp;{$battery}&thinsp;%</span>";
+    else if ($online && $battery  == 100) $icon = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_battery" : "")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Online - Battery is full'><i class='fa fa-battery-full'></i>&thinsp;{$battery}&thinsp;%</span>";
+    else if (!$online) $icon = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_battery" : "")."' class='tooltip-nut $red' data='[{$nut_name}] Offline - Battery is discharging - Est. $battery_runtime left'><i class='fa fa-battery-discharging'></i>&thinsp;{$battery}&thinsp;%</span>";
+    else $icon = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_battery" : "")."' class='tooltip-nut ".($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")."' data='[{$nut_name}] Battery status unknown'><i class='fa fa-battery-discharging'></i>n/a</span>";
 
     $status[0] = $icon;
   } else {
@@ -99,11 +99,11 @@ if (count($ups_status)) {
     $realPower = $realPowerNominal && $load ? round($realPowerNominal * $load * 0.01) : -1;
 
   if ($realPower >= 0 && $apparentPower >= 0) {
-    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load&thinsp;% - Real power: $realPower&thinsp;W - Apparent power: $apparentPower&thinsp;VA'><i class='fa fa-plug'></i>&thinsp;{$realPower}&thinsp;W ({$apparentPower}&thinsp;VA)</span>";
+    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_power" : "")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load&thinsp;% - Real power: $realPower&thinsp;W - Apparent power: $apparentPower&thinsp;VA'><i class='fa fa-plug'></i>&thinsp;{$realPower}&thinsp;W ({$apparentPower}&thinsp;VA)</span>";
   } else if ($realPower >= 0 && $load) {
-    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load&thinsp;% - Real power: $realPower&thinsp;W'><i class='fa fa-plug'></i>&thinsp;{$realPower}&thinsp;W</span>";
+    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_power" : "")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='[{$nut_name}] Load: $load&thinsp;% - Real power: $realPower&thinsp;W'><i class='fa fa-plug'></i>&thinsp;{$realPower}&thinsp;W</span>";
   } else if ($apparentPower >= 0){
-    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 1 ? "copyright" : "nut_power")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green"))."' data='[{$nut_name}] Load: $load&thinsp;% - Apparent power: $apparentPower&thinsp;VA'><i class='fa fa-plug'></i>&thinsp;{$apparentPower}&thinsp;VA</span>";
+    $status[1] = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_power" : "")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green"))."' data='[{$nut_name}] Load: $load&thinsp;% - Apparent power: $apparentPower&thinsp;VA'><i class='fa fa-plug'></i>&thinsp;{$apparentPower}&thinsp;VA</span>";
   }
 
   echo "<span style='margin:0 6px 0 12px'>".implode('</span><span style="margin:0 6px 0 6px">', $status)."</span>";
