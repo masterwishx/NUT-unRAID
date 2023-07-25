@@ -272,6 +272,10 @@ else
         ln -s /var/run/upsmon.pid /var/run/nut/upsmon.pid
     fi
 
+    # if upgrading on live system, stop the services here
+    # to release any remaining file locks before patching
+    [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut stop 2>/dev/null
+
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 
