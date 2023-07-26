@@ -253,10 +253,6 @@ else
         /etc/rc.d/rc.nut stop 2>/dev/null
     fi
 
-    # start install always with fresh folders
-    rm -rf /etc/nut
-    rm -rf /etc/ups
-
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
 

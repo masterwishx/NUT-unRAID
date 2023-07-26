@@ -36,6 +36,12 @@
 - add: implement battery replacement notification in settings
 
         Thanks to forum member Rysz for the PR.
+###2023.06.03
+- Add Small footer style thanks ich777 for the PR.
+###2023.02.14
+-6.12 Dashboard support
+-PHP8 fixes
+-Refresh option.
 ###2022.03.20
 -fix for filetree top level
 -update nut footer
@@ -259,10 +265,6 @@ else
         /etc/rc.d/rc.nut stop 2>/dev/null
     fi
 
-    # start install always with fresh folders
-    rm -rf /etc/nut
-    rm -rf /etc/ups
-
     # nut-2.7.4 and nut plugin expects:
     #   Config: /etc/nut
     #   Pid   : /var/run/nut/upsmon.pid
@@ -344,6 +346,7 @@ rm -rf /var/run/nut
 # in case of re-installation of package on live system
 rm -rf /etc/nut
 rm -rf /etc/ups
+rm -rf /var/run/nut
 
 echo ""
 echo "-----------------------------------------------------------"
