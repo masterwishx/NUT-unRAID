@@ -191,7 +191,7 @@ The 'nut-package' file.
 -->
 <FILE Name="&plgPATH;/nut-2.8.0-x86_64-1.txz" Min="6.10" Run="upgradepkg --install-new">
 <URL>&pkgURL;/nut-2.8.0-x86_64-1.txz</URL>
-<MD5>2c7a37ac49a3c752536b7f4f43777cc2</MD5>
+<MD5>fd23a1d6a8d3088eefbd0d5a92569a12</MD5>
 </FILE>
 
 <FILE Name="&plgPATH;/nut-2.7.4.20200318-x86_64-1.txz" Min="6.8" Run="upgradepkg --install-new">
