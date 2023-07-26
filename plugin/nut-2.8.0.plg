@@ -244,6 +244,11 @@ if [[ ${version:0:3} == 6.0 ]]; then
     exit 1
 fi
 
+# start install always with fresh folders
+# in case of unclean old installation remnants
+rm -rf /etc/nut
+rm -rf /etc/ups
+
 # Verify and install plugin package
 sum1=$(/usr/bin/md5sum &plgPATH;/&plgNAME;.txz)
 sum2=$(/usr/bin/cat &plgPATH;/&plgNAME;.md5)
@@ -334,7 +339,8 @@ rm -rf /etc/nut
 rm -f /etc/ups
 rm -rf /var/run/nut
 
-# clean up once more in case of reinstall of other nut package on live system
+# clean up folders after the removed installation
+# in case of re-installation of package on live system
 rm -rf /etc/nut
 rm -rf /etc/ups
 
