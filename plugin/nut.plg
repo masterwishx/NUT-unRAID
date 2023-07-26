@@ -304,6 +304,10 @@ rm -rf &plgPATH;/ups
 rm -f &plgPATH;/*.txz \
     &plgPATH;/*.md5
 
+# clean up once more in case of reinstall on live system
+rm -rf /etc/nut
+rm -rf /etc/ups
+
 echo ""
 echo "-----------------------------------------------------------"
 echo " &name; has been removed."

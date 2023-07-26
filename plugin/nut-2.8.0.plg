@@ -334,6 +334,10 @@ rm -rf /etc/nut
 rm -f /etc/ups
 rm -rf /var/run/nut
 
+# clean up once more in case of reinstall on live system
+rm -rf /etc/nut
+rm -rf /etc/ups
+
 echo ""
 echo "-----------------------------------------------------------"
 echo " &name; has been removed."
