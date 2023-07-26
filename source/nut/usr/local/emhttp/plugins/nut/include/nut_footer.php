@@ -80,24 +80,33 @@ if (count($ups_status)) {
   $battery_runtime = array_key_exists($nut_runtime, $ups_status) ? format_time($ups_status[$nut_runtime]) : "n/a";
   $css_class = $online['severity'] > 0 ? $nut_msgSeverity[$online['severity']]['css_class'] : ($config['FOOTER_STYLE'] == 1 ? $black : $green);
   $fa_icon = '';
-
+  $statusTooltipData = '';
   $batteryText = $battery . "&thinsp;%";
+  # if no battery info
   if ($battery === false) {
     $batteryText = " n/a";
     $fa_icon = "fa-battery-empty";
     $online['fulltext'][] = 'Battery info not available';
+  # if ups.status contain CHRG
   } else if (is_array($online) && in_array('CHRG', $online['value'])) {
     $fa_icon = "fa-battery-charging";
+  # if ups.status contain DISCHRG
   } else if (is_array($online) && in_array('DISCHRG', $online['value'])) {
     $fa_icon = "fa-battery-discharging";
     $online['fulltext'][] = "Est. " . $battery_runtime . " left";
+  # other ups.status messages
   } else if (is_array($online) && $online['value']) {
     $fa_icon = "fa-battery-full";
-    $fa_icon .= in_array('RB', $online['value']) ? ' fa-blink' : '';
+    # blink battery icon if ups.status contain RB (Replace Battery)
+    if (in_array('RB', $online['value']))
+      $fa_icon .= ' fa-blink';
+  # unknown status
   } else {
     $fa_icon = "fa-battery-empty";
     $online['fulltext'][] = 'Battery status unknown';
   }
+
+  # enable tooltip on Default footer style
   if ($config['FOOTER_STYLE'] == 0)
     $statusTooltipData = ' data="[' . $nut_name . '] ' . implode(' - ', $online['fulltext']) . '"';
 
@@ -114,16 +123,21 @@ if (count($ups_status)) {
 
   $powerText = '';
   $powerTooltipData = '';
+  # display load, real and apparent power
   if ($realPower >= 0 && $apparentPower >= 0) {
     $powerText = "{$realPower}&thinsp;W ({$apparentPower}&thinsp;VA)";
     $powerTooltipData = "Load: $load&thinsp;% - Real power: $realPower&thinsp;W - Apparent power: $apparentPower&thinsp;VA";
+  # display load and real power
   } else if ($realPower >= 0 && $load) {
     $powerText = "{$realPower}&thinsp;W";
     $powerTooltipData = "Load: $load&thinsp;% - Real power: $realPower&thinsp;W";
+  # display load and apparent power
   } else if ($apparentPower >= 0) {
     $powerText = "{$apparentPower}&thinsp;VA";
     $powerTooltipData = "Load: $load&thinsp;% - Apparent power: $apparentPower&thinsp;VA";
   }
+
+  # enable tooltip on Default footer style
   if ($config['FOOTER_STYLE'] == 0)
     $powerTooltipData = " data='[{$nut_name}] " . $powerTooltipData . "'";
 

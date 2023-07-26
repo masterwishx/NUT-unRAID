@@ -33,6 +33,7 @@ $nut_interval     = isset($nut_cfg['INTERVAL'])     ? intval($nut_cfg['INTERVAL'
 $nut_runtime      = isset($nut_cfg['RUNTIME'])      ? htmlspecialchars($nut_cfg ['RUNTIME'])      : 'battery.runtime';
 $nut_running      = (intval(trim(shell_exec( "[ -f /proc/`cat /var/run/nut/upsmon.pid 2> /dev/null`/exe ] && echo 1 || echo 0 2> /dev/null" ))) === 1 );
 
+# debug constant to overwrite ups.status
 // define('NUT_STATUS_DEBUG', 'OB DISCHRG BYPASS CAL');
 $nut_states = [
     'OL'      => ['severity' => 0, 'msg' => 'On line'],

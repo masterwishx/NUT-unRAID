@@ -62,7 +62,7 @@ if (file_exists('/var/run/nut/upsmon.pid')) {
     }
   }
 
-  # if manual, override values
+  # if manual, overwrite values
   if ($nut_power == 'manual') {
     $powerNominal = intval($nut_powerva);
     $realPowerNominal = intval($nut_powerw);
