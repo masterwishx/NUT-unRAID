@@ -256,7 +256,6 @@ else
     # start install always with fresh folders
     rm -rf /etc/nut
     rm -rf /etc/ups
-    mkdir /etc/nut
 
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz

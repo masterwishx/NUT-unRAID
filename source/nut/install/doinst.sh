@@ -25,6 +25,11 @@ if [ -L /etc/nut ]; then
     mkdir /etc/nut
 fi
 
+# create nut directory
+if [ ! -d /etc/nut ]; then
+    mkdir /etc/nut
+fi
+
 # prepare conf backup directory on flash drive, if it does not already exist
 if [ ! -d $BOOT/ups ]; then
     mkdir $BOOT/ups
