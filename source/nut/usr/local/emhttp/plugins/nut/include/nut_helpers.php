@@ -75,7 +75,7 @@ function nut_ups_status($rows, $valueOnly = false)
         # if only ups.status value as param
         if ($valueOnly)
             $status_values = explode(' ', $row);
-        # if statut array as param, find ups.status
+        # if status array as param, find ups.status
         else if (preg_match('/^ups.status:\s*([^$]+)/i', $row, $matches))
             $status_values = explode(' ', $matches[1]);
         # skip everything else
