@@ -270,10 +270,10 @@ else
         mkdir /etc/nut
         cp -f /etc/ups/* /etc/nut
         rm -rf /etc/ups
-        ln -s /etc/nut /etc/ups
+        ln -sf /etc/nut /etc/ups
         # Link nut-2.7.4 pid to nut-2.8.0 pid
         mkdir /var/run/nut
-        ln -s /var/run/upsmon.pid /var/run/nut/upsmon.pid
+        ln -sf /var/run/upsmon.pid /var/run/nut/upsmon.pid
     fi
 
     # upgrade plugin package
