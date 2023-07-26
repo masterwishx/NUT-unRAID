@@ -254,7 +254,9 @@ if [ "${sum1:0:32}" != "${sum2:0:32}" ]; then
 else
     # if upgrading on live system, stop the services here
     # to release any remaining file locks before patching
-    [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut stop 2>/dev/null
+    if [ -x /etc/rc.d/rc.nut ]; then
+        /etc/rc.d/rc.nut stop 2>/dev/null
+    fi
 
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
