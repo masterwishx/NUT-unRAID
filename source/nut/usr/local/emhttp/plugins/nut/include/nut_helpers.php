@@ -92,6 +92,9 @@ function nut_ups_status($rows, $valueOnly = false)
                 # keep the highest severity message level
                 $severity = max($severity, $nut_states[$var]['severity']);
                 return $nut_states[$var]['msg'];
+            # if unknown status flag, return it
+            } else {
+                return $var;
             }
         }, $status_values);
     });

@@ -47,7 +47,7 @@ $nut_states = [
     'CAL'     => ['severity' => 0, 'msg' => 'UPS is currently performing runtime calibration (on battery)'],
     'OFF'     => ['severity' => 1, 'msg' => 'UPS is offline and is not supplying power to the load'],
     'OVER'    => ['severity' => 2, 'msg' => 'UPS is overloaded'],
-    'TRIM'    => ['severity' => 1, 'msg' => 'UPS is trimming incoming voltage'],
+    'TRIM'    => ['severity' => 1, 'msg' => 'UPS is trimming incoming voltage (called "buck" in some hardware)'],
     'BOOST'   => ['severity' => 1, 'msg' => 'UPS is boosting incoming voltage'],
     'FSD'     => ['severity' => 1, 'msg' => 'Forced Shutdown'],
 ];
