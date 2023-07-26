@@ -244,11 +244,6 @@ if [[ ${version:0:3} == 6.0 ]]; then
     exit 1
 fi
 
-# start install always with fresh folders
-# in case of unclean old installation remnants
-rm -rf /etc/nut
-rm -rf /etc/ups
-
 # Verify and install plugin package
 sum1=$(/usr/bin/md5sum &plgPATH;/&plgNAME;.txz)
 sum2=$(/usr/bin/cat &plgPATH;/&plgNAME;.md5)
@@ -263,6 +258,10 @@ else
     if [ -x /etc/rc.d/rc.nut ]; then
         /etc/rc.d/rc.nut stop 2>/dev/null
     fi
+
+    # start install always with fresh folders
+    rm -rf /etc/nut
+    rm -rf /etc/ups
 
     # nut-2.7.4 and nut plugin expects:
     #   Config: /etc/nut
