@@ -253,6 +253,10 @@ if [ "${sum1:0:32}" != "${sum2:0:32}" ]; then
     rm &plgPATH;/&plgNAME;.md5
     exit 1
 else
+    # if upgrading on live system, stop the services here
+    # to release any remaining file locks before patching
+    [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut stop 2>/dev/null
+
     # nut-2.7.4 and nut plugin expects:
     #   Config: /etc/nut
     #   Pid   : /var/run/nut/upsmon.pid
@@ -264,17 +268,13 @@ else
     if [ ! -d /etc/nut ]; then
         # Link nut-2.8.0 config to nut-2.7.4 config
         mkdir /etc/nut
-        cp /etc/ups/* /etc/nut
+        cp -f /etc/ups/* /etc/nut
         rm -rf /etc/ups
         ln -s /etc/nut /etc/ups
         # Link nut-2.7.4 pid to nut-2.8.0 pid
         mkdir /var/run/nut
         ln -s /var/run/upsmon.pid /var/run/nut/upsmon.pid
     fi
-
-    # if upgrading on live system, stop the services here
-    # to release any remaining file locks before patching
-    [ -x /etc/rc.d/rc.nut ] && /etc/rc.d/rc.nut stop 2>/dev/null
 
     # upgrade plugin package
     upgradepkg --install-new &plgPATH;/&plgNAME;.txz
@@ -331,7 +331,7 @@ rm -f &plgPATH;/*.txz \
 
 # Remove links for nut-2.8.0 vs nut-2.7.4
 rm -rf /etc/nut
-rm /etc/ups
+rm -f /etc/ups
 rm -rf /var/run/nut
 
 echo ""
