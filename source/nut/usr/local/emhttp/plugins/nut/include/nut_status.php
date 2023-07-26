@@ -21,8 +21,30 @@ $all    = $_GET['all']=='true';
 $result = [];
 
 if (file_exists('/var/run/nut/upsmon.pid')) {
+  
   exec("/usr/bin/upsc ".escapeshellarg($nut_name)."@$nut_ip 2>/dev/null", $rows);
+  
+  if ($_GET['diagsave'] == "true") {
+
+  $diagarray = $rows;
+  
+  array_walk($diagarray, function(&$var) {
+    if (preg_match('/^(device|ups)\.(serial|macaddr):/i', $var, $matches)) {
+      $var = $matches[1] . '.' . $matches[2] . ': REMOVED';
+    }
+  });
+
+  $diagstring = implode("\n",$diagarray);
+  header('Content-Disposition: attachment; filename="nut-diagnostics.dev"');
+  header('Content-Type: text/plain');
+  header('Content-Length: ' . strlen($diagstring));
+  header('Connection: close');
+  die($diagstring);
+
+  }
+  
   $upsStatus = nut_ups_status($rows);
+
   for ($i=0; $i<count($rows); $i++) {
     $row = array_map('trim', explode(':', $rows[$i], 2));
     $key = $row[0];
