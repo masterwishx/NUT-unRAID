@@ -101,6 +101,15 @@ EOT;
   -webkit-animation:ring 3s ease infinite;
   animation:ring 3s ease infinite
 }
+#nut_footer {
+  float: right;
+  margin-right: 6px;
+}
+#nut_footer.minimal {
+  font-family: bitstream;
+  font-size: 1.1rem;
+  padding-right: 10px;
+}
 </style>
 <script type="text/javascript">
   function getNUTfooter() {
@@ -127,14 +136,9 @@ EOT;
 
   $(function()
     {
-      var footer = $("<span id='nut_footer'></span>").insertAfter("div#footer > span#copyright").css({"float": "right", "margin-right": "6px"});
+      var footer = $("<span id='nut_footer'></span>").insertAfter("div#footer > span#copyright");
       <?if ($config['FOOTER_STYLE'] == 1): ?>
-        footer.css({
-          "font-family": "bitstream",
-          "font-size": "1.1rem",
-          "float": "right",
-          "padding-right": "10px"
-        });
+        footer.addClass('minimal');
       <?endif;?>
       getNUTfooter();
       $('body').on('mouseenter', '.tooltip-nut', function()

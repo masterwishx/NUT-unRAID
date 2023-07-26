@@ -98,9 +98,10 @@ if (count($ups_status)) {
     $fa_icon = "fa-battery-empty";
     $online['fulltext'][] = 'Battery status unknown';
   }
-  $tooltipData = '[' . $nut_name . '] ' . implode(' - ', $online['fulltext']);
+  if ($config['FOOTER_STYLE'] == 0)
+    $statusTooltipData = ' data="[' . $nut_name . '] ' . implode(' - ', $online['fulltext']) . '"';
 
-  $status[0] = "<span id='" . ($config['FOOTER_STYLE'] == 0 ? "nut_battery" : "") . "' class='tooltip-nut " . $css_class . "' data='" . $tooltipData . "'><i class='fa " . $fa_icon . "' style='vertical-align: baseline;'></i>&thinsp;" . $batteryText . "</span>";
+  $status[0] = "<span id='" . ($config['FOOTER_STYLE'] == 0 ? "nut_battery" : "") . "' class='tooltip-nut " . $css_class . "'" . $statusTooltipData . "><i class='fa " . $fa_icon . "' style='vertical-align: baseline;'></i>&thinsp;" . $batteryText . "</span>";
 
   # ups.power.nominal (in VA) or compute from load and ups.power.nominal
   $apparentPower = $powerNominal > 0 && $load ? round($powerNominal * $load * 0.01) : -1;
@@ -115,15 +116,18 @@ if (count($ups_status)) {
   $powerTooltipData = '';
   if ($realPower >= 0 && $apparentPower >= 0) {
     $powerText = "{$realPower}&thinsp;W ({$apparentPower}&thinsp;VA)";
-    $powerTooltipData = "[{$nut_name}] Load: $load&thinsp;% - Real power: $realPower&thinsp;W - Apparent power: $apparentPower&thinsp;VA";
+    $powerTooltipData = "Load: $load&thinsp;% - Real power: $realPower&thinsp;W - Apparent power: $apparentPower&thinsp;VA";
   } else if ($realPower >= 0 && $load) {
     $powerText = "{$realPower}&thinsp;W";
-    $powerTooltipData = "[{$nut_name}] Load: $load&thinsp;% - Real power: $realPower&thinsp;W";
+    $powerTooltipData = "Load: $load&thinsp;% - Real power: $realPower&thinsp;W";
   } else if ($apparentPower >= 0) {
     $powerText = "{$apparentPower}&thinsp;VA";
-    $powerTooltipData = "[{$nut_name}] Load: $load&thinsp;% - Apparent power: $apparentPower&thinsp;VA";
+    $powerTooltipData = "Load: $load&thinsp;% - Apparent power: $apparentPower&thinsp;VA";
   }
-  $status[1] = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_power" : "")."' class='tooltip-nut " . ($load >= 90 ? "$red" : ($config['FOOTER_STYLE'] == 1 ? "$black" : "$green")) . "' data='{$powerTooltipData}'><i class='fa fa-plug'></i>&thinsp;{$powerText}</span>";
+  if ($config['FOOTER_STYLE'] == 0)
+    $powerTooltipData = " data='[{$nut_name}] " . $powerTooltipData . "'";
+
+  $status[1] = "<span id='".($config['FOOTER_STYLE'] == 0 ? "nut_power" : "")."' class='tooltip-nut " . ($load >= 90 ? $red : ($config['FOOTER_STYLE'] == 1 ? $black : $green)) . "'" . $powerTooltipData . "><i class='fa fa-plug'></i>&thinsp;" . $powerText . "</span>";
 
   echo "<span style='margin:0 6px 0 12px'>".implode('</span><span style="margin:0 6px 0 6px">', $status)."</span>";
 } else {
